@@ -12,3 +12,5 @@ footer{margin:64px 0 0;text-align:center;color:var(--muted)}
 nav{margin-bottom:24px;text-align:center}
 nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
+/* Add near the end of css/base.css */
+main, .wrap, .hero, .card, nav, footer { position: relative; z-index: 1; }
