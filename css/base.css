@@ -14,3 +14,20 @@ nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
 /* Add near the end of css/base.css */
 main, .wrap, .hero, .card, nav, footer { position: relative; z-index: 1; }
+/* Full-viewport canvas behind content */
+#bg{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;               /* <- important: not -1 */
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 800px at 50% -10%, rgba(255,170,60,.06), transparent 60%),
+    radial-gradient(800px 600px at 90% 10%,  rgba(255,220,140,.04), transparent 60%),
+    #0b0b0f;
+  filter: saturate(115%) contrast(102%);
+}
+
+/* Ensure all content sits above the canvas */
+main, .wrap, .hero, .card, nav, footer { position: relative; z-index: 1; }
