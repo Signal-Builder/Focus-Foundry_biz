@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forge · Email Capture Demo</title>
+<link rel="stylesheet" href="../../shared/css/base.css">
+<style>
+.stage{position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));padding:40px;text-align:center}
+.forge-stamp{display:inline-block;padding:18px 28px;border:2px solid rgba(255,255,255,.6);letter-spacing:.18em;text-transform:uppercase;font-weight:900;position:relative}
+.forge-stamp::after{content:'FORGE';position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);background:radial-gradient(closest-side,rgba(102,224,255,.15),transparent);opacity:0;transform:scale(0.9) rotate(-3deg);filter:blur(1px)}
+.stage.play .forge-stamp::after{animation:stamp .6s ease-out forwards}
+@keyframes stamp{0%{opacity:0;transform:scale(1.5) rotate(-6deg);filter:blur(6px)}60%{opacity:1;transform:scale(.96) rotate(1deg);filter:blur(0)}100%{opacity:1;transform:scale(1) rotate(0)}}
+.input{width:100%;padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--ink)}
+.row{display:flex;gap:8px;margin-top:10px}
+.form-msg{opacity:.85;color:var(--muted);margin-top:8px;min-height:1em}
+</style>
+</head><body>
+<main class="wrap">
+  <section class="hero">
+    <h1>FORGE</h1>
+    <p class="lead">A stamped cinematic capture page for launches and drops.</p>
+    <a class="btn" data-glitch>Preview Stamp</a>
+  </section>
+  <section class="card stage" id="stage">
+    <div class="forge-stamp">PREVIEW</div>
+    <form class="form" id="capture">
+      <input class="input" type="email" name="email" placeholder="you@example.com" required />
+      <div class="row">
+        <button class="btn" type="submit">Join the list</button>
+        <a class="btn" href="../.." style="background:#1f2226;color:#e7e7ee">Back</a>
+      </div>
+      <div class="form-msg"></div>
+    </form>
+  </section>
+  <footer>© 2025 Briteminds · Focus Foundry</footer>
+</main>
+<script src="../../shared/js/ff.js"></script>
+<script>
+const stage=document.getElementById('stage');
+function play(){stage.classList.remove('play');void stage.offsetWidth;stage.classList.add('play');ff.glitchFlash();}
+document.addEventListener('DOMContentLoaded',play);
+document.querySelector('[data-glitch]').addEventListener('click',play);
+ff.capture(document.getElementById('capture'));
+</script>
+</body></html>
