@@ -14,17 +14,6 @@ nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
 
 
-#bg{
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-
-  background: transparent;  /* body now holds the lava photo */
-  filter: saturate(115%) contrast(102%);
-}
 
 /* Ensure UI above canvas */
 main, .wrap, .hero, .card, nav, footer {
