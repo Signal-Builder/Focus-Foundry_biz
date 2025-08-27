@@ -8,10 +8,10 @@
 </head>
 <body>
 
-  <!-- Fullscreen canvas. Inline bg avoids CSS path issues during dev -->
+  <!-- Fullscreen canvas (embers draw here). Keep background on BODY in CSS -->
   <canvas id="bg" aria-hidden="true"></canvas>
 
-  <nav>
+  <nav aria-label="Primary">
     <a href="index.html">Home</a>
     <a href="pages/services.html">Services</a>
     <a href="pages/case-studies.html">Case Studies</a>
@@ -22,12 +22,17 @@
   <main class="wrap">
     <section class="hero" id="hero">
       <div class="brand-mark">
-        <img class="flame-ring" id="flameRing"
-             src="assets/flames/circle.png"
-             alt="" aria-hidden="true" />
-        <img class="logo" id="brandLogo"
-             src="assets/logos/clear.png"
-             alt="Focus Foundry logo" />
+        <!-- NEW: wrappers for 3D tilt + slow Z spin so logo and ring move together -->
+        <div class="tilt3d">
+          <div class="spinZ">
+            <img class="flame-ring" id="flameRing"
+                 src="assets/flames/circle.png"
+                 alt="" aria-hidden="true" />
+            <img class="logo" id="brandLogo"
+                 src="assets/logos/clear.png"
+                 alt="Focus Foundry logo" />
+          </div>
+        </div>
       </div>
 
       <div class="kicker">Media Solutions</div>
@@ -47,3 +52,4 @@
   <script src="js/base.js"></script>
 </body>
 </html>
+
