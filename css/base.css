@@ -250,3 +250,7 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
   text-transform: uppercase;
   line-height: 1.15;
 }
+/* Move fire lettering up by exactly 1.5 inches (144px) */
+.hero .fire-title.raise-1-5in{
+  transform: translateY(-144px);
+}
