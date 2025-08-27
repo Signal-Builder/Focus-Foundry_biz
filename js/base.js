@@ -81,9 +81,10 @@
   function draw() {
     t += 0.006;
 
-    // Keep photo visible
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect(0, 0, W, H);
+    // at the top of draw()
+ctx.globalCompositeOperation = 'source-over';
+ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
+
 
     const h = hearth();
 

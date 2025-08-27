@@ -17,16 +17,34 @@ nav{margin-bottom:24px;text-align:center}
 nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
 
-/* ---- Canvas fixed behind everything ---- */
+/* Lava photo on the BODY (furthest back) */
+body{
+  margin: 0;
+  background: #0b0b0f; /* fallback */
+  background-image: url("../assets/background/lava-bg.jpg"); /* path is relative to css/base.css */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Canvas fixed over body, under content */
 #bg{
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   display: block;
-  z-index: 0;              /* behind content */
-  pointer-events: none;    /* never block clicks */
+  z-index: 10;            /* <-- ensure it's above the body */
+  pointer-events: none;
+  background: transparent;
 }
+
+/* Content above the canvas */
+nav, main, .wrap, .hero, .card, footer{
+  position: relative;
+  z-index: 20;            /* <-- ensure it's above the canvas */
+}
+
 
 /* ---- Keep content above canvas ---- */
 nav, main, .wrap, .hero, .card, footer { position: relative; z-index: 1 }
