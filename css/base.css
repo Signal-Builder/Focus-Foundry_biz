@@ -62,4 +62,42 @@ main, .wrap, .hero, .card, nav, footer { position:relative; z-index:1 }
   70%{  transform:scale(1.0); opacity:.85 }
   100%{ transform:scale(1.0); opacity:0 }
 }
+/* Spin keyframes */
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Make transforms silky */
+.brand-mark, .logo, .flame-ring { will-change: transform; }
+
+/* After the stamp finishes, start a slow spin */
+#hero.stamp .flame-ring{
+  /* already has the flare animation; append rotation after it */
+  animation:
+    flameStamp .9s ease-out .05s both,
+    rotate360 40s linear 1.2s infinite;      /* slow, continuous */
+}
+
+#hero.stamp .logo{
+  /* stamp in, then counter-rotate very slowly */
+  animation:
+    stampIn .7s ease-out both,
+    rotate360 60s linear 1.2s infinite reverse;
+}
+
+/* Optional: pause spin when user hovers the hero (nice for demos) */
+#hero:hover .flame-ring,
+#hero:hover .logo{
+  animation-play-state: paused;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #hero.stamp .flame-ring,
+  #hero.stamp .logo{
+    animation: none;
+  }
+}
+
 
