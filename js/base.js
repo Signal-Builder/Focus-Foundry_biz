@@ -119,8 +119,9 @@
   // return to normal for next frame
   ctx.globalCompositeOperation = 'source-over';
   requestAnimationFrame(draw);
-}
-  requestAnimationFrame(draw);
+  }
+
+  draw();
 
   console.log('Embers started ✓');
 })();
