@@ -31,13 +31,7 @@ nav a:hover{color:var(--accent)}
   background-blend-mode: overlay;
   filter: saturate(115%) contrast(102%);
 }
-#bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.35); /* adjust darkness */
-  z-index: -1;
-}
+
 /* Ensure UI is above canvas */
 main, .wrap, .hero, .card, nav, footer { position:relative; z-index:1 }
 
