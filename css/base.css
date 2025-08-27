@@ -1,21 +1,32 @@
-:root{ --bg:#0b0b0f; --ink:#e7e7ee; --muted:#9aa0a6; --accent:#66e0ff; }
+/* ========== Tokens ========== */
+:root{
+  --bg:#0b0b0f;
+  --ink:#e7e7ee;
+  --muted:#9aa0a6;
+  --accent:#66e0ff;
+}
 
+/* ========== Base ========== */
 *{ box-sizing:border-box }
 html,body{ height:100% }
 body{
   margin:0; color:var(--ink);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
-  /* Path is RELATIVE to css/base.css  */
+
+  /* Lava background (path is relative to this CSS file) */
   background-image:url("../assets/background/lava-bg.jpg");
-  background-size:cover; background-position:center; background-repeat:no-repeat;
-  background-color:var(--bg);
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-color:var(--bg); /* fallback */
 }
 
 .wrap{ max-width:1100px; margin:0 auto; padding:48px 24px }
 
-/* Sticky translucent nav */
+/* ========== Sticky translucent nav ========== */
 nav{
-  position:sticky; top:0; z-index:25; text-align:center; padding:10px 0;
+  position:sticky; top:0; z-index:25;
+  text-align:center; padding:10px 0;
   background:rgba(10,10,14,.35);
   -webkit-backdrop-filter:saturate(120%) blur(6px);
   backdrop-filter:saturate(120%) blur(6px);
@@ -23,36 +34,50 @@ nav{
 nav a{ color:var(--muted); margin:0 12px; text-decoration:none; font-weight:500 }
 nav a:hover{ color:var(--accent) }
 
-/* Hero */
+/* ========== Hero ========== */
 .hero{
-  position:relative; padding:96px 24px; text-align:center; border-radius:24px;
+  position:relative; /* for mask */
+  padding:64px 24px 48px; /* a bit tighter now that title is image */
+  text-align:center;
+  border-radius:24px;
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-  box-shadow:0 10px 30px rgba(0,0,0,.35); overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  overflow:hidden;
 }
+/* Legibility mask to keep text readable */
 .hero::before{
   content:""; position:absolute; inset:-8px; z-index:-1; border-radius:inherit;
   background: radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%);
 }
 
-/* Hidden semantic H1 */
+/* Hidden semantic H1 (we use image visually) */
 .sr-only{
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
 }
 
-/* Fire-title */
+/* Fire brand header */
 .fire-title{
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  margin:0 auto 10px; width:min(90%, 820px);
-  filter: drop-shadow(0 10px 26px rgba(0,0,0,.55));
+  margin:0 auto 8px;
+  text-align:center;
+  filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
 }
-.fire-word{ display:block; width:100%; height:auto; image-rendering:auto; }
+.fire-logo{
+  width:min(92%, 900px);
+  height:auto;
+  display:block;
+  margin:0 auto;
+}
 
+/* Kicker + hero copy */
 .kicker{
-  text-transform:uppercase; letter-spacing:.18em;
-  font-size:12px; color:#f0c870; opacity:.9; text-align:center; margin-bottom:8px;
+  margin-top:6px;
+  font-size:14px;
+  letter-spacing:.20em;
+  color:#f0c870;
+  text-transform:uppercase;
 }
-p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:0 0 24px }
+p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:12px 0 22px }
 
 .btn{
   display:inline-block; padding:14px 22px; border-radius:12px; text-decoration:none;
@@ -68,18 +93,37 @@ p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:0 0 24px }
   border-radius:16px; background:rgba(255,255,255,.02);
 }
 
+/* Brand stamp (logo) */
+.brand-stamp{
+  position:relative;
+  width:140px; height:140px;
+  margin:28px auto 0;
+}
+.brand-stamp img{
+  width:100%; height:auto; display:block; opacity:.96;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,.55));
+  animation: stampIn 0.9s ease-out both;
+}
+
+/* Stamping animation */
+@keyframes stampIn{
+  0%   { transform: scale(2) rotate(-10deg); opacity:0; filter: blur(10px) }
+  60%  { transform: scale(0.95) rotate(3deg); opacity:1; filter: blur(2px) }
+  100% { transform: scale(1) rotate(0deg); opacity:1; filter: blur(0) }
+}
+
+/* Footer */
 footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
 
-/* Ember canvas behind content */
+/* ========== Canvas: embers layer (behind content) ========== */
 #bg{
   position:fixed; inset:0; width:100vw; height:100vh; display:block;
   z-index:10; pointer-events:none; background:transparent;
 }
-
 /* Content above canvas */
 main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
 
-/* Services */
+/* ========== Services ========== */
 .services{ margin:48px 0 12px }
 .services > h2{ font-size:clamp(24px,3.8vw,36px); margin:0 0 18px }
 .services-grid{ display:grid; gap:16px; grid-template-columns:repeat(3, minmax(0,1fr)) }
@@ -101,7 +145,7 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
 .svc-link{ color:var(--accent); text-decoration:none; font-weight:600 }
 .svc-link:hover{ text-decoration:underline }
 
-/* Contact band */
+/* ========== Contact band ========== */
 .contact-band{
   margin:56px 0 0; border-radius:20px;
   background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
@@ -114,9 +158,9 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
 .btn-ghost{ background:transparent; color:var(--ink); border:1px solid rgba(255,255,255,.18); box-shadow:none }
 .btn-ghost:hover{ border-color:rgba(255,255,255,.35) }
 
-/* Responsive tweaks */
+/* ========== Responsive tweaks ========== */
 @media (max-width:640px){
   .wrap{ padding:36px 16px }
-  .hero{ padding:72px 18px }
-  .fire-title{ width:92%; gap:6px }
+  .hero{ padding:56px 18px 40px }
+  .fire-logo{ width:94% }
 }
