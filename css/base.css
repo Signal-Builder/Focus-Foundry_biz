@@ -254,3 +254,109 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
 .hero .fire-title.raise-1-5in{
   transform: translateY(-144px);
 }
+/* ===== Stamping timeline ================================================== */
+/* Initial states */
+.kicker-stamp,
+.brand-stamp .logo { opacity: 0; transform: translateY(0); }
+
+/* Container stacks gold + imprint */
+.brand-stamp.stack{
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 18px auto 0;              /* sits right under the kicker */
+}
+
+/* Layer both images perfectly */
+.brand-stamp.stack .logo{
+  position: absolute; inset: 0;
+  width: 100%; height: auto;
+  display: block;
+}
+
+/* Gold version gets the hot glow style */
+.brand-stamp .logo.gold{
+  filter: none;
+  mix-blend-mode: normal;
+}
+
+/* Imprint is the same art but “burned” to black */
+.brand-stamp .logo.imprint{
+  filter: brightness(0) contrast(1.2);
+  mix-blend-mode: multiply;         /* help it feel like a brand in the surface */
+  opacity: 0;
+}
+
+/* When hero gets .play-stamp, run the sequence */
+.hero.play-stamp .kicker-stamp{
+  animation: ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 200ms both;
+}
+
+.hero.play-stamp .brand-stamp .logo.gold{
+  /* 1) stamp in, 2) glow/pulse, 3) fade out to reveal imprint */
+  animation:
+    ff-stampIn 720ms cubic-bezier(.16,.84,.36,1) 880ms both,
+    ff-glowPulse 1.6s ease-in-out 1.64s 2 both,
+    ff-fadeOut 480ms ease 4.0s forwards;
+  filter: drop-shadow(0 8px 20px rgba(255,200,80,.35));
+}
+
+/* Black imprint fades in slightly after the gold fades out */
+.hero.play-stamp .brand-stamp .logo.imprint{
+  animation: ff-fadeIn 520ms ease 4.05s forwards;
+}
+
+/* Keyframes */
+@keyframes ff-stampIn{
+  0%   { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
+  60%  { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
+  100% { transform: scale(1) rotate(0); filter: blur(0); opacity: 1; }
+}
+
+@keyframes ff-glowPulse{
+  0%   { filter: drop-shadow(0 0 0 rgba(255,180,80,.0)) brightness(1); }
+  40%  { filter: drop-shadow(0 0 30px rgba(255,190,90,.55)) brightness(1.1); }
+  60%  { filter: drop-shadow(0 0 18px rgba(255,170,70,.40)) brightness(1.05); }
+  100% { filter: drop-shadow(0 0 0 rgba(255,180,80,.0)) brightness(1); }
+}
+
+@keyframes ff-fadeOut{ to { opacity: 0; } }
+@keyframes ff-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Optional: a subtle flare burst behind the stamp */
+.brand-stamp.stack::before{
+  content:"";
+  position:absolute; inset:-12%;
+  border-radius:50%;
+  background: radial-gradient(closest-side, rgba(255,210,120,.22), rgba(255,150,60,.10) 55%, transparent 70%);
+  opacity:0;
+}
+.hero.play-stamp .brand-stamp.stack::before{
+  animation: ff-flare 1.1s ease-out 1.0s both;
+}
+@keyframes ff-flare{
+  0%   { transform: scale(0.6); opacity:0; }
+  40%  { transform: scale(1.05); opacity:.55; }
+  100% { transform: scale(1); opacity:.0; }
+}
+
+/* Tighter spacing under the fire letters */
+.kicker-stamp{
+  margin-top: 2px !important;             /* tight under the fire title */
+  font-size: clamp(18px, 2.1vw, 24px);
+  font-weight: 600;
+  letter-spacing: .18em;
+  color: var(--brand-gold);
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.15;
+}
+
+/* Respect reduced motion: show final states without animation */
+@media (prefers-reduced-motion: reduce){
+  .kicker-stamp,
+  .brand-stamp .logo { animation: none !important; opacity: 1 !important; filter: none !important; }
+  .brand-stamp .logo.gold { opacity: 0 !important; }
+  .brand-stamp .logo.imprint { opacity: 1 !important; }
+  .brand-stamp.stack::before { display:none !important; }
+}

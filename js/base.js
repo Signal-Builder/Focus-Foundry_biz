@@ -143,6 +143,26 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
   set();
   addEventListener('scroll', set, { passive: true });
 })();
+// Trigger the stamp sequence when the hero is visible
+(() => {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+
+  const play = () => hero.classList.add('play-stamp');
+
+  // If already on screen (top of page), start shortly after load
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { play(); io.disconnect(); }
+      });
+    }, { threshold: 0.6 });
+    io.observe(hero);
+  } else {
+    // Fallback
+    window.addEventListener('load', () => setTimeout(play, 300));
+  }
+})();
 
 
 
