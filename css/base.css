@@ -13,31 +13,7 @@ nav{margin-bottom:24px;text-align:center}
 nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
 
-/* Canvas behind all content */
 
-/* Page background: lava photo + subtle gradient fallback */
-body{
-  margin: 0;
-  height: 100%;
-  color: var(--ink);
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
-
-/* Lava photo background */
-/* To display the lava photo, set it as a background image in CSS instead of using an HTML tag. */
-background-image: url("/assets/background/lava-bg.jpg");
-
-
-  /* Cover whole screen */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  /* Fallback gradient in case image fails to load */
-  background-color: #0b0b0f;
-  background-blend-mode: overlay;
-}
-
-/* Ember canvas stays on top of the body bg, still behind content */
 #bg{
   position: fixed;
   inset: 0;
