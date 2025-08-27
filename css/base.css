@@ -1,115 +1,94 @@
-:root{--bg:#0b0b0f;--ink:#e7e7ee;--muted:#9aa0a6;--accent:#66e0ff}
-*{box-sizing:border-box}html,body{height:100%}
-body{margin:0;background:#0b0b0f;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial}
-
-.wrap{max-width:1100px;margin:0 auto;padding:48px 24px}
-.hero{padding:96px 24px;text-align:center;border-radius:24px;
-      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-      box-shadow:0 10px 30px rgba(0,0,0,.35)}
-h1{font-size:clamp(36px,6vw,68px);margin:0 0 8px}
-p.lead{color:var(--muted);font-size:clamp(16px,2.4vw,20px);margin:0 0 24px}
-.btn{display:inline-block;padding:14px 22px;border-radius:12px;text-decoration:none;font-weight:700;color:#0b0b0f;background:var(--accent);
-     box-shadow:0 8px 24px rgba(102,224,255,.35);transition:transform .12s ease, box-shadow .12s ease}
-.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(102,224,255,.45)}
-.card{margin:36px 0;padding:24px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.02)}
-footer{margin:64px 0 0;text-align:center;color:var(--muted)}
-nav{margin-bottom:24px;text-align:center}
-nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
-nav a:hover{color:var(--accent)}
-
-/* Lava photo on the BODY (furthest back) */
-body{
-  margin: 0;
-  background: #0b0b0f; /* fallback */
-  background-image: url("../assets/background/lava-bg.jpg"); /* path is relative to css/base.css */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+/* ===== Services ===== */
+.services{
+  margin: 48px 0 12px;
+}
+.services > h2{
+  font-size: clamp(24px, 3.8vw, 36px);
+  margin: 0 0 18px;
+}
+.services-grid{
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+}
+@media (max-width: 900px){
+  .services-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 640px){
+  .services-grid{ grid-template-columns: 1fr; }
 }
 
-/* Canvas fixed over body, under content */
-#bg{
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  display: block;
-  z-index: 10;            /* <-- ensure it's above the body */
-  pointer-events: none;
+.svc{
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  background: rgba(10,10,14,.35);
+  backdrop-filter: blur(4px) saturate(110%);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.svc:hover{
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+}
+.svc-icon{
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: rgba(255,170,60,.12);
+  color: #f5c375;
+  margin-bottom: 10px;
+}
+.svc h3{
+  margin: 0 0 6px;
+  font-size: clamp(18px, 2.6vw, 22px);
+}
+.svc p{
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+.svc-link{
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+.svc-link:hover{ text-decoration: underline; }
+
+/* ===== Contact band ===== */
+.contact-band{
+  margin: 56px 0 0;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow: 0 12px 30px rgba(0,0,0,.35);
+}
+.contact-inner{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 22px;
+  text-align: center;
+}
+.contact-inner h2{
+  margin: 0 0 6px;
+  font-size: clamp(24px, 3.8vw, 36px);
+}
+.contact-lead{
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.contact-actions{
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-ghost{
   background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: none;
 }
-
-/* Content above the canvas */
-nav, main, .wrap, .hero, .card, footer{
-  position: relative;
-  z-index: 20;            /* <-- ensure it's above the canvas */
+.btn-ghost:hover{
+  border-color: rgba(255,255,255,.35);
 }
-
-
-/* ---- Keep content above canvas ---- */
-nav, main, .wrap, .hero, .card, footer { position: relative; z-index: 1 }
-
-/* Branding */
-.brand-mark{ position:relative; width:clamp(140px,28vw,220px); margin:0 auto 10px }
-.logo{
-  width:100%; height:auto; display:block; opacity:.98;
-  filter:drop-shadow(0 6px 18px rgba(0,0,0,.35));
-}
-.kicker{
-  text-transform:uppercase; letter-spacing:.18em;
-  font-size:12px; color:#f0c870; opacity:.9; text-align:center; margin-bottom:8px;
-}
-
-/* Flame ring overlay + intro stamp */
-.flame-ring{
-  position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
-  opacity:0; mix-blend-mode:screen;
-  filter:saturate(140%) contrast(110%) drop-shadow(0 12px 28px rgba(255,170,60,.35));
-  pointer-events:none;
-}
-
-#hero{ position:relative; overflow:hidden }
-#hero.stamp .logo{ animation:stampIn .7s ease-out both }
-#hero.stamp .flame-ring{ animation:flameStamp .9s ease-out .05s both }
-
-@keyframes stampIn{
-  0%{ transform:scale(1.35) rotate(-4deg); filter:blur(6px); opacity:0 }
-  60%{ transform:scale(.98)  rotate( 1deg); filter:blur(0);   opacity:1 }
-  100%{ transform:scale(1)    rotate( 0);   filter:drop-shadow(0 10px 30px rgba(255,170,60,.25)) }
-}
-@keyframes flameStamp{
-  0%{   transform:scale(.6);  opacity:0 }
-  35%{  transform:scale(1.04);opacity:.95 }
-  70%{  transform:scale(1.0); opacity:.85 }
-  100%{ transform:scale(1.0); opacity:0 }
-}
-.brand-mark{ position:relative; width:clamp(140px,28vw,220px); margin:0 auto 10px; perspective:800px; }
-.tilt3d{ transform-style:preserve-3d; animation:ff-tilt 16s ease-in-out 1.2s infinite alternate; }
-.spinZ{ position:relative; transform-style:preserve-3d; animation:ff-spin 42s linear 1.2s infinite; }
-
-.flame-ring{
-  position:absolute; inset:0; width:100%; height:100%; object-fit:contain;
-  opacity:0; mix-blend-mode:screen;
-  filter:saturate(140%) contrast(110%) drop-shadow(0 12px 28px rgba(255,170,60,.35));
-  pointer-events:none;
-}
-.logo{ position:relative; width:100%; height:auto; display:block; opacity:.98;
-  filter:drop-shadow(0 6px 18px rgba(0,0,0,.35)); }
-
-@keyframes ff-tilt{
-  0%{   transform: rotateX(-8deg) rotateY(6deg) translateZ(0px); }
-  50%{  transform: rotateX( 6deg) rotateY(-8deg) translateZ(2px); }
-  100%{ transform: rotateX(-5deg) rotateY(5deg) translateZ(0px); }
-}
-@keyframes ff-spin{ from{ transform:rotateZ(0deg) } to{ transform:rotateZ(360deg) } }
-
-/* keep your existing stamp animations */
-#hero{ position:relative; overflow:hidden }
-#hero.stamp .logo{ animation:stampIn .7s ease-out both }
-#hero.stamp .flame-ring{ animation:flameStamp .9s ease-out .05s both }
-
-/* optional: pause on hover & reduced motion */
-#hero:hover .tilt3d, #hero:hover .spinZ{ animation-play-state:paused; }
-@media (prefers-reduced-motion: reduce){ .tilt3d, .spinZ{ animation:none !important; } }
-
-
