@@ -14,13 +14,7 @@ nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
 
 /* Canvas behind all content */
-#bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.35); /* adjust darkness */
-  z-index: -1;
-}
+
 
 #bg{
   position: fixed;
@@ -37,7 +31,13 @@ nav a:hover{color:var(--accent)}
   background-blend-mode: overlay;
   filter: saturate(115%) contrast(102%);
 }
-
+#bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35); /* adjust darkness */
+  z-index: -1;
+}
 /* Ensure UI is above canvas */
 main, .wrap, .hero, .card, nav, footer { position:relative; z-index:1 }
 
