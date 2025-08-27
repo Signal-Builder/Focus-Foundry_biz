@@ -94,5 +94,35 @@ main, .wrap, .hero, .card, nav, footer {
     animation: none;
   }
 }
+/* ---- CANVAS: fixed, covers viewport, no layout height ---- */
+#bg{
+  position: fixed;          /* <-- key: removes it from document flow */
+  inset: 0;                 /* top:0; right:0; bottom:0; left:0 */
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 0;               /* behind content */
+  pointer-events: none;     /* never block clicks */
+  background: url("../assets/background/lava-bg.jpg") center/cover no-repeat; /* if you want it on the canvas */
+  /* or background: transparent; if body holds the photo */
+}
+
+/* ---- CONTENT: always above canvas ---- */
+nav, main, .wrap, .hero, .card, footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional: page bg on the body instead of the canvas */
+body{
+  margin: 0;
+  background: #0b0b0f;  /* fallback */
+  /* uncomment if you want the lava on body instead
+  background-image: url("../assets/background/lava-bg.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  */
+}
 
 
