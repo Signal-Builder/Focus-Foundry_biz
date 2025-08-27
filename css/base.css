@@ -177,3 +177,36 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
   .fire-logo{ width:94% }
   nav{ gap:16px; font-size:16px; }
 }
+/* ===== Hero tight layout (overrides) ===== */
+.hero.hero--tight{
+  padding-top: 32px !important;   /* pull fire title up */
+  padding-bottom: 48px;           /* keep bottom breathing room */
+}
+
+.hero.hero--tight .fire-title{
+  margin: 0 auto 4px !important;  /* minimal gap under fire text */
+  text-align: center;
+}
+
+.hero.hero--tight .fire-logo{
+  width: min(92%, 880px);          /* adjust as you like */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.hero.hero--tight .kicker{
+  margin-top: 6px !important;      /* sits directly under fire text */
+  font-size: clamp(18px, 2.1vw, 24px) !important; /* medium size */
+  font-weight: 600;
+  letter-spacing: .18em;
+  color: var(--brand-gold);        /* match nav */
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.15;
+}
+
+/* Optional: bring the stamp a bit closer to the kicker */
+.hero.hero--tight .brand-stamp{
+  margin-top: 18px !important;
+}
