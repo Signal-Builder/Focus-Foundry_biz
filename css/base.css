@@ -14,14 +14,28 @@ nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
 
 /* Canvas behind all content */
+#bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35); /* adjust darkness */
+  z-index: -1;
+}
+
 #bg{
-  position:fixed; inset:0; width:100vw; height:100vh;
-  z-index:0; pointer-events:none;
-  background:
-    radial-gradient(900px 600px at 50% -10%, rgba(255,170,60,.06), transparent 60%),
-    radial-gradient(700px 500px at 85% 10%,  rgba(255,220,140,.04), transparent 60%),
-    #0b0b0f;
-  filter:saturate(115%) contrast(102%);
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+
+  /* Lava background image */
+  background: url("assets/background/lava.jpg") center/cover no-repeat;
+  
+  /* Extra overlay gradients to keep text readable */
+  background-blend-mode: overlay;
+  filter: saturate(115%) contrast(102%);
 }
 
 /* Ensure UI is above canvas */
