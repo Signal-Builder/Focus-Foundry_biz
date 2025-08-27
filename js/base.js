@@ -69,52 +69,58 @@
   function draw(){
   t += 0.005;
 
-  // super-light veil; won't hide the photo
-  ctx.save();
+  // ultra-light veil to create a bit of contrast but not hide the photo
   ctx.globalCompositeOperation = 'source-over';
-  ctx.fillStyle = 'rgba(0,0,0,0.03)';   // << very transparent
+  ctx.fillStyle = 'rgba(0,0,0,0.03)';   // keep very low
   ctx.fillRect(0, 0, W, H);
-  ctx.restore();
 
   const h = hearth();
 
-  ctx.globalCompositeOperation = 'lighter';
   for (const p of P){
     // motion
     p.x += Math.cos(p.a) * p.s;
     p.y += (Math.sin(p.a + t) + 0.8) * p.s;
-    p.a += (Math.random()-0.5)*0.05;
+    p.a += (Math.random() - 0.5) * 0.05;
 
     // attraction
     const dx = h.x - p.x, dy = h.y - p.y;
-    const dist = Math.hypot(dx,dy) + 1e-3;
-    const pull = Math.min(0.015, 60/(dist*dist));
+    const dist = Math.hypot(dx, dy) + 1e-3;
+    const pull = Math.min(0.015, 60 / (dist * dist));
     p.x += dx * pull;
     p.y += dy * pull;
 
     // wrap
-    if (p.x<0) p.x+=W; if (p.x>W) p.x-=W;
-    if (p.y<0) p.y+=H; if (p.y>H) p.y-=H;
+    if (p.x < 0) p.x += W; if (p.x > W) p.x -= W;
+    if (p.y < 0) p.y += H; if (p.y > H) p.y -= H;
 
-    // flicker and draw
-    const flick = 1 + (Math.random()-0.5)*0.2;
-    const R = p.r * 6 * flick;
+    // flicker/size
+    const flick = 1 + (Math.random() - 0.5) * 0.25;
+    const Rcore = p.r * 2 * flick;   // tight bright core
+    const Rhalo = p.r * 8 * flick;   // wide soft halo
 
-    const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,R);
-    g.addColorStop(0.0,'rgba(255,200,80,0.18)');
-    g.addColorStop(0.55,'rgba(255,140,40,0.10)');
-    g.addColorStop(1.0,'rgba(255,140,40,0.00)');
+    // 1) Bright core (draw on top of photo, not additive)
+    ctx.globalCompositeOperation = 'source-over';
+    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
+    g.addColorStop(0.0, 'rgba(255,220,120,0.55)'); // hot center
+    g.addColorStop(1.0, 'rgba(255,160,60,0.00)');
     ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rcore, 0, Math.PI * 2); ctx.fill();
 
-    ctx.beginPath(); ctx.arc(p.x,p.y,R,0,Math.PI*2); ctx.fill();
+    // 2) Soft halo (additive glow for warmth)
+    ctx.globalCompositeOperation = 'lighter';
+    g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rhalo);
+    g.addColorStop(0.0, 'rgba(255,200,80,0.16)');
+    g.addColorStop(0.6, 'rgba(255,140,40,0.08)');
+    g.addColorStop(1.0, 'rgba(255,140,40,0.00)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rhalo, 0, Math.PI * 2); ctx.fill();
   }
-  ctx.globalCompositeOperation = 'source-over';
 
+  // return to normal for next frame
+  ctx.globalCompositeOperation = 'source-over';
   requestAnimationFrame(draw);
 }
-
-  
-  draw();
+  requestAnimationFrame(draw);
 
   console.log('Embers started ✓');
 })();
