@@ -8,9 +8,10 @@
 </head>
 <body>
 
-
-  <!-- Ember canvas (behind everything) -->
-  <canvas id="bg" aria-hidden="true"></canvas>
+  <!-- Fullscreen canvas. Inline bg avoids CSS path issues during dev -->
+  <canvas id="bg" aria-hidden="true"
+          style="background: url('assets/background/lava-bg.jpg') center/cover no-repeat;">
+  </canvas>
 
   <nav>
     <a href="index.html">Home</a>
@@ -20,17 +21,9 @@
     <a href="pages/contact.html">Contact</a>
   </nav>
 
-<canvas id="bg" aria-hidden="true"
-  style="background: url('assets/background/lava-bg.jpg') center/cover no-repeat;">
-</canvas>
-
-
-
-
   <main class="wrap">
     <section class="hero" id="hero">
       <div class="brand-mark">
-        <!-- Flame ring + logo (paths corrected to lowercase) -->
         <img class="flame-ring" id="flameRing"
              src="assets/flames/circle.png"
              alt="" aria-hidden="true" />
@@ -56,5 +49,3 @@
   <script src="js/base.js"></script>
 </body>
 </html>
-
-
