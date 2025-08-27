@@ -210,3 +210,43 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
 .hero.hero--tight .brand-stamp{
   margin-top: 18px !important;
 }
+/* --- FORCE-HIDE the semantic H1 if it leaks through anywhere --- */
+.hero h1.sr-only{
+  position:absolute !important;
+  width:1px !important;
+  height:1px !important;
+  padding:0 !important;
+  margin:-1px !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  white-space:nowrap !important;
+  border:0 !important;
+}
+
+/* --- TIGHTEN HERO LAYOUT: lift fire title, tighten kicker --- */
+.hero.hero--tight{
+  padding-top: 26px !important;      /* move content closer to the top */
+  padding-bottom: 48px;
+}
+
+.hero.hero--tight .fire-title{
+  margin: -6px auto 2px !important;  /* lift the fire image slightly; tiny gap below */
+  text-align:center;
+}
+
+.hero.hero--tight .fire-logo{
+  width: min(92%, 880px);            /* adjust if you want it bigger/smaller */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.hero.hero--tight .kicker{
+  margin-top: 2px !important;        /* sit tight under the fire letters */
+  font-size: clamp(18px, 2.1vw, 24px) !important;
+  font-weight: 600;
+  letter-spacing: .18em;
+  color: var(--brand-gold);
+  text-transform: uppercase;
+  line-height: 1.15;
+}
