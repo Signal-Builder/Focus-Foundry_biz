@@ -1,32 +1,50 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Focus Foundry · Cinematic Web Experiences</title>
-<link rel="stylesheet" href="css/base.css">
-</head><body>
-<nav>
-  <a href="index.html">Home</a>
-  <a href="pages/services.html">Services</a>
-  <a href="pages/case-studies.html">Case Studies</a>
-  <a href="pages/about.html">About</a>
-  <a href="pages/contact.html">Contact</a>
-</nav>
-<main class="wrap">
-  <!-- Ember canvas -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus Foundry · Cinematic Web Experiences</title>
+  <link rel="stylesheet" href="css/base.css" />
+</head>
+<body>
+
+  <!-- Ember canvas (behind everything) -->
   <canvas id="bg" aria-hidden="true"></canvas>
 
-  <section class="hero" id="hero">
-    <img class="logo" id="brandLogo" src="assets/images/brand/logo.svg" alt="Focus Foundry logo" />
-    <div class="kicker">Media Solutions</div>
-    <h1>Focus Foundry</h1>
-    <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
-    <a class="btn" href="pages/services.html">View Services</a>
-  </section>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="pages/services.html">Services</a>
+    <a href="pages/case-studies.html">Case Studies</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/contact.html">Contact</a>
+  </nav>
 
-  <section class="card">
-    <h2>What We Do</h2>
-    <p>We design modular, cinematic landing pages using HTML, CSS, and JavaScript. Optimized for speed, impact, and storytelling.</p>
-  </section>
+  <main class="wrap">
+    <section class="hero" id="hero">
+      <div class="brand-mark">
+        <!-- Use your exact asset paths; if missing, page still works -->
+        <img class="flame-ring" id="flameRing"
+             src="assets/Flame-Circle/Flame_Circle_No_BG.png"
+             alt="" aria-hidden="true" />
+        <img class="logo" id="brandLogo"
+             src="assets/FF_Logos/gold_Transparent.png"
+             alt="Focus Foundry logo" />
+      </div>
 
-  <footer>© 2025 Briteminds · Focus Foundry</footer>
-</main>
+      <div class="kicker">Media Solutions</div>
+      <h1>Focus Foundry</h1>
+      <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
+      <a class="btn" href="pages/services.html">View Services</a>
+    </section>
+
+    <section class="card">
+      <h2>What We Do</h2>
+      <p>We design modular, cinematic landing pages using HTML, CSS, and JavaScript. Optimized for speed, impact, and storytelling.</p>
+    </section>
+
+    <footer>© 2025 Briteminds · Focus Foundry</footer>
+  </main>
+
+  <script src="js/base.js"></script>
+</body>
+</html>
