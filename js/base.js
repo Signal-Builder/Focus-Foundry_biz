@@ -1,40 +1,53 @@
-(() => {
-  const c = document.getElementById('bg');
-  if (!c) { console.warn('No #bg'); return; }
+function draw(){
+  t += 0.005;
 
-  const dpr = Math.min(2, window.devicePixelRatio || 1);
-  const ctx = c.getContext('2d', { alpha: true });
+  // fully transparent clear (do NOT paint a dark veil)
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.clearRect(0, 0, W, H);
 
-  function resize(){
-    c.width  = Math.floor(innerWidth  * dpr);
-    c.height = Math.floor(innerHeight * dpr);
-    c.style.width  = innerWidth  + 'px';
-    c.style.height = innerHeight + 'px';
-  }
-  addEventListener('resize', resize, { passive:true });
-  resize();
+  const h = hearth();
 
-  let t = 0;
-  function draw(){
-    t += 0.02;
+  for (const p of P){
+    // motion
+    p.x += Math.cos(p.a) * p.s;
+    p.y += (Math.sin(p.a + t) + 0.6) * p.s;
+    p.a += (Math.random() - 0.5) * 0.05;
 
-    // clear with transparent veil (so background photo shows)
+    // gentle attraction to logo
+    const dx = h.x - p.x, dy = h.y - p.y;
+    const dist = Math.hypot(dx,dy) + 1e-3;
+    const pull = Math.min(0.02, 80 / (dist*dist));
+    p.x += dx * pull;
+    p.y += dy * pull;
+
+    // wrap
+    if (p.x < 0) p.x += W; if (p.x > W) p.x -= W;
+    if (p.y < 0) p.y += H; if (p.y > H) p.y -= H;
+
+    // brighter embers for visibility test
+    const flick = 1 + (Math.random() - 0.5) * 0.3;
+    const Rcore = p.r * 2.2 * flick;
+    const Rhalo = p.r * 10  * flick;
+
+    // bright core (normal blend so it shows on photo)
     ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect(0,0,c.width,c.height);
+    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
+    g.addColorStop(0.0, 'rgba(255, 240, 150, 0.85)');
+    g.addColorStop(1.0, 'rgba(255, 160, 60, 0.00)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rcore, 0, Math.PI*2); ctx.fill();
 
-    // draw a very obvious circle moving left-right
-    const x = (c.width  / 2) + Math.cos(t) * (c.width * 0.3);
-    const y = (c.height / 3);
-
-    ctx.beginPath();
-    ctx.fillStyle = 'rgba(255, 255, 0, 0.95)'; // bright yellow
-    ctx.arc(x, y, 30 * dpr, 0, Math.PI * 2);
-    ctx.fill();
-
-    requestAnimationFrame(draw);
+    // halo (additive for warmth)
+    ctx.globalCompositeOperation = 'lighter';
+    g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rhalo);
+    g.addColorStop(0.0, 'rgba(255,200,80,0.22)');
+    g.addColorStop(0.7, 'rgba(255,140,40,0.10)');
+    g.addColorStop(1.0, 'rgba(255,140,40,0.00)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rhalo, 0, Math.PI*2); ctx.fill();
   }
-  draw();
 
-  console.log('[diag] canvas test running');
-})();
+  ctx.globalCompositeOperation = 'source-over';
+  requestAnimationFrame(draw);
+}
 
