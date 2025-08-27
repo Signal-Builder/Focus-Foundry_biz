@@ -14,8 +14,27 @@ nav a{color:var(--muted);margin:0 12px;text-decoration:none;font-weight:500}
 nav a:hover{color:var(--accent)}
 
 /* Canvas behind all content */
+/* Page background: lava photo + subtle gradient fallback */
+body{
+  margin: 0;
+  height: 100%;
+  color: var(--ink);
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
 
+  /* Lava photo background */
+  background-image: url("assets/background/lava-bg.jpg");
 
+  /* Cover whole screen */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Fallback gradient in case image fails to load */
+  background-color: #0b0b0f;
+  background-blend-mode: overlay;
+}
+
+/* Ember canvas stays on top of the body bg, still behind content */
 #bg{
   position: fixed;
   inset: 0;
@@ -24,36 +43,16 @@ nav a:hover{color:var(--accent)}
   z-index: 0;
   pointer-events: none;
 
-  /* Lava background image */
-  background: url("assets/background/lava.jpg") center/cover no-repeat;
-  
-  /* Extra overlay gradients to keep text readable */
-  background-blend-mode: overlay;
+  background: transparent;  /* body now holds the lava photo */
   filter: saturate(115%) contrast(102%);
 }
-#bg{
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
 
-  background: url("assets/background/lava.jpg") center/cover no-repeat;
-  background-blend-mode: overlay;
-  filter: saturate(115%) contrast(102%);
-}
-#bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.35); /* adjust darkness */
-  z-index: -1;
+/* Ensure UI above canvas */
+main, .wrap, .hero, .card, nav, footer {
+  position: relative;
+  z-index: 1;
 }
 
-
-/* Ensure UI is above canvas */
-main, .wrap, .hero, .card, nav, footer { position:relative; z-index:1 }
 
 /* Branding */
 .brand-mark{ position:relative; width:clamp(140px,28vw,220px); margin:0 auto 10px }
