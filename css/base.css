@@ -15,15 +15,17 @@ nav a:hover{color:var(--accent)}
 
 /* Canvas behind all content */
 /* Page background: lava photo + subtle gradient fallback */
+/* Page background: lava photo + subtle gradient fallback */
 body{
   margin: 0;
   height: 100%;
   color: var(--ink);
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
 
-  /* Lava photo background */
-  background-image: url("assets/background/lava-bg.jpg"),
-                    linear-gradient(180deg, rgba(255,140,60,.15), rgba(0,0,0,.35));
+/* Lava photo background */
+/* To display the lava photo, set it as a background image in CSS instead of using an HTML tag. */
+background-image: url("/assets/background/lava-bg.jpg");
+
 
   /* Cover whole screen */
   background-size: cover;
