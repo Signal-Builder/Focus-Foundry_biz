@@ -4,6 +4,7 @@
   --ink:#e7e7ee;
   --muted:#9aa0a6;
   --accent:#66e0ff;
+  --brand-gold:#f0c870; /* gold used for nav + kicker */
 }
 
 /* ========== Base ========== */
@@ -13,7 +14,7 @@ body{
   margin:0; color:var(--ink);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
 
-  /* Lava background (path is relative to this CSS file) */
+  /* Lava background (path is RELATIVE to this CSS file) */
   background-image:url("../assets/background/lava-bg.jpg");
   background-size:cover;
   background-position:center;
@@ -23,21 +24,39 @@ body{
 
 .wrap{ max-width:1100px; margin:0 auto; padding:48px 24px }
 
-/* ========== Sticky translucent nav ========== */
+/* ========== Sticky translucent nav (bigger + gold) ========== */
 nav{
   position:sticky; top:0; z-index:25;
-  text-align:center; padding:10px 0;
-  background:rgba(10,10,14,.35);
-  -webkit-backdrop-filter:saturate(120%) blur(6px);
-  backdrop-filter:saturate(120%) blur(6px);
+
+  display:flex; justify-content:center; gap:22px;
+  padding:14px 0; /* bigger */
+  background:rgba(10,10,14,.45);
+  -webkit-backdrop-filter:saturate(120%) blur(8px);
+  backdrop-filter:saturate(120%) blur(8px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+
+  font-size:17px; /* bigger */
+  letter-spacing:.02em;
+  transition:background .2s ease, padding .2s ease, box-shadow .2s ease;
 }
-nav a{ color:var(--muted); margin:0 12px; text-decoration:none; font-weight:500 }
-nav a:hover{ color:var(--accent) }
+nav a{
+  color:var(--brand-gold); /* match kicker */
+  text-decoration:none;
+  font-weight:600;
+}
+nav a:hover{ color:#ffd88a; text-decoration:underline }
+
+/* When user scrolls a bit, bar tightens/solidifies (JS toggles .nav--scrolled) */
+nav.nav--scrolled{
+  padding:10px 0;
+  background:rgba(10,10,14,.60);
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
 
 /* ========== Hero ========== */
 .hero{
   position:relative; /* for mask */
-  padding:64px 24px 48px; /* a bit tighter now that title is image */
+  padding:64px 24px 48px; /* tighter since title is image */
   text-align:center;
   border-radius:24px;
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
@@ -56,7 +75,7 @@ nav a:hover{ color:var(--accent) }
   overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
 }
 
-/* Fire brand header */
+/* Fire brand header (single image) */
 .fire-title{
   margin:0 auto 8px;
   text-align:center;
@@ -69,16 +88,18 @@ nav a:hover{ color:var(--accent) }
   margin:0 auto;
 }
 
-/* Kicker + hero copy */
+/* “Media Solutions” — larger, sits right under title, gold to match nav */
 .kicker{
-  margin-top:6px;
-  font-size:14px;
+  margin-top:8px;            /* sits tight under fire title */
+  font-size:18px;            /* larger */
   letter-spacing:.20em;
-  color:#f0c870;
+  color:var(--brand-gold);   /* same color as nav links */
   text-transform:uppercase;
+  text-align:center;
 }
-p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:12px 0 22px }
 
+/* Hero copy + CTA */
+p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:12px 0 22px }
 .btn{
   display:inline-block; padding:14px 22px; border-radius:12px; text-decoration:none;
   font-weight:700; color:#0b0b0f; background:var(--accent);
@@ -104,8 +125,6 @@ p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:12px 0 22px
   filter: drop-shadow(0 8px 20px rgba(0,0,0,.55));
   animation: stampIn 0.9s ease-out both;
 }
-
-/* Stamping animation */
 @keyframes stampIn{
   0%   { transform: scale(2) rotate(-10deg); opacity:0; filter: blur(10px) }
   60%  { transform: scale(0.95) rotate(3deg); opacity:1; filter: blur(2px) }
@@ -163,4 +182,5 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
   .wrap{ padding:36px 16px }
   .hero{ padding:56px 18px 40px }
   .fire-logo{ width:94% }
+  nav{ gap:16px; font-size:16px; }
 }

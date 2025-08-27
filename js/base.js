@@ -135,6 +135,14 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
 
   console.log('Embers started ✓', { dpr, particles: P.length });
 })();
+// Nav scroll state
+(() => {
+  const nav = document.getElementById('site-nav') || document.querySelector('nav');
+  if (!nav) return;
+  const set = () => nav.classList.toggle('nav--scrolled', window.scrollY > 10);
+  set();
+  addEventListener('scroll', set, { passive: true });
+})();
 
 
 
