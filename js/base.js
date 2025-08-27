@@ -164,5 +164,20 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
   }
 })();
 
+// Trigger stamp when hero is in view (or soon after load)
+(() => {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+  const activate = () => hero.classList.add('play-stamp');
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { activate(); io.disconnect(); } });
+    }, { threshold: 0.6 });
+    io.observe(hero);
+  } else {
+    window.addEventListener('load', () => setTimeout(activate, 300));
+  }
+})();
 
 
