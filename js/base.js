@@ -17,19 +17,19 @@
   addEventListener('resize', resize, { passive: true });
   resize();
 
-  // Ensure correct layering at runtime too
+  // Ensure layering
   Object.assign(c.style, {
     position: 'fixed',
     inset: '0',
-    zIndex: '0',
+    zIndex: '0',           // canvas behind content (CSS puts content z-index higher)
     pointerEvents: 'none',
     display: 'block'
   });
 
-  // Hearth = logo center
-  const logoEl = document.getElementById('brandLogo');
+  // Hearth = logo center (falls back to screen upper third)
   function hearth() {
-    if (!logoEl) return { x: W / 2, y: H / 3 };
+    const logoEl = document.getElementById('brandLogo');
+    if (!logoEl) return { x: (W / 2), y: (H / 3) };
     const r = logoEl.getBoundingClientRect();
     const x = (r.left + r.right) / 2;
     const y = (r.top  + r.bottom) / 2 + window.scrollY;
@@ -69,7 +69,7 @@
     }
   }
 
-  // Stamp burst
+  // Initial stamp burst near hearth after load
   window.addEventListener('load', () => {
     const hero = document.getElementById('hero');
     if (hero) hero.classList.add('stamp');
@@ -77,14 +77,12 @@
     spawn(h.x, h.y, 40);
   });
 
-  // Draw
+  // Draw loop
   function draw() {
     t += 0.006;
 
-    // at the top of draw()
-ctx.globalCompositeOperation = 'source-over';
-ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
-
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, W, H); // keep canvas transparent between frames
 
     const h = hearth();
 
@@ -94,7 +92,7 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
       p.y += (Math.sin(p.a + t) + 0.6) * p.s;
       p.a += (Math.random() - 0.5) * 0.05;
 
-      // attraction towards logo
+      // attraction towards hearth
       const dx = h.x - p.x, dy = h.y - p.y;
       const dist = Math.hypot(dx, dy) + 1e-3;
       const pull = Math.min(0.02, 80 / (dist * dist));
@@ -105,12 +103,12 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
       if (p.x < 0) p.x += W; if (p.x > W) p.x -= W;
       if (p.y < 0) p.y += H; if (p.y > H) p.y -= H;
 
-      // look
+      // draw
       const flick = 1 + (Math.random() - 0.5) * 0.25;
       const Rcore = p.r * 2.2 * flick;
       const Rhalo = p.r * 9.0 * flick;
 
-      // bright core (normal blend = visible on photos)
+      // bright core (normal blend)
       ctx.globalCompositeOperation = 'source-over';
       let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
       g.addColorStop(0.0, 'rgba(255, 240, 170, 0.85)');
@@ -135,6 +133,7 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
 
   console.log('Embers started ✓', { dpr, particles: P.length });
 })();
+
 // Nav scroll state
 (() => {
   const nav = document.getElementById('site-nav') || document.querySelector('nav');
@@ -143,6 +142,7 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
   set();
   addEventListener('scroll', set, { passive: true });
 })();
+
 // Trigger the stamp sequence when the hero is visible
 (() => {
   const hero = document.getElementById('hero');
@@ -150,34 +150,12 @@ ctx.clearRect(0, 0, W, H);   // keep the canvas fully transparent between frames
 
   const play = () => hero.classList.add('play-stamp');
 
-  // If already on screen (top of page), start shortly after load
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { play(); io.disconnect(); }
-      });
+      entries.forEach(e => { if (e.isIntersecting) { play(); io.disconnect(); } });
     }, { threshold: 0.6 });
     io.observe(hero);
   } else {
-    // Fallback
     window.addEventListener('load', () => setTimeout(play, 300));
   }
 })();
-
-// Trigger stamp when hero is in view (or soon after load)
-(() => {
-  const hero = document.getElementById('hero');
-  if (!hero) return;
-  const activate = () => hero.classList.add('play-stamp');
-
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { activate(); io.disconnect(); } });
-    }, { threshold: 0.6 });
-    io.observe(hero);
-  } else {
-    window.addEventListener('load', () => setTimeout(activate, 300));
-  }
-})();
-
-
