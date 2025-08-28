@@ -131,27 +131,18 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* Container for Fire Title, Logo Stamp, and Kicker */
+/* Container for all hero-header elements */
 .hero-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px; /* Adjust this value to control the space between elements */
-  margin-bottom: var(--spacing-4); /* Add some space below the whole header block */
-}
-
-/* Brand stamp animation (within hero-header) */
-.brand-stamp {
-  position: relative;
-  width: min(90%, 360px); /* Adjusts the size of the stamp container */
-  height: min(90%, 360px);
-  margin: 0; /* Remove previous margins as gap handles spacing */
-  transform: rotate(-3deg); /* Slightly angle the stamp */
+  gap: 10px;
+  margin-bottom: var(--spacing-4);
 }
 
 /* Fire brand header (single image) */
 .fire-title {
-  margin: 0; /* Removing all margins as we'll use a Flexbox gap */
+  margin: 0;
   text-align: center;
   filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
 }
@@ -163,9 +154,10 @@ nav.nav--scrolled {
   margin: 0 auto;
 }
 
-/* “Media Solutions” tight under title */
+/* "Media Solutions" kicker text */
 .kicker {
-  margin: 0; /* Removing all margins */
+  margin: 0;
+  font-family: 'sparatedregular', sans-serif;
   font-size: clamp(28px, 4.2vw, 42px);
   font-weight: normal;
   letter-spacing: 0.12em;
@@ -173,6 +165,29 @@ nav.nav--scrolled {
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
+}
+
+/* Brand stamp animation (within hero-header) */
+.brand-stamp {
+  position: relative;
+  width: min(90%, 360px);
+  height: min(90%, 360px);
+  margin: 0;
+  transform: rotate(-3deg);
+}
+
+.brand-stamp .logo {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.brand-stamp .logo.imprint {
+  position: absolute;
+  inset: 0;
+  filter: brightness(0) contrast(1.2);
+  mix-blend-mode: multiply;
+  opacity: 0;
 }
 
 /* Hero copy + CTA */
@@ -203,28 +218,6 @@ p.lead {
   transform: translateY(0);
 }
 
-/* Brand stamp animation */
-.brand-stamp {
-  position: relative;
-  width: min(90%, 360px);
-  height: min(90%, 360px);
-  margin: var(--spacing-4) auto 0;
-}
-
-.brand-stamp .logo {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.brand-stamp .logo.imprint {
-  position: absolute;
-  inset: 0;
-  filter: brightness(0) contrast(1.2);
-  mix-blend-mode: multiply;
-  opacity: 0;
-}
-
 /* Initial state */
 .kicker-stamp,
 .brand-stamp .logo {
@@ -232,7 +225,7 @@ p.lead {
 }
 
 /* Animation trigger state */
-.hero.play-stamp .kicker-stamp{
+.hero.play-stamp .kicker-stamp {
   animation: ff-stampIn 640ms cubic-bezier(.16,.84,.36,1) 160ms both;
 }
 
