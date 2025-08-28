@@ -143,10 +143,7 @@
   addEventListener('scroll', set, { passive: true });
 })();
 
-// Trigger the stamp sequence when the hero is visible
-(() => {
-  const hero = document.getElementById('hero');
-  if (!hero) return;
+/
 
   const play = () => hero.classList.add('play-stamp');
 
