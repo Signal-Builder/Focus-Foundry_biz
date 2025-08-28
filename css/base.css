@@ -443,3 +443,9 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
   content: none !important;
   animation: none !important;
 }
+/* Remove the flare halo ring behind the logo stamp */
+.brand-stamp.stack::before {
+  display: none !important;
+  content: none !important;
+  animation: none !important;
+}
