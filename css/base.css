@@ -1,8 +1,8 @@
 
 @font-face {
     font-family: 'sparatedregular';
-    src: url('../assets/fonts/sparated-webfont.woff2') format('woff2'),
-         url('../assets/fonts/sparated-webfont.woff') format('woff');
+    src: url("../Focus-Foundry_Biz/focus-foundry_biz/assets/fonts/separated/sparated-webfont.woff2"') format('woff2'),
+         url("../assets/fonts/separated/sparated-webfont.woff") format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
