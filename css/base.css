@@ -130,13 +130,11 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* Fire brand header (single image) */
 .hero .fire-title {
-  margin: -16px auto 8px; /* Adjust this value as needed */
+  margin: -16px auto 4px; /* Adjust this value as needed */
   text-align: center;
   filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
 }
-
 .fire-logo {
   width: min(92%, 850px);
   height: auto;
