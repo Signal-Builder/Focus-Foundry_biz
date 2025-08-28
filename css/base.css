@@ -4,7 +4,7 @@
   --ink:#e7e7ee;
   --muted:#9aa0a6;
   --accent:#66e0ff;
-  --brand-gold:#f0c870; /* gold used for nav + kicker */
+  --brand-gold:#f0c870;
 }
 
 /* ========== Base ========== */
@@ -16,10 +16,8 @@ body{
 
   /* Lava background (path is RELATIVE to this CSS file) */
   background-image:url("../assets/background/lava-bg.jpg");
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  background-color:var(--bg); /* fallback */
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+  background-color:var(--bg);
 }
 
 .wrap{ max-width:1100px; margin:0 auto; padding:48px 24px }
@@ -27,26 +25,17 @@ body{
 /* ========== Sticky translucent nav (bigger + gold) ========== */
 nav{
   position:sticky; top:0; z-index:25;
-
   display:flex; justify-content:center; gap:22px;
-  padding:14px 0; /* bigger */
+  padding:14px 0;
   background:rgba(10,10,14,.45);
   -webkit-backdrop-filter:saturate(120%) blur(8px);
   backdrop-filter:saturate(120%) blur(8px);
   border-bottom:1px solid rgba(255,255,255,.06);
-
-  font-size:17px; /* bigger */
-  letter-spacing:.02em;
+  font-size:17px; letter-spacing:.02em;
   transition:background .2s ease, padding .2s ease, box-shadow .2s ease;
 }
-nav a{
-  color:var(--brand-gold); /* match kicker */
-  text-decoration:none;
-  font-weight:600;
-}
+nav a{ color:var(--brand-gold); text-decoration:none; font-weight:600 }
 nav a:hover{ color:#ffd88a; text-decoration:underline }
-
-/* When user scrolls a bit, bar tightens/solidifies (JS toggles .nav--scrolled) */
 nav.nav--scrolled{
   padding:10px 0;
   background:rgba(10,10,14,.60);
@@ -56,40 +45,42 @@ nav.nav--scrolled{
 /* ========== Hero ========== */
 .hero{
   position:relative;
-  padding:30px 24px 48px;  /* was 64px top, now tighter */
+  padding:30px 24px 48px;  /* tighter top padding */
   text-align:center;
   border-radius:24px;
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
   box-shadow:0 10px 30px rgba(0,0,0,.35);
   overflow:hidden;
 }
+/* Legibility mask */
 .hero::before{
   content:""; position:absolute; inset:-8px; z-index:-1; border-radius:inherit;
   background: radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%);
 }
 
+/* Semantic H1 visually hidden */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Fire brand header (single image) */
 .fire-title{
-  margin:0 auto 4px; /* tighter gap under fire text */
+  margin:0 auto 4px;
   text-align:center;
   filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
 }
 .fire-logo{
   width:min(92%, 850px);
-  height:auto;
-  display:block;
-  margin:0 auto;
+  height:auto; display:block; margin:0 auto;
 }
 
+/* “Media Solutions” tight under title */
 .kicker{
-  margin-top:6px;                /* sits snug under fire letters */
-  font-size:22px;                /* medium size */
-  font-weight:600;
-  letter-spacing:.18em;
-  color:var(--brand-gold);       /* same gold as nav */
-  text-transform:uppercase;
-  text-align:center;
+  margin-top:6px;
+  font-size:22px; font-weight:600; letter-spacing:.18em;
+  color:var(--brand-gold); text-transform:uppercase; text-align:center; line-height:1.15;
 }
-
 
 /* Hero copy + CTA */
 p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:12px 0 22px }
@@ -102,27 +93,46 @@ p.lead{ color:var(--muted); font-size:clamp(16px,2.4vw,20px); margin:12px 0 22px
 .btn:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(102,224,255,.45) }
 .btn:active{ transform:translateY(0) }
 
-.card{
-  margin:36px 0; padding:24px; border:1px solid rgba(255,255,255,.08);
-  border-radius:16px; background:rgba(255,255,255,.02);
-}
-
-/* Brand stamp (logo) */
+/* Brand stamp (two layers: gold + black imprint) — no glow/halo */
 .brand-stamp{
   position:relative;
   width:140px; height:140px;
-  margin:28px auto 0;
+  margin:18px auto 0;
 }
-.brand-stamp img{
-  width:100%; height:auto; display:block; opacity:.96;
-  filter: drop-shadow(0 8px 20px rgba(0,0,0,.55));
-  animation: stampIn 0.9s ease-out both;
+.brand-stamp .logo{
+  width:100%; height:auto; display:block;
 }
-@keyframes stampIn{
-  0%   { transform: scale(2) rotate(-10deg); opacity:0; filter: blur(10px) }
-  60%  { transform: scale(0.95) rotate(3deg); opacity:1; filter: blur(2px) }
-  100% { transform: scale(1) rotate(0deg); opacity:1; filter: blur(0) }
+.brand-stamp .logo.imprint{
+  position:absolute; inset:0;
+  filter:brightness(0) contrast(1.2);
+  mix-blend-mode:multiply;
+  opacity:0; /* fades in after gold fades out */
 }
+
+/* Minimal stamp sequence — no flare, no glow */
+.kicker-stamp,
+.brand-stamp .logo { opacity:0; }
+
+.hero.play-stamp .kicker-stamp{
+  animation: ff-stampIn 640ms cubic-bezier(.16,.84,.36,1) 160ms both;
+}
+.hero.play-stamp .brand-stamp .logo.gold{
+  animation:
+    ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 820ms both,
+    ff-fadeOut 420ms ease 2.6s forwards;  /* gold fades out to reveal imprint */
+}
+.hero.play-stamp .brand-stamp .logo.imprint{
+  animation: ff-fadeIn 520ms ease 2.7s forwards;
+}
+
+/* Keyframes (simple) */
+@keyframes ff-stampIn{
+  0%   { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
+  60%  { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
+  100% { transform: scale(1) rotate(0);      filter: blur(0);      opacity: 1; }
+}
+@keyframes ff-fadeOut{ to { opacity: 0; } }
+@keyframes ff-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* Footer */
 footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
@@ -177,275 +187,9 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
   .fire-logo{ width:94% }
   nav{ gap:16px; font-size:16px; }
 }
-/* ===== Hero tight layout (overrides) ===== */
+
+/* ===== Optional tighter hero variant ===== */
 .hero.hero--tight{
-  padding-top: 32px !important;   /* pull fire title up */
-  padding-bottom: 48px;           /* keep bottom breathing room */
+  padding-top: 26px;
 }
 
-.hero.hero--tight .fire-title{
-  margin: 0 auto 4px !important;  /* minimal gap under fire text */
-  text-align: center;
-}
-
-.hero.hero--tight .fire-logo{
-  width: min(92%, 880px);          /* adjust as you like */
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.hero.hero--tight .kicker{
-  margin-top: 6px !important;      /* sits directly under fire text */
-  font-size: clamp(18px, 2.1vw, 24px) !important; /* medium size */
-  font-weight: 600;
-  letter-spacing: .18em;
-  color: var(--brand-gold);        /* match nav */
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.15;
-}
-
-/* Optional: bring the stamp a bit closer to the kicker */
-.hero.hero--tight .brand-stamp{
-  margin-top: 18px !important;
-}
-/* --- FORCE-HIDE the semantic H1 if it leaks through anywhere --- */
-.hero h1.sr-only{
-  position:absolute !important;
-  width:1px !important;
-  height:1px !important;
-  padding:0 !important;
-  margin:-1px !important;
-  overflow:hidden !important;
-  clip:rect(0,0,0,0) !important;
-  white-space:nowrap !important;
-  border:0 !important;
-}
-
-/* --- TIGHTEN HERO LAYOUT: lift fire title, tighten kicker --- */
-.hero.hero--tight{
-  padding-top: 26px !important;      /* move content closer to the top */
-  padding-bottom: 48px;
-}
-
-.hero.hero--tight .fire-title{
-  margin: -6px auto 2px !important;  /* lift the fire image slightly; tiny gap below */
-  text-align:center;
-}
-
-.hero.hero--tight .fire-logo{
-  width: min(92%, 880px);            /* adjust if you want it bigger/smaller */
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-.hero.hero--tight .kicker{
-  margin-top: 2px !important;        /* sit tight under the fire letters */
-  font-size: clamp(18px, 2.1vw, 24px) !important;
-  font-weight: 600;
-  letter-spacing: .18em;
-  color: var(--brand-gold);
-  text-transform: uppercase;
-  line-height: 1.15;
-}
-/* Move fire lettering up by exactly 1.5 inches (144px) */
-.hero .fire-title.raise-1-5in{
-  transform: translateY(-144px);
-}
-/* ===== Stamping timeline ================================================== */
-/* Initial states */
-.kicker-stamp,
-.brand-stamp .logo { opacity: 0; transform: translateY(0); }
-
-/* Container stacks gold + imprint */
-.brand-stamp.stack{
-  position: relative;
-  width: 140px;
-  height: 140px;
-  margin: 18px auto 0;              /* sits right under the kicker */
-}
-
-/* Layer both images perfectly */
-.brand-stamp.stack .logo{
-  position: absolute; inset: 0;
-  width: 100%; height: auto;
-  display: block;
-}
-
-/* Gold version gets the hot glow style */
-.brand-stamp .logo.gold{
-  filter: none;
-  mix-blend-mode: normal;
-}
-
-/* Imprint is the same art but “burned” to black */
-.brand-stamp .logo.imprint{
-  filter: brightness(0) contrast(1.2);
-  mix-blend-mode: multiply;         /* help it feel like a brand in the surface */
-  opacity: 0;
-}
-
-/* When hero gets .play-stamp, run the sequence */
-.hero.play-stamp .kicker-stamp{
-  animation: ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 200ms both;
-}
-
-.hero.play-stamp .brand-stamp .logo.gold{
-  /* 1) stamp in, 2) glow/pulse, 3) fade out to reveal imprint */
-  animation:
-    ff-stampIn 720ms cubic-bezier(.16,.84,.36,1) 880ms both,
-    ff-glowPulse 1.6s ease-in-out 1.64s 2 both,
-    ff-fadeOut 480ms ease 4.0s forwards;
-  filter: drop-shadow(0 8px 20px rgba(255,200,80,.35));
-}
-
-/* Black imprint fades in slightly after the gold fades out */
-.hero.play-stamp .brand-stamp .logo.imprint{
-  animation: ff-fadeIn 520ms ease 4.05s forwards;
-}
-
-/* Keyframes */
-@keyframes ff-stampIn{
-  0%   { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
-  60%  { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
-  100% { transform: scale(1) rotate(0); filter: blur(0); opacity: 1; }
-}
-
-@keyframes ff-glowPulse{
-  0%   { filter: drop-shadow(0 0 0 rgba(255,180,80,.0)) brightness(1); }
-  40%  { filter: drop-shadow(0 0 30px rgba(255,190,90,.55)) brightness(1.1); }
-  60%  { filter: drop-shadow(0 0 18px rgba(255,170,70,.40)) brightness(1.05); }
-  100% { filter: drop-shadow(0 0 0 rgba(255,180,80,.0)) brightness(1); }
-}
-
-@keyframes ff-fadeOut{ to { opacity: 0; } }
-@keyframes ff-fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* Optional: a subtle flare burst behind the stamp */
-.brand-stamp.stack::before{
-  content:"";
-  position:absolute; inset:-12%;
-  border-radius:50%;
-  background: radial-gradient(closest-side, rgba(255,210,120,.22), rgba(255,150,60,.10) 55%, transparent 70%);
-  opacity:0;
-}
-.hero.play-stamp .brand-stamp.stack::before{
-  animation: ff-flare 1.1s ease-out 1.0s both;
-}
-@keyframes ff-flare{
-  0%   { transform: scale(0.6); opacity:0; }
-  40%  { transform: scale(1.05); opacity:.55; }
-  100% { transform: scale(1); opacity:.0; }
-}
-
-/* Tighter spacing under the fire letters */
-.kicker-stamp{
-  margin-top: 2px !important;             /* tight under the fire title */
-  font-size: clamp(18px, 2.1vw, 24px);
-  font-weight: 600;
-  letter-spacing: .18em;
-  color: var(--brand-gold);
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 1.15;
-}
-
-/* Respect reduced motion: show final states without animation */
-@media (prefers-reduced-motion: reduce){
-  .kicker-stamp,
-  .brand-stamp .logo { animation: none !important; opacity: 1 !important; filter: none !important; }
-  .brand-stamp .logo.gold { opacity: 0 !important; }
-  .brand-stamp .logo.imprint { opacity: 1 !important; }
-  .brand-stamp.stack::before { display:none !important; }
-}
-/* --- Hide the sr-only H1 if it shows --- */
-.hero h1.sr-only{
-  position:absolute !important; width:1px !important; height:1px !important;
-  padding:0 !important; margin:-1px !important; overflow:hidden !important;
-  clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important;
-}
-
-/* ===== Stamp sequence (final-authority overrides) ===== */
-.kicker-stamp, .brand-stamp .logo{
-  opacity:0 !important; transform:translateY(0) !important;
-}
-
-/* Stack the two logo layers */
-.brand-stamp.stack{
-  position:relative; width:140px; height:140px; margin:18px auto 0;
-}
-.brand-stamp.stack .logo{
-  position:absolute; inset:0; width:100%; height:auto; display:block;
-}
-.brand-stamp .logo.imprint{
-  filter:brightness(0) contrast(1.2); mix-blend-mode:multiply; opacity:0 !important;
-}
-
-/* Run when .play-stamp is present on the hero */
-.hero.play-stamp .kicker-stamp{
-  animation: ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 200ms both;
-}
-.hero.play-stamp .brand-stamp .logo.gold{
-  animation:
-    ff-stampIn 720ms cubic-bezier(.16,.84,.36,1) 880ms both,
-    ff-glowPulse 1.6s ease-in-out 1.64s 2 both,
-    ff-fadeOut 480ms ease 4.0s forwards;
-  filter: drop-shadow(0 8px 20px rgba(255,200,80,.35));
-}
-.hero.play-stamp .brand-stamp .logo.imprint{
-  animation: ff-fadeIn 520ms ease 4.05s forwards;
-}
-
-/* Optional flare */
-.brand-stamp.stack::before{
-  content:""; position:absolute; inset:-12%; border-radius:50%;
-  background:radial-gradient(closest-side, rgba(255,210,120,.22), rgba(255,150,60,.10) 55%, transparent 70%);
-  opacity:0;
-}
-.hero.play-stamp .brand-stamp.stack::before{
-  animation: ff-flare 1.1s ease-out 1.0s both;
-}
-
-/* Keyframes */
-@keyframes ff-stampIn{
-  0% { transform:scale(2) rotate(-8deg); filter:blur(10px); opacity:0 }
-  60%{ transform:scale(.96) rotate(2deg);  filter:blur(1.4px); opacity:1 }
-  100%{transform:scale(1) rotate(0);      filter:blur(0);     opacity:1 }
-}
-@keyframes ff-glowPulse{
-  0%{filter:drop-shadow(0 0 0 rgba(255,180,80,0)) brightness(1)}
-  40%{filter:drop-shadow(0 0 30px rgba(255,190,90,.55)) brightness(1.1)}
-  60%{filter:drop-shadow(0 0 18px rgba(255,170,70,.40)) brightness(1.05)}
-  100%{filter:drop-shadow(0 0 0 rgba(255,180,80,0)) brightness(1)}
-}
-@keyframes ff-fadeOut{ to{opacity:0} }
-@keyframes ff-fadeIn { to{opacity:1} }
-@keyframes ff-flare{
-  0%{transform:scale(.6);  opacity:0}
-  40%{transform:scale(1.05);opacity:.55}
-  100%{transform:scale(1); opacity:0}
-}
-
-/* Reduced motion: show final state */
-@media (prefers-reduced-motion: reduce){
-  .kicker-stamp, .brand-stamp .logo{ animation:none !important; opacity:1 !important; filter:none !important }
-  .brand-stamp .logo.gold{ opacity:0 !important }
-  .brand-stamp .logo.imprint{ opacity:1 !important }
-  .brand-stamp.stack::before{ display:none !important }
-}
-
-
-/* Remove the flare halo behind the logo stamp (can look like a ring) */
-.brand-stamp.stack::before {
-  display: none !important;
-  content: none !important;
-  animation: none !important;
-}
-/* Remove the flare halo ring behind the logo stamp */
-.brand-stamp.stack::before {
-  display: none !important;
-  content: none !important;
-  animation: none !important;
-}
