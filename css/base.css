@@ -132,7 +132,7 @@ nav.nav--scrolled {
 
 /* Fire brand header (single image) */
 .fire-title {
-  margin: 16px auto 4px; /* Move the element up by 16px */
+  margin: -16px auto 4px; /* Move the element up by 16px */
   text-align: center;
   filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
 }
