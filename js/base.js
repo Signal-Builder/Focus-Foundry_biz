@@ -157,5 +157,17 @@
     io.observe(hero);
   } else {
     window.addEventListener('load', () => setTimeout(play, 300));
+    // Hearth = center of the fire title (stable)
+function hearth() {
+  const ft = document.querySelector('.fire-title');
+  if (ft) {
+    const r = ft.getBoundingClientRect();
+    const x = (r.left + r.right) / 2;
+    const y = (r.top + r.bottom) / 2 + window.scrollY;
+    return { x: x * dpr, y: y * dpr };
+  }
+  return { x: W / 2, y: H / 3 };
+}
+
   }
 })();
