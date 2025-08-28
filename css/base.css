@@ -1,12 +1,13 @@
-
+/* ========== Fonts ========== */
 @font-face {
-    font-family: 'sparatedregular';
-    src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
-         url('../assets/fonts/separated/sparated-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'sparatedregular';
+  src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
+       url('../assets/fonts/separated/sparated-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
+
 /* ========== Tokens ========== */
 :root {
   /* Colors */
@@ -145,6 +146,13 @@ nav.nav--scrolled {
   filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
 }
 
+.fire-logo {
+  width: min(92%, 850px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 /* “Media Solutions” tight under title */
 .kicker {
   margin: 0; /* Removing all margins */
@@ -155,13 +163,6 @@ nav.nav--scrolled {
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
-}
-
-.fire-logo {
-  width: min(92%, 850px);
-  height: auto;
-  display: block;
-  margin: 0 auto;
 }
 
 /* Hero copy + CTA */
@@ -195,21 +196,23 @@ p.lead {
 /* Brand stamp animation */
 .brand-stamp {
   position: relative;
-  width: min(90%, 360px); /* Adjusts the size of the stamp container */
+  width: min(90%, 360px);
   height: min(90%, 360px);
   margin: var(--spacing-4) auto 0;
 }
+
 .brand-stamp .logo {
-  width: 150%;
+  width: 100%;
   height: auto;
   display: block;
 }
 
-.brand-stamp .logo.imprint{
-position:absolute; inset:0;
-filter:brightness(0) contrast(1.2);
-mix-blend-mode:multiply;
-opacity:0; /* fades in after gold fades out */
+.brand-stamp .logo.imprint {
+  position: absolute;
+  inset: 0;
+  filter: brightness(0) contrast(1.2);
+  mix-blend-mode: multiply;
+  opacity: 0;
 }
 
 /* Initial state */
@@ -219,15 +222,20 @@ opacity:0; /* fades in after gold fades out */
 }
 
 /* Animation trigger state */
+.hero.play-stamp .kicker-stamp{
+  animation: ff-stampIn 640ms cubic-bezier(.16,.84,.36,1) 160ms both;
+}
+
 .hero.play-stamp .brand-stamp .logo.gold {
   animation:
     ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 820ms both,
-    ff-fadeOut 420ms ease 1.3s forwards;  /* Gold fades out earlier */
+    ff-fadeOut 420ms ease 1.3s forwards;
 }
 
 .hero.play-stamp .brand-stamp .logo.imprint {
-  animation: ff-fadeIn 520ms ease 1.5s forwards; /* Imprint fades in earlier to match */
+  animation: ff-fadeIn 520ms ease 1.5s forwards, ff-imprintGlow 1.2s ease 1.5s forwards;
 }
+
 /* Keyframes */
 @keyframes ff-stampIn {
   0% {
@@ -252,11 +260,13 @@ opacity:0; /* fades in after gold fades out */
     opacity: 0;
   }
 }
+
 @keyframes ff-imprintGlow {
   0%   { box-shadow: 0 0 0 rgba(0,0,0,0); }
   50%  { box-shadow: 0 0 16px var(--brand-gold); }
   100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
 }
+
 @keyframes ff-fadeIn {
   from {
     opacity: 0;
@@ -264,7 +274,6 @@ opacity:0; /* fades in after gold fades out */
   to {
     opacity: 1;
   }
-
 }
 
 /* ========== Footer ========== */
