@@ -435,20 +435,9 @@ main, .wrap, .hero, .card, nav, footer{ position:relative; z-index:20 }
   .brand-stamp .logo.imprint{ opacity:1 !important }
   .brand-stamp.stack::before{ display:none !important }
 }
-/* Hard-hide any legacy flame ring image, if cached/leftover */
-.flame-ring,
-#flameRing {
-  display: none !important;
-  animation: none !important;
-}
+
 
 /* Remove the flare halo behind the logo stamp (can look like a ring) */
-.brand-stamp.stack::before {
-  display: none !important;
-  content: none !important;
-  animation: none !important;
-}
-/* Kill the flare halo behind the logo stamp */
 .brand-stamp.stack::before {
   display: none !important;
   content: none !important;
