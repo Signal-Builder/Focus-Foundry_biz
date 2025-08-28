@@ -232,7 +232,8 @@ p.lead {
 .hero.play-stamp .brand-stamp .logo.gold {
   animation:
     ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 820ms both,
-    ff-fadeOut 420ms ease 1.3s forwards;
+    ff-fadeOut 420ms ease 3s forwards,
+    ff-brandFlash 600ms ease 1.2s both; /* New flash animation */
 }
 
 .hero.play-stamp .brand-stamp .logo.imprint {
@@ -240,22 +241,10 @@ p.lead {
 }
 
 /* Keyframes */
-@keyframes ff-stampIn {
-  0% {
-    transform: scale(2) rotate(-8deg);
-    filter: blur(10px);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(0.96) rotate(2deg);
-    filter: blur(1.4px);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) rotate(0);
-    filter: blur(0);
-    opacity: 1;
-  }
+@keyframes ff-stampIn{
+  0%   { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
+  60%  { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
+  100% { transform: scale(1) rotate(45deg); filter: blur(0); opacity: 1; }
 }
 
 @keyframes ff-fadeOut {
@@ -279,6 +268,11 @@ p.lead {
   }
 }
 
+@keyframes ff-brandFlash {
+  0%    { box-shadow: 0 0 0 rgba(255,160,60,0); }
+  50%   { box-shadow: 0 0 40px 10px rgba(255,160,60,0.8); }
+  100%  { box-shadow: 0 0 0 rgba(255,160,60,0); }
+}
 /* ========== Footer ========== */
 footer {
   margin: 64px 0 0;
