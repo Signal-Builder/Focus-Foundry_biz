@@ -130,11 +130,11 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* Fire brand header */
+/* Fire brand header (single image) */
 .fire-title {
-  margin: 0 auto 4px;
+  margin: -16px auto 4px; /* Move the element up by 16px */
   text-align: center;
-  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.65));
+  filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
 }
 
 .fire-logo {
