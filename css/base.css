@@ -131,12 +131,22 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* Container for Fire Title and Kicker */
+/* Container for Fire Title, Logo Stamp, and Kicker */
 .hero-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0px; /* Adjust this value to control the space between elements */
+  gap: 10px; /* Adjust this value to control the space between elements */
+  margin-bottom: var(--spacing-4); /* Add some space below the whole header block */
+}
+
+/* Brand stamp animation (within hero-header) */
+.brand-stamp {
+  position: relative;
+  width: min(90%, 360px); /* Adjusts the size of the stamp container */
+  height: min(90%, 360px);
+  margin: 0; /* Remove previous margins as gap handles spacing */
+  transform: rotate(-3deg); /* Slightly angle the stamp */
 }
 
 /* Fire brand header (single image) */
