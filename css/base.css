@@ -100,30 +100,17 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
-  /* Use a consistent padding system. We'll add top/bottom padding here. */
-  padding: 80px var(--spacing-4); 
+  padding: 30px var(--spacing-4) var(--spacing-5);
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   overflow: hidden;
   display: flex;
-  flex-direction: column; /* Center the elements vertically */
-  align-items: center; /* Center the elements horizontally */
-  justify-content: center; /* Center the elements in the middle of the screen */
-  min-height: 100vh; /* Make sure the hero section takes up the entire viewport height */
-}
-
-/* Remove the specific rule that creates the spinning ring */
-#bg {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  display: block;
-  z-index: var(--z-canvas);
-  pointer-events: none;
-  background: transparent;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 /* Legibility mask */
@@ -149,12 +136,12 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* Container for Fire Title, Logo Stamp, and Kicker */
+/* Container for all hero-header elements */
 .hero-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px; /* Correct spacing between elements */
+  gap: 8px; /* Slightly reduced gap to bring elements closer */
   margin-bottom: var(--spacing-4);
 }
 
@@ -183,16 +170,18 @@ nav.nav--scrolled {
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
-  transform: none; /* Kicker is now straight */
+  transform: none; /* Kicker is now straight, no rotation */
 }
 
-/* Brand stamp animation */
+/* Brand stamp animation (within hero-header) */
 .brand-stamp {
   position: relative;
   width: min(90%, 360px);
   height: min(90%, 360px);
-  margin: var(--spacing-4) auto;
-  animation: logoPulse 2s infinite ease-in-out, logoSpin 5s infinite linear; /* New animations */
+  margin: 0;
+  transform: rotate(45deg);
+  /* New animation that will run constantly */
+  animation: logoSwing 4s infinite cubic-bezier(.55,.085,.68,.53), logoSpin 6s infinite linear, logoPulse 2s infinite ease-in-out;
 }
 
 .brand-stamp .logo {
@@ -201,13 +190,25 @@ nav.nav--scrolled {
   display: block;
 }
 
-.brand-stamp .logo.imprint {
+.brand-stamp .logo.gold {
   position: absolute;
   inset: 0;
-  filter: brightness(0.2) contrast(1.2) sepia(0.8);
-  mix-blend-mode: multiply;
-  opacity: 0;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 0 4px rgba(255,255,255,0.1);
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* The new ring around the logo */
+.brand-stamp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 4px solid var(--brand-gold);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--brand-gold);
+  opacity: 0.8;
+  transform: scale(1.1);
+  animation: logoPulse 2s infinite ease-in-out;
 }
 
 /* Hero copy + CTA */
@@ -258,7 +259,8 @@ p.lead {
 }
 
 .hero.play-stamp .brand-stamp .logo.imprint {
-  animation: ff-fadeIn 520ms ease 1.5s forwards, ff-imprintGlow 1.2s ease 1.5s forwards;
+  /* This rule is now redundant, but kept here for clarity if you wish to re-introduce the imprint */
+  display: none;
 }
 
 /* Keyframes */
@@ -306,16 +308,23 @@ p.lead {
     opacity: 1;
   }
 }
-@keyframes logoPulse {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.05) rotate(0deg); }
-  100% { transform: scale(1) rotate(0deg); }
+
+/* New keyframe animations for the new effect */
+@keyframes logoSwing {
+  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
+  25%      { transform: rotateX(20deg) rotateY(30deg); }
+  75%      { transform: rotateX(-20deg) rotateY(-30deg); }
 }
 
 @keyframes logoSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50%      { transform: scale(1.1); opacity: 1; }
+}
+
 /* ========== Footer ========== */
 footer {
   margin: 64px 0 0;

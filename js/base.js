@@ -32,14 +32,16 @@
   };
 
   const getHearthPosition = () => {
-    const fireTitle = document.querySelector('.fire-title');
-    if (fireTitle) {
-      const rect = fireTitle.getBoundingClientRect();
+    // The hearth now follows the brand-stamp logo
+    const brandStamp = document.querySelector('.brand-stamp');
+    if (brandStamp) {
+      const rect = brandStamp.getBoundingClientRect();
       const x = (rect.left + rect.right) / 2;
       const y = (rect.top + rect.bottom) / 2 + scrollY;
       return { x: x * DPR, y: y * DPR };
     }
-    return { x: width / 2, y: height / 3 };
+    // Fallback to center of canvas if logo not found
+    return { x: width / 2, y: height / 2 };
   };
 
   // --- Particle Logic ---
@@ -61,7 +63,6 @@
   const seedParticles = () => {
     particles.length = 0; // Clear existing particles
     const particleCount = getParticleCount();
-    const hearth = getHearthPosition();
 
     for (let i = 0; i < particleCount; i++) {
       // All particles will now be seeded randomly across the screen
@@ -180,4 +181,3 @@
     observer.observe(hero);
   }
 })();
-
