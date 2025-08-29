@@ -64,17 +64,8 @@
     const hearth = getHearthPosition();
 
     for (let i = 0; i < particleCount; i++) {
-      if (i < particleCount * 0.5) {
-        // Half near hearth
-        const angle = Math.random() * Math.PI * 2;
-        const distance = (Math.random() * HEARTH_RADIUS_MAX + HEARTH_RADIUS_MIN) * DPR;
-        particles.push(
-          createParticle(hearth.x + Math.cos(angle) * distance, hearth.y + Math.sin(angle) * distance)
-        );
-      } else {
-        // Half anywhere on the screen
-        particles.push(createParticle(Math.random() * width, Math.random() * height));
-      }
+      // All particles will now be seeded randomly across the screen
+      particles.push(createParticle(Math.random() * width, Math.random() * height));
     }
   };
 

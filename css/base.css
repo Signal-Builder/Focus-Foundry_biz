@@ -131,12 +131,12 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* Container for all hero-header elements */
+/* Container for Fire Title, Logo Stamp, and Kicker */
 .hero-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Gap between title, logo, and kicker */
   margin-bottom: var(--spacing-4);
 }
 
@@ -165,15 +165,16 @@ nav.nav--scrolled {
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
+  transform: rotate(-10deg); /* Angle the kicker */
 }
 
 /* Brand stamp animation (within hero-header) */
 .brand-stamp {
   position: relative;
-  width: min(90%, 360px);
+  width: min(90%, 360px); /* Adjusts the size of the stamp container */
   height: min(90%, 360px);
-  margin: 0;
-  transform: rotate(-3deg);
+  margin: 0; /* No external margins, Flexbox gap handles spacing */
+  transform: rotate(-3deg); /* Initial slight angle before animation finalizes */
 }
 
 .brand-stamp .logo {
@@ -185,9 +186,10 @@ nav.nav--scrolled {
 .brand-stamp .logo.imprint {
   position: absolute;
   inset: 0;
-  filter: brightness(0) contrast(1.2);
+  filter: brightness(0.2) contrast(1.2) sepia(0.8); /* Burnt look */
   mix-blend-mode: multiply;
   opacity: 0;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 0 4px rgba(255,255,255,0.1); /* Indented effect */
 }
 
 /* Hero copy + CTA */
@@ -218,7 +220,7 @@ p.lead {
   transform: translateY(0);
 }
 
-/* Initial state */
+/* Initial state for elements involved in animation */
 .kicker-stamp,
 .brand-stamp .logo {
   opacity: 0;
@@ -227,13 +229,14 @@ p.lead {
 /* Animation trigger state */
 .hero.play-stamp .kicker-stamp {
   animation: ff-stampIn 640ms cubic-bezier(.16,.84,.36,1) 160ms both;
+  transform: rotate(-10deg); /* Kicker also lands angled */
 }
 
 .hero.play-stamp .brand-stamp .logo.gold {
   animation:
     ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 820ms both,
     ff-fadeOut 420ms ease 3s forwards,
-    ff-brandFlash 600ms ease 1.2s both; /* New flash animation */
+    ff-brandFlash 600ms ease 1.2s both; /* Flash on landing */
 }
 
 .hero.play-stamp .brand-stamp .logo.imprint {
@@ -241,10 +244,22 @@ p.lead {
 }
 
 /* Keyframes */
-@keyframes ff-stampIn{
-  0%   { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
-  60%  { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
-  100% { transform: scale(1) rotate(45deg); filter: blur(0); opacity: 1; }
+@keyframes ff-stampIn {
+  0% {
+    transform: scale(2) rotate(-8deg);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.96) rotate(2deg);
+    filter: blur(1.4px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(45deg); /* Logo lands at 45 degrees */
+    filter: blur(0);
+    opacity: 1;
+  }
 }
 
 @keyframes ff-fadeOut {
@@ -259,6 +274,12 @@ p.lead {
   100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
 }
 
+@keyframes ff-brandFlash {
+  0%    { box-shadow: 0 0 0 rgba(255,160,60,0); }
+  50%   { box-shadow: 0 0 40px 10px rgba(255,160,60,0.8); }
+  100%  { box-shadow: 0 0 0 rgba(255,160,60,0); }
+}
+
 @keyframes ff-fadeIn {
   from {
     opacity: 0;
@@ -266,12 +287,6 @@ p.lead {
   to {
     opacity: 1;
   }
-}
-
-@keyframes ff-brandFlash {
-  0%    { box-shadow: 0 0 0 rgba(255,160,60,0); }
-  50%   { box-shadow: 0 0 40px 10px rgba(255,160,60,0.8); }
-  100%  { box-shadow: 0 0 0 rgba(255,160,60,0); }
 }
 /* ========== Footer ========== */
 footer {
