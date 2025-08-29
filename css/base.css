@@ -623,6 +623,6 @@ footer {
   .hero-header { padding-bottom: clamp(110px, 20vh, 180px); }
   .brand-stamp {
     width: min(80vw, 300px);
-    bottom: calc(-1 * clamp(80px, 16vh, 150px));
+    top: calc(-1 * clamp(80px, 16vh, 150px));
   }
 }
