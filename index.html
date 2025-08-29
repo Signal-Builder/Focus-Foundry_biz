@@ -28,33 +28,35 @@
   </nav>
 
   <main>
-   <div class="hero-content">
-  <div class="hero-header">
-    <!-- Title + overlayed text live together -->
-    <div class="title-wrap">
-      <div class="fire-title">
-        <img class="fire-logo"
-             src="assets/fonts/h1-ff.png"
-             alt="Focus Foundry brand title image" />
+  <section class="hero hero--tight play-stamp" id="hero">
+  <h1 class="sr-only">Focus Foundry</h1>
+
+  <div class="hero-content">
+    <div class="hero-header">
+      <div class="title-wrap">
+        <div class="fire-title">
+          <img class="fire-logo" src="assets/fonts/h1-ff.png" alt="Focus Foundry brand title image" />
+        </div>
+
+        <!-- Kicker stays under the fire title -->
+        <div class="title-under">
+          <p class="kicker kicker--glow">MEDIA SOLUTIONS</p>
+        </div>
       </div>
 
-      <!-- This sits ON the image, just beneath the glowing letters -->
-      <div class="title-under">
-        <p class="kicker kicker-stamp kicker--brand">MEDIA SOLUTIONS</p>
-        <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
-      </div>
+      <!-- Stamp floats in the dead space -->
+      <figure class="brand-stamp stack" aria-hidden="true">
+        <img class="logo gold" id="brandLogo" src="assets/logos/clear.png" alt="">
+      </figure>
     </div>
 
-    <!-- Stamp floats under the header in the dead space -->
-    <figure class="brand-stamp stack" aria-hidden="true">
-      <img class="logo gold" id="brandLogo" src="assets/logos/clear.png" alt="">
-    </figure>
+    <!-- NEW: subheading lives under the logo, above the CTA -->
+    <p class="lead lead--glow">Cinematic landing pages and immersive web funnels that convert.</p>
+
+    <a class="btn" href="#services">View Services</a>
   </div>
-
-  <a class="btn" href="#services">View Services</a>
-</div>
-
 </section>
+
 
 
     <div class="wrap">

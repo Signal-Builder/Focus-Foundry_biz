@@ -783,3 +783,61 @@ footer {
   margin-left: auto;
   margin-right: auto;
 }
+/* Keep header as the anchor + leave room for the floating stamp */
+.hero-header {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding-bottom: clamp(130px, 16vh, 210px); /* reserves space for logo */
+}
+
+/* Stamp tighter to title; adjust if needed */
+.brand-stamp {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(-1 * clamp(70px, 10vh, 120px)); /* closer to title = smaller numbers */
+  width: min(70vw, 360px);
+  margin: 0;
+  pointer-events: none;
+  animation: none !important;                  /* container doesn't animate */
+}
+.brand-stamp .logo {
+  width: 100%; height: auto; display: block;
+  animation: logoTumble 28s linear infinite;   /* spin only the image */
+  filter: drop-shadow(0 0 15px var(--lava-glow))
+          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+
+/* Kicker: gold text + lava glow (matches the stamp vibe) */
+.kicker--glow {
+  margin: 6px 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: clamp(28px, 4.2vw, 42px);
+  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* simulate the logo's glow with layered text-shadows */
+  text-shadow:
+    0 0 10px rgba(245,90,16,.35),
+    0 0 18px rgba(245,90,16,.28),
+    0 0 30px rgba(245,90,16,.22);
+}
+
+/* Subheading placed UNDER the stamp, same glow tone */
+.lead.lead--glow {
+  margin: clamp(10px, 2vh, 16px) auto 14px;
+  max-width: 58ch;
+  text-align: center;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: #f0c870; /* base gold */
+  text-shadow:
+    0 0 8px rgba(245,90,16,.35),
+    0 0 16px rgba(245,90,16,.24),
+    0 1px 2px rgba(0,0,0,.6);
+}
+
+/* If the kicker/subhead need to sit higher over the title image */
+.title-under { bottom: clamp(26px, 5vw, 70px); }  /* nudge up/down */
