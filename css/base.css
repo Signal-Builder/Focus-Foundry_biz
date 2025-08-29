@@ -586,3 +586,43 @@ footer {
     margin: clamp(-90px, -12vh, -60px) auto 0;
   }
 }
+/* Lift the hero content so the title sits higher */
+.hero {
+  justify-content: flex-start;                 /* stop vertical centering */
+  padding-top: clamp(60px, 12vh, 140px);
+}
+
+/* Title + kicker + subhead act as a single block and provide
+   space for the stamp to float underneath */
+.hero-header {
+  position: relative;                          /* positioning context */
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding-bottom: clamp(140px, 18vh, 260px);   /* reserves dead-space for the stamp */
+}
+
+/* Center the stamp and hang it off the bottom of the header block */
+.brand-stamp {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(-1 * clamp(100px, 14vh, 200px)); /* negative = hangs below header */
+  width: min(70vw, 360px);
+  height: auto;
+  margin: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* optional: calmer spin */
+  animation: logoTumble 28s linear infinite;
+}
+
+/* Mobile tune-up */
+@media (max-width: 640px) {
+  .hero { padding-top: 80px; }
+  .hero-header { padding-bottom: clamp(110px, 20vh, 180px); }
+  .brand-stamp {
+    width: min(80vw, 300px);
+    bottom: calc(-1 * clamp(80px, 16vh, 150px));
+  }
+}

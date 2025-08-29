@@ -29,33 +29,32 @@
 
   <main>
     <section class="hero hero--tight play-stamp" id="hero">
-      <!-- Accessible page title for SEO/screen readers -->
-      <h1 class="sr-only">Focus Foundry</h1>
+  <h1 class="sr-only">Focus Foundry</h1>
 
-      <div class="hero-content">
-
-        <!-- HEADER BLOCK: title → kicker → subhead -->
-        <div class="hero-header">
-          <div class="fire-title">
-            <img class="fire-logo"
-                 src="assets/fonts/h1-ff.png"
-                 alt="Focus Foundry brand title image" />
-          </div>
-
-          <p class="kicker kicker-stamp kicker--brand">MEDIA SOLUTIONS</p>
-          <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
-        </div>
-
-        <!-- STAMP: floats up into the dead space under the header -->
-        <figure class="brand-stamp stack" aria-hidden="true">
-          <img class="logo gold" id="brandLogo"
-               src="assets/logos/clear.png"
-               alt="Focus Foundry logo gold layer">
-        </figure>
-
-        <a class="btn" href="#services">View Services</a>
+  <div class="hero-content">
+    <!-- Positioning context for the stamp -->
+    <div class="hero-header">
+      <div class="fire-title">
+        <img class="fire-logo"
+             src="assets/fonts/h1-ff.png"
+             alt="Focus Foundry brand title image" />
       </div>
-    </section>
+
+      <p class="kicker kicker-stamp kicker--brand">MEDIA SOLUTIONS</p>
+      <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
+
+      <!-- Stamp now lives INSIDE the header and will hang below it -->
+      <figure class="brand-stamp stack" aria-hidden="true">
+        <img class="logo gold" id="brandLogo"
+             src="assets/logos/clear.png"
+             alt="Focus Foundry logo gold layer" />
+      </figure>
+    </div>
+
+    <a class="btn" href="#services">View Services</a>
+  </div>
+</section>
+
 
     <div class="wrap">
       <section class="tagline-section">
