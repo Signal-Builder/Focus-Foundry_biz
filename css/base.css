@@ -16,6 +16,7 @@
   --muted: #9aa0a6;
   --accent: #66e0ff;
   --brand-gold: #f0c870;
+  --lava-glow: #f55a10;
 
   /* Spacing Scale (based on an 8px grid) */
   --spacing-1: 8px;
@@ -100,7 +101,7 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
-  padding: 30px var(--spacing-4) var(--spacing-5);
+  padding: 80px var(--spacing-4); 
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
@@ -141,7 +142,7 @@ nav.nav--scrolled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px; /* Slightly reduced gap to bring elements closer */
+  gap: 8px;
   margin-bottom: var(--spacing-4);
 }
 
@@ -166,11 +167,11 @@ nav.nav--scrolled {
   font-size: clamp(28px, 4.2vw, 42px);
   font-weight: normal;
   letter-spacing: 0.12em;
-  color: var(--brand-gold);
+  color: var(--lava-glow); /* Updated color */
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
-  transform: none; /* Kicker is now straight, no rotation */
+  transform: none;
 }
 
 /* Brand stamp animation (within hero-header) */
@@ -180,7 +181,6 @@ nav.nav--scrolled {
   height: min(90%, 360px);
   margin: 0;
   transform: rotate(45deg);
-  /* New animation that will run constantly */
   animation: logoSwing 4s infinite cubic-bezier(.55,.085,.68,.53), logoSpin 6s infinite linear, logoPulse 2s infinite ease-in-out;
 }
 
@@ -190,27 +190,6 @@ nav.nav--scrolled {
   display: block;
 }
 
-.brand-stamp .logo.gold {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* The new ring around the logo */
-.brand-stamp::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 4px solid var(--brand-gold);
-  border-radius: 50%;
-  box-shadow: 0 0 15px var(--brand-gold);
-  opacity: 0.8;
-  transform: scale(1.1);
-  animation: logoPulse 2s infinite ease-in-out;
-}
-
 /* Hero copy + CTA */
 p.lead {
   color: var(--muted);
@@ -218,6 +197,7 @@ p.lead {
   margin: var(--spacing-2) 0 var(--spacing-4);
 }
 
+/* Updated button styles to match lava theme */
 .btn {
   display: inline-block;
   padding: 14px var(--spacing-4);
@@ -225,18 +205,28 @@ p.lead {
   text-decoration: none;
   font-weight: 700;
   color: var(--bg);
-  background: var(--accent);
-  box-shadow: 0 8px 24px rgba(102, 224, 255, 0.35);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  background: var(--lava-glow);
+  box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
+  transition: transform .12s ease, box-shadow .12s ease;
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(102, 224, 255, 0.45);
+  box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45);
 }
 
 .btn:active {
   transform: translateY(0);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--lava-glow);
+  border: 1px solid rgba(245, 90, 16, 0.18);
+  box-shadow: none;
+}
+.btn-ghost:hover {
+  border-color: rgba(245, 90, 16, 0.35);
 }
 
 /* Initial state for elements involved in animation */
@@ -248,19 +238,207 @@ p.lead {
 /* Animation trigger state */
 .hero.play-stamp .kicker-stamp {
   animation: ff-stampIn 640ms cubic-bezier(.16,.84,.36,1) 160ms both;
-  transform: none; /* Kicker is now straight, no rotation */
+  transform: none;
 }
 
 .hero.play-stamp .brand-stamp .logo.gold {
   animation:
     ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 820ms both,
-    ff-fadeOut 420ms ease 3s forwards,
     ff-brandFlash 600ms ease 1.2s both;
 }
 
-.hero.play-stamp .brand-stamp .logo.imprint {
-  /* This rule is now redundant, but kept here for clarity if you wish to re-introduce the imprint */
-  display: none;
+/* The new ring around the logo */
+.brand-stamp::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 4px solid var(--lava-glow);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--lava-glow);
+  opacity: 0.8;
+  transform: scale(1.1);
+  animation: logoPulse 2s infinite ease-in-out;
+}
+
+/* Tagline section */
+.tagline-section {
+    text-align: center;
+    padding: 24px 0;
+}
+
+.tagline-title {
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 700;
+    color: var(--brand-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0;
+}
+
+.tagline-subhead {
+    font-size: clamp(16px, 2.2vw, 20px);
+    color: var(--lava-glow);
+    text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
+    margin-top: 8px;
+    margin-bottom: 24px;
+    animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* ========== Footer ========== */
+footer {
+  margin: 64px 0 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ========== Canvas: embers layer ========== */
+#bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  background: transparent;
+}
+
+/* Content above canvas */
+main,
+.wrap,
+.hero,
+.card,
+nav,
+footer {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* ========== Services ========== */
+.services {
+  margin: var(--spacing-5) 0 var(--spacing-2);
+}
+
+.services > h2 {
+  font-size: clamp(24px, 3.8vw, 36px);
+  margin: 0 0 18px;
+}
+
+.services-grid {
+  display: grid;
+  gap: var(--spacing-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.svc {
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(10, 10, 14, 0.35);
+  backdrop-filter: blur(4px) saturate(110%);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.svc:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.svc-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 170, 60, 0.12);
+  color: #f5c375;
+  margin-bottom: 10px;
+}
+
+.svc h3 {
+  margin: 0 0 6px;
+  font-size: clamp(18px, 2.6vw, 22px);
+}
+
+.svc p {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.svc-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.svc-link:hover {
+  text-decoration: underline;
+}
+
+/* ========== Contact band ========== */
+.contact-band {
+  margin: 56px 0 0;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.contact-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.contact-inner h2 {
+  margin: 0 0 6px;
+  font-size: clamp(24px, 3.8vw, 36px);
+}
+
+.contact-lead {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.contact-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: 36px 16px;
+  }
+  .hero {
+    padding: 56px 18px 40px;
+  }
+  .fire-logo {
+    width: 94%;
+  }
+  nav {
+    gap: var(--spacing-3);
+    font-size: 16px;
+  }
+}
+
+/* Optional tighter hero variant */
+.hero.hero--tight {
+  padding-top: 26px;
 }
 
 /* Keyframes */
@@ -276,7 +454,7 @@ p.lead {
     opacity: 1;
   }
   100% {
-    transform: scale(1) rotate(0deg); /* Animation lands straight to inherit parent's rotation */
+    transform: scale(1) rotate(0deg);
     filter: blur(0);
     opacity: 1;
   }
@@ -289,15 +467,27 @@ p.lead {
 }
 
 @keyframes ff-imprintGlow {
-  0%   { box-shadow: 0 0 0 rgba(0,0,0,0); }
-  50%  { box-shadow: 0 0 16px var(--brand-gold); }
-  100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+  0% {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  50% {
+    box-shadow: 0 0 16px var(--brand-gold);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
 }
 
 @keyframes ff-brandFlash {
-  0%    { box-shadow: 0 0 0 rgba(255,160,60,0); }
-  50%   { box-shadow: 0 0 40px 10px rgba(255,160,60,0.8); }
-  100%  { box-shadow: 0 0 0 rgba(255,160,60,0); }
+  0% {
+    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+  }
+  50% {
+    box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+  }
 }
 
 @keyframes ff-fadeIn {
@@ -309,21 +499,35 @@ p.lead {
   }
 }
 
-/* New keyframe animations for the new effect */
 @keyframes logoSwing {
-  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
-  25%      { transform: rotateX(20deg) rotateY(30deg); }
-  75%      { transform: rotateX(-20deg) rotateY(-30deg); }
+  0%, 100% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: rotateX(20deg) rotateY(30deg);
+  }
+  75% {
+    transform: rotateX(-20deg) rotateY(-30deg);
+  }
 }
 
 @keyframes logoSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes logoPulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50%      { transform: scale(1.1); opacity: 1; }
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 }
+
 
 /* ========== Footer ========== */
 footer {
