@@ -976,3 +976,61 @@ footer {
     --gap-below-stamp: 8px;
   }
 }
+/* ===== HERO — RESET (final) ===== */
+:root{
+  --gap-title-kicker: clamp(10px, 2.2vw, 18px);   /* title → kicker */
+  --pull-stamp:      clamp(80px, 12vh, 150px);    /* how far the logo floats up */
+  --gap-stamp-lead:  10px;                        /* logo → subheading */
+  --gap-lead-btn:    8px;                         /* subheading → button */
+}
+
+.hero{
+  justify-content: flex-start;                    /* stop vertical centering */
+  padding-top: clamp(40px, 10vh, 120px);
+  overflow: visible;                               /* allow the logo to float up */
+}
+
+.fire-title{ margin: 0 0 var(--gap-title-kicker); }
+
+/* Polished kicker with subtle lava glow (matches the logo vibe) */
+.kicker.kicker--glow{
+  margin: 0;
+  text-transform: uppercase; letter-spacing: .16em;
+  font-size: clamp(28px, 4.2vw, 42px);
+  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow:
+    0 0 10px rgba(245,90,16,.28),
+    0 0 20px rgba(245,90,16,.22);
+}
+
+/* Center the stamp and float it UP with a negative margin */
+.brand-stamp{
+  position: relative;                /* stay in normal flow */
+  width: min(70vw, 360px);
+  margin: calc(-1 * var(--pull-stamp)) auto 0;
+  pointer-events: none;
+  animation: none !important;        /* container must NOT animate transform */
+}
+.brand-stamp .logo{
+  display:block; width:100%; height:auto;
+  animation: logoTumble 28s linear infinite;     /* spin only the image */
+  filter: drop-shadow(0 0 15px var(--lava-glow))
+          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+
+/* Subheading + button tight under the logo */
+.lead.lead--glow{
+  margin: var(--gap-stamp-lead) auto var(--gap-lead-btn);
+  max-width: 58ch; text-align:center;
+  color:#f0c870;
+  text-shadow:
+    0 0 8px rgba(245,90,16,.35),
+    0 0 16px rgba(245,90,16,.24),
+    0 1px 2px rgba(0,0,0,.6);
+}
+.btn{ margin-top: 0; }
+
+/* Safety: neutralize any earlier absolute/overlay rules that might linger */
+.title-wrap, .title-under { all: unset; }  /* we’re not using them anymore */
+.hero-header { all: unset; display: contents; } /* flatten wrapper */
