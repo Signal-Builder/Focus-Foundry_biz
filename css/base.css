@@ -106,19 +106,20 @@ nav.nav--scrolled {
 
 /* ========== Hero ========== */
 .hero {
-  position: relative;
+  /* Use flexbox for vertical stacking and center alignment */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding-top: clamp(40px, 10vh, 120px);
-  padding-bottom: 0; /* Ensures content stays tight */
+  justify-content: flex-start; /* Keeps content towards the top */
+  min-height: 100vh; /* Ensures the hero takes full viewport height */
+  padding-top: clamp(40px, 10vh, 120px); /* Top padding for the entire hero section */
+  padding-bottom: var(--spacing-5); /* Add some bottom padding for overall hero area */
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: visible; /* Allows the stamp to "float" out of the container */
+  overflow: visible; /* Important to allow the stamp to visually extend if needed */
+  position: relative; /* Establish positioning context for ::before */
 }
 
 /* Legibility mask */
@@ -144,19 +145,24 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* New container for the hero's core content */
+/* Container for all hero's core content, managed by flexbox */
 .hero-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically within its space if needed */
   max-width: var(--content-width);
   margin: 0 auto;
+  gap: 0; /* Reset default gaps from previous attempts */
 }
 
-/* Title and logo */
+/* Fire brand header (single image) */
 .fire-title {
-  margin: 0; /* Removed conflicting margins */
+  margin: 0; /* Remove any default margins */
+  text-align: center;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  /* Added a bit of bottom margin to separate from kicker */
+  margin-bottom: var(--spacing-1); /* Small gap between title and kicker */
 }
 
 .fire-logo {
@@ -165,46 +171,60 @@ nav.nav--scrolled {
   display: block;
 }
 
-/* Kicker: gold text with glow */
-.kicker.kicker--glow {
-  margin: var(--gap-title-kicker) 0 0; /* Use variable for space */
+/* "Media Solutions" kicker text */
+.kicker {
+  margin: 0; /* Reset default margins */
   font-family: 'sparatedregular', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: .16em;
   font-size: clamp(28px, 4.2vw, 42px);
+  font-weight: normal;
+  letter-spacing: 0.12em;
+  color: var(--lava-glow); /* Original color, can be updated to gradient if desired */
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.15;
+  transform: none; /* Ensure no unwanted transforms */
+  text-shadow: 0 0 10px var(--lava-glow), 0 0 20px var(--lava-glow);
+  /* Use your gold gradient from previous version */
   background: linear-gradient(180deg, #ffe7ad 0%, #f0c870 55%, #b6863b 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  color: transparent; /* Makes gradient visible */
   text-shadow: 0 0 10px rgba(245, 90, 16, .28), 0 0 20px rgba(245, 90, 16, .22);
+  /* Added margin below kicker to correctly position stamp */
+  margin-bottom: -40px; /* Negative margin to pull the stamp up *into* the kicker's space */
+  z-index: 1; /* Ensure kicker is above stamp if there's overlap in content */
 }
 
-/* Stamp: use negative margin to pull it up */
+/* Brand stamp (logo) animation */
 .brand-stamp {
-  position: relative; /* Stays in normal flow */
-  width: min(70vw, 360px);
-  height: auto;
-  margin: calc(-1 * var(--pull-stamp)) auto 0; /* THE KEY: negative top margin */
-  pointer-events: none;
-  animation: none !important; /* Container does NOT animate */
+  position: relative; /* Maintain normal flow, but allow z-index/transform */
+  width: min(90%, 360px);
+  height: auto; /* Adjust height based on width */
+  margin: 0 auto; /* Center horizontally */
+  /* This margin should be adjusted based on the desired overlap with the kicker */
+  margin-top: -60px; /* Adjust this value to control how much it overlaps the kicker */
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  z-index: 2; /* Ensure the stamp is above the kicker text if needed */
+  animation: none !important; /* Stop container from animating */
 }
 
 .brand-stamp .logo {
-  display: block;
   width: 100%;
   height: auto;
-  animation: logoTumble 28s linear infinite; /* Spin only the image */
+  display: block;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  animation: logoTumble 28s linear infinite; /* Apply animation only to the image */
 }
 
-/* Subheading + CTA tight under the logo */
-.lead.lead--glow {
-  margin: var(--gap-stamp-lead) auto var(--gap-lead-btn);
-  max-width: 58ch;
-  text-align: center;
-  font-size: clamp(16px, 2.2vw, 20px);
-  color: #f0c870;
+
+/* Hero copy + CTA */
+p.lead {
+  color: #f0c870; /* Base gold */
+  font-size: clamp(16px, 2.4vw, 20px);
   text-shadow: 0 0 8px rgba(245, 90, 16, .35), 0 0 16px rgba(245, 90, 16, .24), 0 1px 2px rgba(0, 0, 0, .6);
+  margin: var(--spacing-2) 0 var(--spacing-4); /* Space below logo, above button */
+  max-width: 58ch;
 }
 
 /* Updated button styles to match lava theme */
@@ -218,7 +238,6 @@ nav.nav--scrolled {
   background: var(--lava-glow);
   box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
   transition: transform .12s ease, box-shadow .12s ease;
-  margin-top: 0;
 }
 
 .btn:hover {
@@ -393,7 +412,7 @@ footer {
   color: var(--muted);
 }
 
-/* ===== Keyframes (consolidated and simplified) ===== */
+/* Keyframes */
 @keyframes logoTumble {
   0%   { transform: rotateX(0deg) rotateY(0deg); }
   25%  { transform: rotateX(45deg) rotateY(90deg); }
@@ -402,14 +421,13 @@ footer {
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 
-/* ===== Media Queries (consolidated) ===== */
+/* Mobile adjustments */
 @media (max-width: 640px) {
   .wrap {
     padding: 36px 16px;
   }
   .hero {
-    padding-top: 80px;
-    padding-bottom: 0;
+    padding: 56px 18px 40px;
   }
   .fire-logo {
     width: 94%;
@@ -418,15 +436,57 @@ footer {
     gap: var(--spacing-3);
     font-size: 16px;
   }
-  :root {
-    --gap-title-kicker: clamp(12px, 6vw, 18px);
-    --pull-stamp: clamp(56px, 18vh, 110px);
-    --gap-stamp-lead: 8px;
+  /* Adjustments for kicker and stamp on mobile */
+  .kicker {
+    margin-bottom: -30px; /* Adjust negative margin for stamp overlap on mobile */
+  }
+  .brand-stamp {
+    margin-top: -40px; /* Adjust this value for mobile overlap */
+    width: min(80vw, 300px);
   }
 }
 
-/* Neutralize any old, conflicting absolute/overlay rules that might linger */
-.title-wrap, .title-under, .hero-header {
-  all: unset;
-  display: contents;
+/* Optional tighter hero variant */
+.hero.hero--tight {
+  padding-top: 26px; /* Adjust top padding for tight variant */
 }
+
+/* --- Ensure old conflicting styles are neutralized --- */
+/* These were from your previous attempts and might be interfering */
+.hero-header { all: unset; display: contents; } /* Flatten wrapper */
+.title-wrap, .title-under { all: unset; }
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .wrap {
+    padding: 36px 16px;
+  }
+  .hero {
+    padding: 56px 18px 40px;
+  }
+  .fire-logo {
+    width: 94%;
+  }
+  nav {
+    gap: var(--spacing-3);
+    font-size: 16px;
+  }
+  /* Adjustments for kicker and stamp on mobile */
+  .kicker {
+    margin-bottom: -30px; /* Adjust negative margin for stamp overlap on mobile */
+  }
+  .brand-stamp {
+    margin-top: -40px; /* Adjust this value for mobile overlap */
+    width: min(80vw, 300px);
+  }
+}
+
+/* Optional tighter hero variant */
+.hero.hero--tight {
+  padding-top: 26px; /* Adjust top padding for tight variant */
+}
+
+/* --- Ensure old conflicting styles are neutralized --- */
+/* These were from your previous attempts and might be interfering */
+.hero-header { all: unset; display: contents; } /* Flatten wrapper */
+.title-wrap, .title-under { all: unset; }
