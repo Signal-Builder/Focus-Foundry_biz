@@ -859,3 +859,55 @@ footer {
 /* Subheading right under the logo; button under that */
 #hero .lead{ margin: var(--gap-stamp-lead) auto 10px; max-width:58ch; }
 #hero .btn{ margin-top: 6px; }
+/* === FINAL TIGHTENING === */
+
+/* 1) Put the kicker tight under the title letters */
+:root{
+  --title-kicker-gap: clamp(10px, 1.8vw, 16px);  /* smaller = closer */
+}
+#hero{ overflow: visible; }                       /* never clip the stamp */
+#hero .title-wrap{ position: relative; display: inline-block; }
+#hero .title-under{
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: var(--title-kicker-gap);               /* sits right under title */
+  width: 100%; text-align: center; z-index: 2;
+}
+#hero .kicker{ margin: 0; }
+
+/* 2) Tumble without vanishing */
+#hero .brand-stamp{
+  position: relative;
+  width: min(70vw, 360px);
+  aspect-ratio: 1 / 1;                           /* stable footprint */
+  margin: calc(-1 * var(--stamp-pull, 170px)) auto 0; /* pull up under kicker */
+  pointer-events: none;
+  animation: none !important;                    /* container never animates */
+  perspective: 1000px;                           /* depth for child */
+  overflow: visible;                             
+}
+
+#hero .brand-stamp .logo{
+  display: block; width: 100%; height: 100%;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: visible;                  /* don't hide back side */
+  -webkit-backface-visibility: visible;
+  animation: logoTumbleSoft 26s linear infinite; /* gentle tumble */
+  filter: drop-shadow(0 0 15px var(--lava-glow))
+          drop-shadow(0 0 25px rgba(245,90,16,.5));
+}
+
+/* softer angles avoid the “edge-on vanish”, but still tumble */
+@keyframes logoTumbleSoft{
+  0%   { transform: rotateX(0deg)  rotateY(0deg); }
+  25%  { transform: rotateX(30deg) rotateY(60deg); }
+  50%  { transform: rotateX(95deg) rotateY(170deg); }
+  75%  { transform: rotateX(210deg) rotateY(285deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* Keep the rest of the stack centered */
+#hero .hero-content{
+  display: grid; justify-items: center; text-align: center;
+}
