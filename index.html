@@ -1,113 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Focus Foundry · Cinematic Web Experiences</title>
-    <link rel="stylesheet" href="css/base.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus Foundry · Cinematic Web Experiences</title>
+  <link rel="stylesheet" href="css/base.css" />
 
-    <!-- Favicons & App Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="assets/favicon/site.webmanifest">
-    <link rel="shortcut icon" href="assets/favicon/favicon.ico">
-    <meta name="msapplication-TileColor" content="#0b0b0f">
-    <meta name="theme-color" content="#0b0b0f">
+  <!-- Favicons & App Icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <link rel="shortcut icon" href="assets/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#0b0b0f">
+  <meta name="theme-color" content="#0b0b0f">
 </head>
 <body>
 
-    <canvas id="bg" aria-hidden="true"></canvas>
+  <canvas id="bg" aria-hidden="true"></canvas>
 
-    <nav id="site-nav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="pages/about.html">About</a>
-        <a href="pages/services.html">Services</a>
-        <a href="pages/case-studies.html">Case Studies</a>
-        <a href="pages/contact.html">Contact</a>
-    </nav>
+  <nav id="site-nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/services.html">Services</a>
+    <a href="pages/case-studies.html">Case Studies</a>
+    <a href="pages/contact.html">Contact</a>
+  </nav>
 
-    <main>
-        <section class="hero hero--tight play-stamp" id="hero">
-            <h1 class="sr-only">Focus Foundry</h1>
-            
-            <div class="hero-content">
-                <div class="fire-title">
-                    <img class="fire-logo" src="assets/fonts/h1-ff.png" alt="Focus Foundry brand title image" />
-                </div>
-                
-                <div class="brand-stamp stack" aria-hidden="true">
-                    <img class="logo gold" id="brandLogo" src="assets/logos/clear.png" alt="Focus Foundry logo gold layer" />
-                </div>
-                
-                <div class="kicker kicker-stamp kicker--brand">Media Solutions</div>
-                <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
-                <a class="btn" href="#services">View Services</a>
-            </div>
-        </section>
+  <main>
+    <section class="hero hero--tight play-stamp" id="hero">
+      <!-- Accessible page title for SEO/screen readers -->
+      <h1 class="sr-only">Focus Foundry</h1>
 
-        <div class="wrap">
-            <section class="tagline-section">
-                <h2 class="tagline-title">Forged. Stamped. Remembered.</h2>
-                <p class="tagline-subhead">Every spark shapes presence. Every strike builds legacy.</p>
-            </section>
+      <div class="hero-content">
 
-            <section class="services" id="services">
-                <h2>Services</h2>
-                <div class="services-grid">
-                    <article class="svc">
-                        <div class="svc-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                                <path d="M17 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3.5l5 3.5V7l-5 3.5z"/>
-                            </svg>
-                        </div>
-                        <h3>Cinematic Landing Pages</h3>
-                        <p>High-impact hero visuals, motion, and clear CTAs tuned for conversions.</p>
-                        <a class="svc-link" href="#contact">Learn more →</a>
-                    </article>
-                    <article class="svc">
-                        <div class="svc-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                                <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
-                            </svg>
-                        </div>
-                        <h3>Sales Funnels</h3>
-                        <p>Opt-in → nurture emails → checkout. Done-for-you or modular builds.</p>
-                        <a class="svc-link" href="#contact">See packages →</a>
-                    </article>
-                    <article class="svc">
-                        <div class="svc-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                                <path d="M13 3L4 14h6l-1 7 9-11h-6l1-7z"/>
-                            </svg>
-                        </div>
-                        <h3>Rapid Prototypes</h3>
-                        <p>Clickable demos & PoCs for pitches, pilots, and speed-to-value.</p>
-                        <a class="svc-link" href="#contact">Start a prototype →</a>
-                    </article>
-                </div>
-            </section>
+        <!-- HEADER BLOCK: title → kicker → subhead -->
+        <div class="hero-header">
+          <div class="fire-title">
+            <img class="fire-logo"
+                 src="assets/fonts/h1-ff.png"
+                 alt="Focus Foundry brand title image" />
+          </div>
 
-            <section class="contact-band" id="contact" aria-labelledby="contact-title">
-                <div class="contact-inner">
-                    <h2 id="contact-title">Let’s build something cinematic</h2>
-                    <p class="contact-lead">Tell us your goal. We’ll propose a crisp plan and timeline.</p>
-                    <div class="contact-actions">
-                        <a class="btn" href="mailto:hello@focusfoundry.ca?subject=Project%20inquiry">Email Us</a>
-                        <a class="btn btn-ghost" href="https://calendly.com/your-handle/intro" target="_blank" rel="noopener">
-                            Book a 15-min Intro
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <footer>© 2025 Briteminds · Focus Foundry</footer>
+          <p class="kicker kicker-stamp kicker--brand">MEDIA SOLUTIONS</p>
+          <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
         </div>
-    </main>
 
-    <script src="js/base.js"></script>
+        <!-- STAMP: floats up into the dead space under the header -->
+        <figure class="brand-stamp stack" aria-hidden="true">
+          <img class="logo gold" id="brandLogo"
+               src="assets/logos/clear.png"
+               alt="Focus Foundry logo gold layer">
+        </figure>
+
+        <a class="btn" href="#services">View Services</a>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="tagline-section">
+        <h2 class="tagline-title">Forged. Stamped. Remembered.</h2>
+        <p class="tagline-subhead">Every spark shapes presence. Every strike builds legacy.</p>
+      </section>
+
+      <section class="services" id="services">
+        <h2>Services</h2>
+        <div class="services-grid">
+          <article class="svc">
+            <div class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M17 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3.5l5 3.5V7l-5 3.5z"/>
+              </svg>
+            </div>
+            <h3>Cinematic Landing Pages</h3>
+            <p>High-impact hero visuals, motion, and clear CTAs tuned for conversions.</p>
+            <a class="svc-link" href="#contact">Learn more →</a>
+          </article>
+
+          <article class="svc">
+            <div class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+              </svg>
+            </div>
+            <h3>Sales Funnels</h3>
+            <p>Opt-in → nurture emails → checkout. Done-for-you or modular builds.</p>
+            <a class="svc-link" href="#contact">See packages →</a>
+          </article>
+
+          <article class="svc">
+            <div class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                <path d="M13 3L4 14h6l-1 7 9-11h-6l1-7z"/>
+              </svg>
+            </div>
+            <h3>Rapid Prototypes</h3>
+            <p>Clickable demos & PoCs for pitches, pilots, and speed-to-value.</p>
+            <a class="svc-link" href="#contact">Start a prototype →</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact-band" id="contact" aria-labelledby="contact-title">
+        <div class="contact-inner">
+          <h2 id="contact-title">Let’s build something cinematic</h2>
+          <p class="contact-lead">Tell us your goal. We’ll propose a crisp plan and timeline.</p>
+          <div class="contact-actions">
+            <a class="btn" href="mailto:hello@focusfoundry.ca?subject=Project%20inquiry">Email Us</a>
+            <a class="btn btn-ghost" href="https://calendly.com/your-handle/intro" target="_blank" rel="noopener">
+              Book a 15-min Intro
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer>© 2025 Briteminds · Focus Foundry</footer>
+    </div>
+  </main>
+
+  <script src="js/base.js"></script>
 </body>
 </html>
-
-  
-

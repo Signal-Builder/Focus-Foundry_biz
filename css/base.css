@@ -551,3 +551,38 @@ footer {
   .hero-header { margin-bottom: 80px; }
   .brand-stamp { bottom: -50px; width: min(80vw, 260px); }
 }
+/* 1) Lift the whole hero content so the top title is higher */
+.hero {
+  justify-content: flex-start;
+  padding-top: clamp(60px, 12vh, 140px);
+}
+
+/* 2) Keep title, kicker, subhead tight as one block */
+.hero-header {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;                        /* tighten spacing between lines */
+  margin-bottom: clamp(70px, 12vh, 120px); /* space below the block */
+}
+
+/* 3) Stamp sits below header, pulled up into the dead space */
+.brand-stamp {
+  position: relative;              /* stay in the flow for responsiveness */
+  width: min(70vw, 360px);
+  height: auto;
+  margin: clamp(-140px, -10vh, -80px) auto 0; /* negative margin = float up */
+  pointer-events: none;            /* don’t block buttons/links */
+  z-index: 1;
+  animation: logoTumble 28s linear infinite; /* slower, calmer spin */
+}
+
+/* Optional: slightly smaller on phones & adjust overlap */
+@media (max-width: 640px) {
+  .hero { padding-top: 80px; }
+  .hero-header { margin-bottom: 90px; }
+  .brand-stamp {
+    width: min(80vw, 300px);
+    margin: clamp(-90px, -12vh, -60px) auto 0;
+  }
+}
