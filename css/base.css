@@ -626,3 +626,55 @@ footer {
     top: calc(-1 * clamp(80px, 16vh, 150px));
   }
 }
+/* Lift the hero content and allow overlap */
+.hero {
+  justify-content: flex-start;     /* stop vertical centering */
+  padding-top: clamp(60px, 12vh, 140px);
+  overflow: visible;               /* don't clip the floating stamp */
+}
+
+/* Header is the positioning anchor + reserves space for the floating stamp */
+.hero-header {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding-bottom: clamp(140px, 18vh, 260px);
+}
+
+/* Center the stamp under the header, pulled into the dead space */
+.brand-stamp {
+  position: absolute;
+  left: 50%;
+  bottom: calc(-1 * clamp(110px, 16vh, 200px));  /* how far it hangs down */
+  transform: translateX(-50%);                   /* horizontal centering */
+  width: min(70vw, 360px);
+  height: auto;
+  margin: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  /* IMPORTANT: the container must NOT animate transform */
+  animation: none !important;
+}
+
+/* Animate only the image so centering isn't overridden */
+.brand-stamp .logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: logoTumble 28s linear infinite;  /* or whatever you like */
+  transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 15px var(--lava-glow))
+          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  .hero { padding-top: 80px; }
+  .hero-header { padding-bottom: clamp(110px, 20vh, 180px); }
+  .brand-stamp {
+    width: min(80vw, 300px);
+    bottom: calc(-1 * clamp(90px, 18vh, 150px));
+  }
+}
