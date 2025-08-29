@@ -28,23 +28,32 @@
   </nav>
 
   <main>
-    <div class="hero-header">
-  <div class="fire-title">
-    <img class="fire-logo" src="assets/fonts/h1-ff.png" alt="Focus Foundry brand title image" />
+   <div class="hero-content">
+  <div class="hero-header">
+    <!-- Title + overlayed text live together -->
+    <div class="title-wrap">
+      <div class="fire-title">
+        <img class="fire-logo"
+             src="assets/fonts/h1-ff.png"
+             alt="Focus Foundry brand title image" />
+      </div>
+
+      <!-- This sits ON the image, just beneath the glowing letters -->
+      <div class="title-under">
+        <p class="kicker kicker-stamp kicker--brand">MEDIA SOLUTIONS</p>
+        <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
+      </div>
+    </div>
+
+    <!-- Stamp floats under the header in the dead space -->
+    <figure class="brand-stamp stack" aria-hidden="true">
+      <img class="logo gold" id="brandLogo" src="assets/logos/clear.png" alt="">
+    </figure>
   </div>
 
-  <p class="kicker kicker-stamp kicker--brand">MEDIA SOLUTIONS</p>
-  <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
-
-  <!-- stamp lives inside the header -->
-  <figure class="brand-stamp stack" aria-hidden="true">
-    <img class="logo gold" id="brandLogo" src="assets/logos/clear.png" alt="">
-  </figure>
+  <a class="btn" href="#services">View Services</a>
 </div>
 
-
-    <a class="btn" href="#services">View Services</a>
-  </div>
 </section>
 
 
