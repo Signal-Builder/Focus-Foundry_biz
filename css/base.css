@@ -678,3 +678,65 @@ footer {
     bottom: calc(-1 * clamp(90px, 18vh, 150px));
   }
 }
+/* Lift the hero content and allow overlaps */
+.hero {
+  justify-content: flex-start;
+  padding-top: clamp(32px, 8vh, 100px);
+  overflow: visible;
+}
+
+/* Header is the anchor, and reserves space for the stamp below */
+.hero-header {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding-bottom: clamp(150px, 19vh, 260px);
+}
+
+/* Title container becomes positioning context for kicker/subhead */
+.title-wrap {
+  position: relative;
+  display: inline-block; /* shrink-wrap to the title image */
+}
+
+/* Overlay the kicker + subhead on the title image */
+.title-under {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(28px, 5vw, 80px); /* <-- TUNE THIS: closer to  title = bigger value */
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Center the stamp and float it into the dead space */
+.brand-stamp {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(-1 * clamp(120px, 18vh, 220px)); /* how far it hangs down */
+  width: min(70vw, 360px);
+  height: auto;
+  margin: 0;
+  z-index: 1;
+  pointer-events: none;
+  animation: none !important; /* container doesn't animate */
+}
+
+/* Animate only the image so centering isn't overridden */
+.brand-stamp .logo {
+  width: 100%;
+  height: auto;
+  display: block;
+  animation: logoTumble 28s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Mobile tune */
+@media (max-width: 640px) {
+  .hero { padding-top: 72px; }
+  .hero-header { padding-bottom: 150px; }
+  .title-under { bottom: clamp(22px, 8vw, 60px); }
+  .brand-stamp { width: min(80vw, 300px); bottom: calc(-1 * clamp(100px, 22vh, 180px)); }
+}
