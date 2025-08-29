@@ -519,29 +519,35 @@ footer {
   75%  { transform: rotateX(225deg) rotateY(270deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
-/* Put the stamp in the dead space, centered under the hero title */
-.hero { position: relative; }
+/* Keep hero title up high */
+.hero {
+  justify-content: flex-start;      /* stop vertical centering */
+  padding-top: clamp(60px, 12vh, 140px);
+  padding-bottom: 0;
+}
 
-.hero-content { position: relative; } /* positioning context */
+/* Group title + kicker, but leave room for stamp */
+.hero-header {
+  margin-bottom: clamp(40px, 8vh, 100px);
+  padding-bottom: 0;
+  position: relative;
+}
 
+/* Float stamp in the dead space above kicker */
 .brand-stamp {
   position: absolute;
+  bottom: -60px;                    /* adjust up/down as needed */
   left: 50%;
-  transform: translateX(-50%);     /* horizontal centering */
-  top: clamp(120px, 30vh, 360px);   /* vertical spot under the title */
-  width: min(70vw, 360px);
+  transform: translateX(-50%);
+  width: min(70vw, 320px);
   height: auto;
-  z-index: 1;                       /* above background, below nav */
-  pointer-events: none;             /* don't block links/buttons */
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* Create room so later content doesn't collide with the stamp */
-.hero-header {
-  padding-bottom: clamp(140px, 24vh, 280px);
-}
-
-/* Tweak for small screens */
+/* Mobile adjustments */
 @media (max-width: 640px) {
-  .brand-stamp { top: clamp(80px, 26vh, 220px); width: min(80vw, 320px); }
-  .hero-header { padding-bottom: clamp(120px, 28vh, 220px); }
+  .hero { padding-top: 80px; }
+  .hero-header { margin-bottom: 80px; }
+  .brand-stamp { bottom: -50px; width: min(80vw, 260px); }
 }
