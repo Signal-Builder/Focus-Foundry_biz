@@ -186,13 +186,13 @@ nav.nav--scrolled {
   transform: none; /* Kicker is now straight */
 }
 
-/* Brand stamp animation (within hero-header) */
+/* Brand stamp animation */
 .brand-stamp {
   position: relative;
   width: min(90%, 360px);
   height: min(90%, 360px);
-  margin: 0;
-  transform: rotate(45deg); /* Both logos will be angled at 45 degrees */
+  margin: var(--spacing-4) auto;
+  animation: logoPulse 2s infinite ease-in-out, logoSpin 5s infinite linear; /* New animations */
 }
 
 .brand-stamp .logo {
@@ -305,6 +305,16 @@ p.lead {
   to {
     opacity: 1;
   }
+}
+@keyframes logoPulse {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes logoSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 /* ========== Footer ========== */
 footer {
