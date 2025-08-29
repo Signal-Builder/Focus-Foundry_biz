@@ -557,3 +557,72 @@ footer {
 @media (max-width:640px){
   #hero .brand-stamp{ width:min(80vw,300px); margin: calc(-1 * clamp(60px,18vh,110px)) auto 0; }
 }
+/* ===== HERO FINAL LAYOUT (ID-scoped so it wins) ===== */
+
+:root{
+  --title-kicker-gap: clamp(22px, 5vw, 64px);   /* how close 'MEDIA SOLUTIONS' sits to the glow letters */
+  --stamp-pull:      clamp(120px, 18vh, 220px); /* how far the stamp floats up toward the kicker */
+  --gap-stamp-lead:  12px;                      /* space between stamp and subheading */
+}
+
+#hero{ overflow: visible; } /* allow the stamp to float upward */
+
+/* Title overlay: puts the kicker on top of the PNG so it’s tight under the letters */
+#hero .title-wrap{ position: relative; display: inline-block; }
+#hero .fire-logo{ width:min(92%, 850px); height:auto; display:block; }
+#hero .title-under{
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: var(--title-kicker-gap);
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Kicker style (gold + soft lava glow) */
+#hero .kicker{
+  margin: 0;
+  font-family: 'sparatedregular', sans-serif;
+  font-size: clamp(28px, 4.2vw, 42px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 10px rgba(245,90,16,.28), 0 0 20px rgba(245,90,16,.22);
+}
+
+/* Stamp: centered, then floated UP with a negative margin */
+#hero .brand-stamp{
+  position: relative;
+  width: min(70vw, 360px);
+  margin: calc(-1 * var(--stamp-pull)) auto 0;   /* pull toward kicker */
+  pointer-events: none;
+  animation: none !important;                    /* don't animate the container */
+  z-index: 1;
+}
+#hero .brand-stamp .logo{
+  display:block; width:100%; height:auto;
+  animation: logoTumble 28s linear infinite;     /* spin only the image */
+  filter: drop-shadow(0 0 15px var(--lava-glow))
+          drop-shadow(0 0 25px rgba(245,90,16,.5));
+}
+
+/* Subhead + CTA tight under the stamp */
+#hero .lead{
+  margin: var(--gap-stamp-lead) auto 10px;
+  max-width: 58ch; text-align: center;
+  color:#f0c870;
+  text-shadow: 0 0 8px rgba(245,90,16,.35), 0 0 16px rgba(245,90,16,.24), 0 1px 2px rgba(0,0,0,.6);
+}
+#hero .btn{ margin-top: 0; }
+
+/* Mobile */
+@media (max-width:640px){
+  :root{
+    --title-kicker-gap: clamp(18px, 7vw, 28px);
+    --stamp-pull: clamp(90px, 22vh, 150px);
+    --gap-stamp-lead: 10px;
+  }
+  #hero .brand-stamp{ width:min(80vw, 300px); }
+}
