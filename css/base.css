@@ -688,3 +688,55 @@ footer {
 .hero.hero--tight {
   padding-top: 26px;
 }
+/* ===== HERO STACK FIX (last wins) ===== */
+:root{
+  /* how close “MEDIA SOLUTIONS” sits to the letters */
+  --title-kicker-gap: clamp(22px, 5vw, 64px);
+  /* how far the logo is pulled upward toward the kicker */
+  --stamp-pull: clamp(110px, 18vh, 200px);
+  /* space between logo and subheading */
+  --gap-stamp-lead: 12px;
+}
+
+.hero { overflow: visible; justify-content: flex-start; }
+
+/* Overlay the kicker onto the title image */
+.title-wrap { position: relative; display: inline-block; }
+.title-under {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: var(--title-kicker-gap);
+  width: 100%; text-align: center;
+  pointer-events: none; z-index: 2;
+}
+.kicker { margin: 0; } /* zero any stray margins */
+
+/* Center the stamp and float it up */
+.brand-stamp {
+  position: relative;
+  width: min(70vw, 360px);
+  margin: calc(-1 * var(--stamp-pull)) auto 0;   /* pull upward toward kicker */
+  pointer-events: none;
+  animation: none !important; /* container must NOT animate */
+  z-index: 1;
+}
+.brand-stamp .logo {
+  display: block; width: 100%; height: auto;
+  animation: logoTumble 28s linear infinite;    /* spin only the image */
+  filter: drop-shadow(0 0 15px var(--lava-glow))
+          drop-shadow(0 0 25px rgba(245,90,16,.5));
+}
+
+/* Subheading sits right under the logo; then button */
+.lead { margin: var(--gap-stamp-lead) auto 10px; max-width: 58ch; text-align: center; }
+.btn  { margin-top: 0; }
+
+/* Mobile nudges */
+@media (max-width: 640px){
+  :root{
+    --title-kicker-gap: clamp(18px, 7vw, 28px);
+    --stamp-pull: clamp(90px, 22vh, 150px);
+    --gap-stamp-lead: 10px;
+  }
+  .brand-stamp { width: min(80vw, 300px); }
+}
