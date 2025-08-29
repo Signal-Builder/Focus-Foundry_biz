@@ -99,15 +99,31 @@ nav.nav--scrolled {
 
 /* ========== Hero ========== */
 .hero {
-    position: relative;
-    padding: 30px var(--spacing-4) var(--spacing-5);
-    text-align: center;
-    border-radius: var(--spacing-4);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-    overflow: hidden;
-    display: flex; /* Add this line */
-    justify-content: center; /* And this line to center the content */
+  position: relative;
+  /* Use a consistent padding system. We'll add top/bottom padding here. */
+  padding: 80px var(--spacing-4); 
+  text-align: center;
+  border-radius: var(--spacing-4);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column; /* Center the elements vertically */
+  align-items: center; /* Center the elements horizontally */
+  justify-content: center; /* Center the elements in the middle of the screen */
+  min-height: 100vh; /* Make sure the hero section takes up the entire viewport height */
+}
+
+/* Remove the specific rule that creates the spinning ring */
+#bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  background: transparent;
 }
 
 /* Legibility mask */
