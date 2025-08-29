@@ -17,7 +17,6 @@
   --accent: #66e0ff;
   --brand-gold: #f0c870;
   --lava-glow: #f55a10;
-  --lava-glow-red: #d94b0d; /* New color for a more reddish glow */
 
   /* Spacing Scale (based on an 8px grid) */
   --spacing-1: 8px;
@@ -111,7 +110,8 @@ nav.nav--scrolled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Removed min-height to allow content to flow naturally */
+  justify-content: center;
+  min-height: 100vh;
 }
 
 /* Legibility mask */
@@ -135,6 +135,18 @@ nav.nav--scrolled {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* New hero-wrap class to center the hero content */
+.hero-wrap {
+  max-width: var(--content-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+  /* Use Flexbox for vertical layout within the hero */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Container for all hero-header elements */
@@ -192,6 +204,11 @@ nav.nav--scrolled {
   height: auto;
   display: block;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+
+/* Removed the glowing ring */
+.brand-stamp::before {
+  content: none;
 }
 
 /* Hero copy + CTA */
@@ -503,7 +520,7 @@ footer {
   75%  { transform: rotateX(225deg) rotateY(270deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
-/* ========== Footer ========== */
+
 footer {
   margin: 64px 0 0;
   text-align: center;
