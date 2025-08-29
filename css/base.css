@@ -519,3 +519,29 @@ footer {
   75%  { transform: rotateX(225deg) rotateY(270deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
+/* Put the stamp in the dead space, centered under the hero title */
+.hero { position: relative; }
+
+.hero-content { position: relative; } /* positioning context */
+
+.brand-stamp {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);     /* horizontal centering */
+  top: clamp(120px, 30vh, 360px);   /* vertical spot under the title */
+  width: min(70vw, 360px);
+  height: auto;
+  z-index: 1;                       /* above background, below nav */
+  pointer-events: none;             /* don't block links/buttons */
+}
+
+/* Create room so later content doesn't collide with the stamp */
+.hero-header {
+  padding-bottom: clamp(140px, 24vh, 280px);
+}
+
+/* Tweak for small screens */
+@media (max-width: 640px) {
+  .brand-stamp { top: clamp(80px, 26vh, 220px); width: min(80vw, 320px); }
+  .hero-header { padding-bottom: clamp(120px, 28vh, 220px); }
+}
