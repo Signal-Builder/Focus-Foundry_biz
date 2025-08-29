@@ -101,7 +101,7 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
-  /* Adjusting padding to be responsive */
+  /* Use a consistent padding system. We'll add top/bottom padding here. */
   padding: 80px var(--spacing-4) 40px; 
   text-align: center;
   border-radius: var(--spacing-4);
@@ -138,7 +138,7 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* The new container for the hero's core content */
+/* New container for the hero's core content */
 .hero-content {
   display: flex;
   flex-direction: column;
@@ -161,6 +161,7 @@ nav.nav--scrolled {
 .fire-title {
   margin: 0;
   text-align: center;
+  /* Updated glow color */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
