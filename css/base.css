@@ -32,6 +32,12 @@
   --z-canvas: 10;
   --z-content: 20;
   --z-nav: 25;
+
+  /* Hero-specific Spacing Knobs */
+  --gap-title-kicker: clamp(10px, 2.2vw, 18px);  /* space from fire title to "MEDIA SOLUTIONS" */
+  --pull-stamp: clamp(80px, 12vh, 150px); /* how far the logo is pulled upward */
+  --gap-stamp-lead: 10px; /* gap from logo to subheading */
+  --gap-lead-btn: 8px; /* subheading → button */
 }
 
 /* ========== Base ========== */
@@ -101,18 +107,18 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
-  /* Use a consistent padding system. We'll add top/bottom padding here. */
-  padding: 80px var(--spacing-4) 40px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding-top: clamp(40px, 10vh, 120px);
+  padding-bottom: 0; /* Ensures content stays tight */
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  overflow: visible; /* Allows the stamp to "float" out of the container */
 }
 
 /* Legibility mask */
@@ -143,25 +149,13 @@ nav.nav--scrolled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Use the existing wrap for max-width and centering */
   max-width: var(--content-width);
   margin: 0 auto;
 }
 
-/* Container for all hero-header elements */
-.hero-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: var(--spacing-4);
-}
-
-/* Fire brand header (single image) */
+/* Title and logo */
 .fire-title {
-  margin: 0;
-  text-align: center;
-  /* Updated glow color */
+  margin: 0; /* Removed conflicting margins */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
@@ -169,53 +163,48 @@ nav.nav--scrolled {
   width: min(92%, 850px);
   height: auto;
   display: block;
-  margin: 0 auto;
 }
 
-/* "Media Solutions" kicker text */
-.kicker {
-  margin: 0;
+/* Kicker: gold text with glow */
+.kicker.kicker--glow {
+  margin: var(--gap-title-kicker) 0 0; /* Use variable for space */
   font-family: 'sparatedregular', sans-serif;
-  font-size: clamp(28px, 4.2vw, 42px);
-  font-weight: normal;
-  letter-spacing: 0.12em;
-  color: var(--lava-glow);
   text-transform: uppercase;
-  text-align: center;
-  line-height: 1.15;
-  transform: none;
-  text-shadow: 0 0 10px var(--lava-glow), 0 0 20px var(--lava-glow);
+  letter-spacing: .16em;
+  font-size: clamp(28px, 4.2vw, 42px);
+  background: linear-gradient(180deg, #ffe7ad 0%, #f0c870 55%, #b6863b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(245, 90, 16, .28), 0 0 20px rgba(245, 90, 16, .22);
 }
 
-/* Brand stamp animation */
+/* Stamp: use negative margin to pull it up */
 .brand-stamp {
-  position: relative;
-  width: min(90%, 360px);
-  height: min(90%, 360px);
-  margin: 0;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  animation: logoTumble 15s infinite ease-in-out;
+  position: relative; /* Stays in normal flow */
+  width: min(70vw, 360px);
+  height: auto;
+  margin: calc(-1 * var(--pull-stamp)) auto 0; /* THE KEY: negative top margin */
+  pointer-events: none;
+  animation: none !important; /* Container does NOT animate */
 }
 
 .brand-stamp .logo {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
+  animation: logoTumble 28s linear infinite; /* Spin only the image */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-/* Removed the glowing ring */
-.brand-stamp::before {
-  content: none;
-}
-
-/* Hero copy + CTA */
-p.lead {
-  color: var(--lava-glow);
-  font-size: clamp(16px, 2.4vw, 20px);
-  margin: var(--spacing-2) 0 var(--spacing-4);
-  text-shadow: 0 0 10px var(--lava-glow);
+/* Subheading + CTA tight under the logo */
+.lead.lead--glow {
+  margin: var(--gap-stamp-lead) auto var(--gap-lead-btn);
+  max-width: 58ch;
+  text-align: center;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: #f0c870;
+  text-shadow: 0 0 8px rgba(245, 90, 16, .35), 0 0 16px rgba(245, 90, 16, .24), 0 1px 2px rgba(0, 0, 0, .6);
 }
 
 /* Updated button styles to match lava theme */
@@ -229,6 +218,7 @@ p.lead {
   background: var(--lava-glow);
   box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
   transition: transform .12s ease, box-shadow .12s ease;
+  margin-top: 0;
 }
 
 .btn:hover {
@@ -246,31 +236,32 @@ p.lead {
   border: 1px solid rgba(245, 90, 16, 0.18);
   box-shadow: none;
 }
+
 .btn-ghost:hover {
   border-color: rgba(245, 90, 16, 0.35);
 }
 
 /* Tagline section */
 .tagline-section {
-    text-align: center;
-    padding: 24px 0;
+  text-align: center;
+  padding: 24px 0;
 }
 
 .tagline-title {
-    font-size: clamp(28px, 4vw, 48px);
-    font-weight: 700;
-    color: var(--brand-gold);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin: 0;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--brand-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
 }
 
 .tagline-subhead {
-    font-size: clamp(16px, 2.2vw, 20px);
-    color: var(--lava-glow);
-    text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
-    margin-top: 8px;
-    margin-bottom: 24px;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: var(--lava-glow);
+  text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
+  margin-top: 8px;
+  margin-bottom: 24px;
 }
 
 /* ========== Footer ========== */
@@ -402,12 +393,23 @@ footer {
   color: var(--muted);
 }
 
+/* ===== Keyframes (consolidated and simplified) ===== */
+@keyframes logoTumble {
+  0%   { transform: rotateX(0deg) rotateY(0deg); }
+  25%  { transform: rotateX(45deg) rotateY(90deg); }
+  50%  { transform: rotateX(120deg) rotateY(180deg); }
+  75%  { transform: rotateX(225deg) rotateY(270deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* ===== Media Queries (consolidated) ===== */
 @media (max-width: 640px) {
   .wrap {
     padding: 36px 16px;
   }
   .hero {
-    padding: 56px 18px 40px;
+    padding-top: 80px;
+    padding-bottom: 0;
   }
   .fire-logo {
     width: 94%;
@@ -416,621 +418,15 @@ footer {
     gap: var(--spacing-3);
     font-size: 16px;
   }
-}
-
-/* Optional tighter hero variant */
-.hero.hero--tight {
-  padding-top: 26px;
-}
-
-/* Keyframes */
-@keyframes ff-stampIn {
-  0% {
-    transform: scale(2) rotate(-8deg);
-    filter: blur(10px);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(0.96) rotate(2deg);
-    filter: blur(1.4px);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) rotate(0deg);
-    filter: blur(0);
-    opacity: 1;
+  :root {
+    --gap-title-kicker: clamp(12px, 6vw, 18px);
+    --pull-stamp: clamp(56px, 18vh, 110px);
+    --gap-stamp-lead: 8px;
   }
 }
 
-@keyframes ff-fadeOut {
-  to {
-    opacity: 0;
-  }
+/* Neutralize any old, conflicting absolute/overlay rules that might linger */
+.title-wrap, .title-under, .hero-header {
+  all: unset;
+  display: contents;
 }
-
-@keyframes ff-imprintGlow {
-  0% {
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  }
-  50% {
-    box-shadow: 0 0 16px var(--brand-gold);
-  }
-  100% {
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  }
-}
-
-@keyframes ff-brandFlash {
-  0% {
-    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
-  }
-  50% {
-    box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
-  }
-}
-
-@keyframes ff-fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes logoSwing {
-  0%, 100% {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-  25% {
-    transform: rotateX(20deg) rotateY(30deg);
-  }
-  75% {
-    transform: rotateX(-20deg) rotateY(-30deg);
-  }
-}
-
-@keyframes logoSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes logoPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-}
-@keyframes logoTumble {
-  0%   { transform: rotateX(0deg) rotateY(0deg); }
-  25%  { transform: rotateX(45deg) rotateY(90deg); }
-  50%  { transform: rotateX(120deg) rotateY(180deg); }
-  75%  { transform: rotateX(225deg) rotateY(270deg); }
-  100% { transform: rotateX(360deg) rotateY(360deg); }
-}
-/* Keep hero title up high */
-.hero {
-  justify-content: flex-start;      /* stop vertical centering */
-  padding-top: clamp(60px, 12vh, 140px);
-  padding-bottom: 0;
-}
-
-/* Group title + kicker, but leave room for stamp */
-.hero-header {
-  margin-bottom: clamp(40px, 8vh, 100px);
-  padding-bottom: 0;
-  position: relative;
-}
-
-/* Float stamp in the dead space above kicker */
-.brand-stamp {
-  position: absolute;
-  bottom: -60px;                    /* adjust up/down as needed */
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(70vw, 320px);
-  height: auto;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Mobile adjustments */
-@media (max-width: 640px) {
-  .hero { padding-top: 80px; }
-  .hero-header { margin-bottom: 80px; }
-  .brand-stamp { bottom: -50px; width: min(80vw, 260px); }
-}
-/* 1) Lift the whole hero content so the top title is higher */
-.hero {
-  justify-content: flex-start;
-  padding-top: clamp(60px, 12vh, 140px);
-}
-
-/* 2) Keep title, kicker, subhead tight as one block */
-.hero-header {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: 6px;                        /* tighten spacing between lines */
-  margin-bottom: clamp(70px, 12vh, 120px); /* space below the block */
-}
-
-/* 3) Stamp sits below header, pulled up into the dead space */
-.brand-stamp {
-  position: relative;              /* stay in the flow for responsiveness */
-  width: min(70vw, 360px);
-  height: auto;
-  margin: clamp(-140px, -10vh, -80px) auto 0; /* negative margin = float up */
-  pointer-events: none;            /* don’t block buttons/links */
-  z-index: 1;
-  animation: logoTumble 28s linear infinite; /* slower, calmer spin */
-}
-
-/* Optional: slightly smaller on phones & adjust overlap */
-@media (max-width: 640px) {
-  .hero { padding-top: 80px; }
-  .hero-header { margin-bottom: 90px; }
-  .brand-stamp {
-    width: min(80vw, 300px);
-    margin: clamp(-90px, -12vh, -60px) auto 0;
-  }
-}
-/* Lift the hero content so the title sits higher */
-.hero {
-  justify-content: flex-start;                 /* stop vertical centering */
-  padding-top: clamp(60px, 12vh, 140px);
-}
-
-/* Title + kicker + subhead act as a single block and provide
-   space for the stamp to float underneath */
-.hero-header {
-  position: relative;                          /* positioning context */
-  display: grid;
-  justify-items: center;
-  gap: 6px;
-  padding-bottom: clamp(140px, 18vh, 260px);   /* reserves dead-space for the stamp */
-}
-
-/* Center the stamp and hang it off the bottom of the header block */
-.brand-stamp {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(-1 * clamp(100px, 14vh, 200px)); /* negative = hangs below header */
-  width: min(70vw, 360px);
-  height: auto;
-  margin: 0;
-  z-index: 1;
-  pointer-events: none;
-  /* optional: calmer spin */
-  animation: logoTumble 28s linear infinite;
-}
-
-/* Mobile tune-up */
-@media (max-width: 640px) {
-  .hero { padding-top: 80px; }
-  .hero-header { padding-bottom: clamp(110px, 20vh, 180px); }
-  .brand-stamp {
-    width: min(80vw, 300px);
-    top: calc(-1 * clamp(80px, 16vh, 150px));
-  }
-}
-/* Lift the hero content and allow overlap */
-.hero {
-  justify-content: flex-start;     /* stop vertical centering */
-  padding-top: clamp(60px, 12vh, 140px);
-  overflow: visible;               /* don't clip the floating stamp */
-}
-
-/* Header is the positioning anchor + reserves space for the floating stamp */
-.hero-header {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: 6px;
-  padding-bottom: clamp(140px, 18vh, 260px);
-}
-
-/* Center the stamp under the header, pulled into the dead space */
-.brand-stamp {
-  position: absolute;
-  left: 50%;
-  bottom: calc(-1 * clamp(110px, 16vh, 200px));  /* how far it hangs down */
-  transform: translateX(-50%);                   /* horizontal centering */
-  width: min(70vw, 360px);
-  height: auto;
-  margin: 0;
-  z-index: 1;
-  pointer-events: none;
-
-  /* IMPORTANT: the container must NOT animate transform */
-  animation: none !important;
-}
-
-/* Animate only the image so centering isn't overridden */
-.brand-stamp .logo {
-  display: block;
-  width: 100%;
-  height: auto;
-  animation: logoTumble 28s linear infinite;  /* or whatever you like */
-  transform-origin: 50% 50%;
-  filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-/* Mobile tweaks */
-@media (max-width: 640px) {
-  .hero { padding-top: 80px; }
-  .hero-header { padding-bottom: clamp(110px, 20vh, 180px); }
-  .brand-stamp {
-    width: min(80vw, 300px);
-    bottom: calc(-1 * clamp(90px, 18vh, 150px));
-  }
-}
-/* Lift the hero content and allow overlaps */
-.hero {
-  justify-content: flex-start;
-  padding-top: clamp(32px, 8vh, 100px);
-  overflow: visible;
-}
-
-/* Header is the anchor, and reserves space for the stamp below */
-.hero-header {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  padding-bottom: clamp(150px, 19vh, 260px);
-}
-
-/* Title container becomes positioning context for kicker/subhead */
-.title-wrap {
-  position: relative;
-  display: inline-block; /* shrink-wrap to the title image */
-}
-
-/* Overlay the kicker + subhead on the title image */
-.title-under {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: clamp(28px, 5vw, 80px); /* <-- TUNE THIS: closer to  title = bigger value */
-  width: 100%;
-  text-align: center;
-  z-index: 2;
-}
-
-/* Center the stamp and float it into the dead space */
-.brand-stamp {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(-1 * clamp(120px, 18vh, 220px)); /* how far it hangs down */
-  width: min(70vw, 360px);
-  height: auto;
-  margin: 0;
-  z-index: 1;
-  pointer-events: none;
-  animation: none !important; /* container doesn't animate */
-}
-
-/* Animate only the image so centering isn't overridden */
-.brand-stamp .logo {
-  width: 100%;
-  height: auto;
-  display: block;
-  animation: logoTumble 28s linear infinite;
-  transform-origin: 50% 50%;
-}
-
-/* Mobile tune */
-@media (max-width: 640px) {
-  .hero { padding-top: 72px; }
-  .hero-header { padding-bottom: 150px; }
-  .title-under { bottom: clamp(22px, 8vw, 60px); }
-  .brand-stamp { width: min(80vw, 300px); bottom: calc(-1 * clamp(100px, 22vh, 180px)); }
-}
-/* Bring the stamp much closer to the subhead */
-.hero-header {
-  padding-bottom: clamp(120px, 14vh, 200px);     /* was larger */
-}
-
-.brand-stamp {
-  bottom: calc(-1 * clamp(60px, 8vh, 110px));    /* less negative = sits higher */
-}
-.title-under {
-  bottom: clamp(20px, 4vw, 60px);                 /* closer to title */
-}
-/* Premium gold kicker (polished, not gimmicky) */
-.kicker {
-  margin: 6px 0 2px;
-  font-family: 'sparatedregular', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: clamp(28px, 4.2vw, 42px);
-  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 60%,#b6863b 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;                 /* gradient text */
-  text-shadow: 0 1px 0 rgba(0,0,0,.45), 0 0 10px rgba(240,200,112,.18);
-}
-.kicker::after {                       /* molten underline */
-  content:"";
-  display:block;
-  width: clamp(140px, 26vw, 320px);
-  height: 2px;
-  margin: 8px auto 0;
-  border-radius: 2px;
-  background: linear-gradient(90deg, transparent, rgba(245,90,16,.75), transparent);
-  filter: drop-shadow(0 0 10px rgba(245,90,16,.45));
-}
-
-/* Subhead: clear, readable, slightly warm */
-.lead {
-  color: rgba(231,231,238,.92);
-  text-shadow: 0 1px 2px rgba(0,0,0,.7);
-  max-width: 48ch;
-  margin-left: auto;
-  margin-right: auto;
-}
-/* Keep header as the anchor + leave room for the floating stamp */
-.hero-header {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  padding-bottom: clamp(130px, 16vh, 210px); /* reserves space for logo */
-}
-
-/* Stamp tighter to title; adjust if needed */
-.brand-stamp {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(-1 * clamp(70px, 10vh, 120px)); /* closer to title = smaller numbers */
-  width: min(70vw, 360px);
-  margin: 0;
-  pointer-events: none;
-  animation: none !important;                  /* container doesn't animate */
-}
-.brand-stamp .logo {
-  width: 100%; height: auto; display: block;
-  animation: logoTumble 28s linear infinite;   /* spin only the image */
-  filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-/* Kicker: gold text + lava glow (matches the stamp vibe) */
-.kicker--glow {
-  margin: 6px 0 0;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: clamp(28px, 4.2vw, 42px);
-  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  /* simulate the logo's glow with layered text-shadows */
-  text-shadow:
-    0 0 10px rgba(245,90,16,.35),
-    0 0 18px rgba(245,90,16,.28),
-    0 0 30px rgba(245,90,16,.22);
-}
-
-/* Subheading placed UNDER the stamp, same glow tone */
-.lead.lead--glow {
-  margin: clamp(10px, 2vh, 16px) auto 14px;
-  max-width: 58ch;
-  text-align: center;
-  font-size: clamp(16px, 2.2vw, 20px);
-  color: #f0c870; /* base gold */
-  text-shadow:
-    0 0 8px rgba(245,90,16,.35),
-    0 0 16px rgba(245,90,16,.24),
-    0 1px 2px rgba(0,0,0,.6);
-}
-
-/* If the kicker/subhead need to sit higher over the title image */
-.title-under { bottom: clamp(26px, 5vw, 70px); }  /* nudge up/down */
-/* === Fine-tune knobs === */
-:root{
-  /* how far the stamp hangs below the header block */
-  --stamp-hang: clamp(52px, 7.5vh, 88px);
-  /* gap between bottom of stamp and the subheading */
-  --gap-below-stamp: 10px;
-  /* distance from bottom of the title image to the kicker */
-  --title-under-gap: clamp(6px, 1.6vw, 14px);
-}
-
-/* keep the hero high; allow overlaps if any */
-.hero{ justify-content:flex-start; padding-top: clamp(32px, 8vh, 100px); overflow:visible; }
-
-/* title+kicker act as one block; reserve exactly enough space for the stamp */
-.hero-header{
-  position:relative;
-  display:grid;
-  justify-items:center;
-  padding-bottom: calc(var(--stamp-hang) + var(--gap-below-stamp));
-}
-
-/* kicker/subhead sit ON the title image, tight under the fire letters */
-.title-wrap{ position:relative; display:inline-block; }
-.title-under{
-  position:absolute; left:50%; transform:translateX(-50%);
-  bottom: var(--title-under-gap);  /* tighter under the title */
-  width:100%; text-align:center; z-index:2;
-}
-
-/* center the stamp and hang it RIGHT under the kicker */
-.brand-stamp{
-  position:absolute; left:50%; transform:translateX(-50%);
-  bottom: calc(-1 * var(--stamp-hang));   /* smaller hang => closer to kicker */
-  width: min(70vw, 360px); margin:0; pointer-events:none; animation:none!important;
-}
-.brand-stamp .logo{
-  width:100%; height:auto; display:block;
-  animation: logoTumble 28s linear infinite;  /* only the image spins */
-  filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245,90,16,.5));
-}
-
-/* subheading now sits tight under the logo; button sits tight under subheading */
-.lead.lead--glow{ margin: 0 auto 8px; text-align:center; }
-.btn{ margin-top: 6px; }
-/* === Spacing knobs you can tweak === */
-:root{
-  /* distance from bottom of title image to the kicker */
-  --title-kicker-gap: clamp(10px, 2.2vw, 20px);
-  /* how far the stamp is pulled upward toward the kicker */
-  --stamp-pull: clamp(60px, 9vh, 140px);
-  /* gap between bottom of stamp and the subheading */
-  --gap-below-stamp: 8px;
-}
-/* ===== HERO — FINAL, CONSOLIDATED ===== */
-
-/* tunable spacing knobs */
-:root{
-  --title-kicker-gap: clamp(10px, 2.2vw, 18px);  /* space from fire title to "MEDIA SOLUTIONS" */
-  --stamp-pull:      clamp(70px, 10vh, 130px);   /* how far the logo is pulled upward */
-  --gap-below-stamp: 10px;                        /* gap from logo to subheading */
-}
-
-.hero{
-  justify-content: flex-start;                   /* stop vertical centering */
-  padding-top: clamp(40px, 10vh, 120px);
-  overflow: visible;                              /* allow floating elements */
-}
-
-/* title block; no extra bottom padding here */
-.hero-header{
-  position: relative;
-  display: grid;
-  justify-items: center;
-  margin: 0;
-  padding: 0;
-}
-
-/* place the kicker on top of the title image so it's truly "under" the letters */
-.title-wrap{ position: relative; display: inline-block; }
-.title-under{
-  position: absolute;
-  left: 50%; transform: translateX(-50%);
-  bottom: var(--title-kicker-gap);
-  width: 100%;
-  text-align: center;
-  z-index: 2;
-}
-
-/* center the stamp and pull it upward toward the kicker */
-.brand-stamp{
-  position: relative;                 /* stays in normal flow */
-  width: min(70vw, 360px);
-  margin: calc(-1 * var(--stamp-pull)) auto 0;  /* negative = floats up */
-  pointer-events: none;
-  animation: none !important;         /* container must NOT animate transform */
-}
-.brand-stamp .logo{
-  display: block; width: 100%; height: auto;
-  animation: logoTumble 28s linear infinite;    /* spin only the image */
-  filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-/* subheading + CTA tight under the logo */
-.lead.lead--glow{
-  margin: var(--gap-below-stamp) auto 6px;
-  max-width: 58ch; text-align: center;
-  color: #f0c870;
-  text-shadow:
-    0 0 8px rgba(245,90,16,.35),
-    0 0 16px rgba(245,90,16,.24),
-    0 1px 2px rgba(0,0,0,.6);
-}
-.btn{ margin-top: 6px; }
-
-/* polished gold kicker with subtle lava glow */
-.kicker.kicker--glow{
-  text-transform: uppercase; letter-spacing: .16em;
-  font-size: clamp(28px, 4.2vw, 42px);
-  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  text-shadow:
-    0 0 10px rgba(245,90,16,.28),
-    0 0 20px rgba(245,90,16,.22);
-}
-
-/* mobile tweaks */
-@media (max-width: 640px){
-  :root{
-    --title-kicker-gap: clamp(12px, 6vw, 18px);
-    --stamp-pull: clamp(56px, 18vh, 110px);
-    --gap-below-stamp: 8px;
-  }
-}
-/* ===== HERO — RESET (final) ===== */
-:root{
-  --gap-title-kicker: clamp(10px, 2.2vw, 18px);   /* title → kicker */
-  --pull-stamp:      clamp(80px, 12vh, 150px);    /* how far the logo floats up */
-  --gap-stamp-lead:  10px;                        /* logo → subheading */
-  --gap-lead-btn:    8px;                         /* subheading → button */
-}
-
-.hero{
-  justify-content: flex-start;                    /* stop vertical centering */
-  padding-top: clamp(40px, 10vh, 120px);
-  overflow: visible;                               /* allow the logo to float up */
-}
-
-.fire-title{ margin: 0 0 var(--gap-title-kicker); }
-
-/* Polished kicker with subtle lava glow (matches the logo vibe) */
-.kicker.kicker--glow{
-  margin: 0;
-  text-transform: uppercase; letter-spacing: .16em;
-  font-size: clamp(28px, 4.2vw, 42px);
-  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  text-shadow:
-    0 0 10px rgba(245,90,16,.28),
-    0 0 20px rgba(245,90,16,.22);
-}
-
-/* Center the stamp and float it UP with a negative margin */
-.brand-stamp{
-  position: relative;                /* stay in normal flow */
-  width: min(70vw, 360px);
-  margin: calc(-1 * var(--pull-stamp)) auto 0;
-  pointer-events: none;
-  animation: none !important;        /* container must NOT animate transform */
-}
-.brand-stamp .logo{
-  display:block; width:100%; height:auto;
-  animation: logoTumble 28s linear infinite;     /* spin only the image */
-  filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-/* Subheading + button tight under the logo */
-.lead.lead--glow{
-  margin: var(--gap-stamp-lead) auto var(--gap-lead-btn);
-  max-width: 58ch; text-align:center;
-  color:#f0c870;
-  text-shadow:
-    0 0 8px rgba(245,90,16,.35),
-    0 0 16px rgba(245,90,16,.24),
-    0 1px 2px rgba(0,0,0,.6);
-}
-.btn{ margin-top: 0; }
-
-/* Safety: neutralize any earlier absolute/overlay rules that might linger */
-.title-wrap, .title-under { all: unset; }  /* we’re not using them anymore */
-.hero-header { all: unset; display: contents; } /* flatten wrapper */
