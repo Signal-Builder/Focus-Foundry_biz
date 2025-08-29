@@ -895,65 +895,84 @@ footer {
   /* gap between bottom of stamp and the subheading */
   --gap-below-stamp: 8px;
 }
+/* ===== HERO — FINAL, CONSOLIDATED ===== */
 
-/* keep hero high and allow overlaps */
-.hero{ justify-content:flex-start; padding-top: clamp(32px, 8vh, 90px); overflow: visible; }
-
-/* header just wraps the title; no extra padding */
-.hero-header{ display:grid; justify-items:center; margin:0; padding:0; }
-
-/* kicker overlays the title image so it sits truly under the letters */
-.title-wrap{ position: relative; display:inline-block; }
-.title-under{
-  position:absolute; left:50%; transform:translateX(-50%);
-  bottom: var(--title-kicker-gap);
-  width:100%; text-align:center; z-index:2;
+/* tunable spacing knobs */
+:root{
+  --title-kicker-gap: clamp(10px, 2.2vw, 18px);  /* space from fire title to "MEDIA SOLUTIONS" */
+  --stamp-pull:      clamp(70px, 10vh, 130px);   /* how far the logo is pulled upward */
+  --gap-below-stamp: 10px;                        /* gap from logo to subheading */
 }
 
-/* stamp in normal flow, pulled up with negative margin (no brittle absolute math) */
-.brand-stamp{
+.hero{
+  justify-content: flex-start;                   /* stop vertical centering */
+  padding-top: clamp(40px, 10vh, 120px);
+  overflow: visible;                              /* allow floating elements */
+}
+
+/* title block; no extra bottom padding here */
+.hero-header{
   position: relative;
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* place the kicker on top of the title image so it's truly "under" the letters */
+.title-wrap{ position: relative; display: inline-block; }
+.title-under{
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: var(--title-kicker-gap);
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+}
+
+/* center the stamp and pull it upward toward the kicker */
+.brand-stamp{
+  position: relative;                 /* stays in normal flow */
   width: min(70vw, 360px);
-  margin: calc(-1 * var(--stamp-pull)) auto 0; /* pulls it toward the kicker */
+  margin: calc(-1 * var(--stamp-pull)) auto 0;  /* negative = floats up */
   pointer-events: none;
-  animation: none !important; /* container must not animate transform */
+  animation: none !important;         /* container must NOT animate transform */
 }
 .brand-stamp .logo{
-  width:100%; height:auto; display:block;
-  animation: logoTumble 28s linear infinite;  /* only the image spins */
+  display: block; width: 100%; height: auto;
+  animation: logoTumble 28s linear infinite;    /* spin only the image */
   filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245,90,16,.5));
+          drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-/* subheading + button tight under the stamp */
-.lead.lead--glow{ margin: var(--gap-below-stamp) auto 6px; text-align:center; }
+/* subheading + CTA tight under the logo */
+.lead.lead--glow{
+  margin: var(--gap-below-stamp) auto 6px;
+  max-width: 58ch; text-align: center;
+  color: #f0c870;
+  text-shadow:
+    0 0 8px rgba(245,90,16,.35),
+    0 0 16px rgba(245,90,16,.24),
+    0 1px 2px rgba(0,0,0,.6);
+}
 .btn{ margin-top: 6px; }
 
-/* glow styling for the kicker/subhead to match the mark */
+/* polished gold kicker with subtle lava glow */
 .kicker.kicker--glow{
   text-transform: uppercase; letter-spacing: .16em;
   font-size: clamp(28px, 4.2vw, 42px);
   background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   text-shadow:
-    0 0 10px rgba(245,90,16,.35),
-    0 0 18px rgba(245,90,16,.28),
-    0 0 30px rgba(245,90,16,.22);
-}
-.lead.lead--glow{
-  color:#f0c870;
-  text-shadow:
-    0 0 8px rgba(245,90,16,.35),
-    0 0 16px rgba(245,90,16,.24),
-    0 1px 2px rgba(0,0,0,.6);
+    0 0 10px rgba(245,90,16,.28),
+    0 0 20px rgba(245,90,16,.22);
 }
 
-/* mobile nudge */
+/* mobile tweaks */
 @media (max-width: 640px){
   :root{
     --title-kicker-gap: clamp(12px, 6vw, 18px);
-    --stamp-pull: clamp(50px, 18vh, 110px);
-    --gap-below-stamp: 6px;
+    --stamp-pull: clamp(56px, 18vh, 110px);
+    --gap-below-stamp: 8px;
   }
 }
-
