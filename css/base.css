@@ -153,6 +153,7 @@ nav.nav--scrolled {
   /* Updated filter for a clean, permanent glow */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
+
 .fire-logo {
   width: min(92%, 850px);
   height: auto;
@@ -181,14 +182,21 @@ nav.nav--scrolled {
   width: min(90%, 360px);
   height: min(90%, 360px);
   margin: 0;
-  transform: rotate(45deg);
-  animation: logoSpin 15s infinite linear; 
+  /* Remove rotation from here to let the keyframes control it */
+  animation: logoTumble 15s infinite ease-in-out;
+  /* Add a perspective property for 3D illusion */
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .brand-stamp .logo {
   width: 100%;
   height: auto;
   display: block;
+  /* Add shadows to create a 3D coin-like effect */
+  box-shadow: 
+    inset 0 0 50px rgba(0,0,0,0.4), /* Inner shadow for a beveled edge */
+    0 0 20px rgba(0,0,0,0.5); /* Outer shadow for depth */
 }
 
 /* Removed the glowing ring */
@@ -234,24 +242,6 @@ p.lead {
 }
 .btn-ghost:hover {
   border-color: rgba(245, 90, 16, 0.35);
-}
-
-/* Initial state for elements involved in animation */
-.kicker-stamp,
-.brand-stamp .logo {
-  opacity: 0;
-}
-
-/* Animation trigger state */
-.hero.play-stamp .kicker-stamp {
-  animation: ff-stampIn 640ms cubic-bezier(.16,.84,.36,1) 160ms both;
-  transform: none;
-}
-
-.hero.play-stamp .brand-stamp .logo.gold {
-  animation:
-    ff-stampIn 680ms cubic-bezier(.16,.84,.36,1) 820ms both,
-    ff-brandFlash 600ms ease 1.2s both;
 }
 
 /* Tagline section */
@@ -517,7 +507,13 @@ footer {
     opacity: 1;
   }
 }
-
+@keyframes logoTumble {
+  0%   { transform: rotateX(0deg) rotateY(0deg); }
+  25%  { transform: rotateX(45deg) rotateY(90deg); }
+  50%  { transform: rotateX(120deg) rotateY(180deg); }
+  75%  { transform: rotateX(225deg) rotateY(270deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
 
 /* ========== Footer ========== */
 footer {
