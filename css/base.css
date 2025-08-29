@@ -1,4 +1,4 @@
-/* ========== Fonts ========== */
+  /* ========== Fonts ========== */
 @font-face {
   font-family: 'sparatedregular';
   src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
@@ -32,12 +32,6 @@
   --z-canvas: 10;
   --z-content: 20;
   --z-nav: 25;
-
-  /* Hero-specific Spacing Knobs */
-  --gap-title-kicker: clamp(10px, 2.2vw, 18px);  /* space from fire title to "MEDIA SOLUTIONS" */
-  --pull-stamp: clamp(80px, 12vh, 150px); /* how far the logo is pulled upward */
-  --gap-stamp-lead: 10px; /* gap from logo to subheading */
-  --gap-lead-btn: 8px; /* subheading → button */
 }
 
 /* ========== Base ========== */
@@ -106,20 +100,18 @@ nav.nav--scrolled {
 
 /* ========== Hero ========== */
 .hero {
-  /* Use flexbox for vertical stacking and center alignment */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Keeps content towards the top */
-  min-height: 100vh; /* Ensures the hero takes full viewport height */
-  padding-top: clamp(40px, 10vh, 120px); /* Top padding for the entire hero section */
-  padding-bottom: var(--spacing-5); /* Add some bottom padding for overall hero area */
+  position: relative;
+  padding: 80px var(--spacing-4) 40px; 
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: visible; /* Important to allow the stamp to visually extend if needed */
-  position: relative; /* Establish positioning context for ::before */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 /* Legibility mask */
@@ -145,68 +137,66 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* Container for all hero's core content, managed by flexbox */
-.hero-content {
+/* New hero-wrap class to center the hero content */
+.hero-wrap {
+  max-width: var(--content-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+  /* Use Flexbox for vertical layout within the hero */
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center items horizontally */
-  justify-content: center; /* Center items vertically within its space if needed */
-  max-width: var(--content-width);
-  margin: 0 auto;
-  gap: 0; /* Reset default gaps from previous attempts */
+  align-items: center;
+}
+
+/* Container for all hero-header elements */
+.hero-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--spacing-4);
 }
 
 /* Fire brand header (single image) */
 .fire-title {
-  margin: 0; /* Remove any default margins */
+  margin: 0;
   text-align: center;
+  /* Updated glow color */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-  /* Added a bit of bottom margin to separate from kicker */
-  margin-bottom: var(--spacing-1); /* Small gap between title and kicker */
 }
 
 .fire-logo {
   width: min(92%, 850px);
   height: auto;
   display: block;
+  margin: 0 auto;
 }
 
 /* "Media Solutions" kicker text */
 .kicker {
-  margin: 0; /* Reset default margins */
+  margin: 0;
   font-family: 'sparatedregular', sans-serif;
   font-size: clamp(28px, 4.2vw, 42px);
   font-weight: normal;
   letter-spacing: 0.12em;
-  color: var(--lava-glow); /* Original color, can be updated to gradient if desired */
+  color: var(--lava-glow);
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
-  transform: none; /* Ensure no unwanted transforms */
+  transform: none;
   text-shadow: 0 0 10px var(--lava-glow), 0 0 20px var(--lava-glow);
-  /* Use your gold gradient from previous version */
-  background: linear-gradient(180deg, #ffe7ad 0%, #f0c870 55%, #b6863b 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent; /* Makes gradient visible */
-  text-shadow: 0 0 10px rgba(245, 90, 16, .28), 0 0 20px rgba(245, 90, 16, .22);
-  /* Added margin below kicker to correctly position stamp */
-  margin-bottom: -40px; /* Negative margin to pull the stamp up *into* the kicker's space */
-  z-index: 1; /* Ensure kicker is above stamp if there's overlap in content */
 }
 
-/* Brand stamp (logo) animation */
+/* Brand stamp animation */
 .brand-stamp {
-  position: relative; /* Maintain normal flow, but allow z-index/transform */
+  position: relative;
   width: min(90%, 360px);
-  height: auto; /* Adjust height based on width */
-  margin: 0 auto; /* Center horizontally */
-  /* This margin should be adjusted based on the desired overlap with the kicker */
-  margin-top: -60px; /* Adjust this value to control how much it overlaps the kicker */
+  height: min(90%, 360px);
+  margin: 0;
   transform-style: preserve-3d;
   perspective: 1000px;
-  z-index: 2; /* Ensure the stamp is above the kicker text if needed */
-  animation: none !important; /* Stop container from animating */
+  animation: logoTumble 15s infinite ease-in-out;
 }
 
 .brand-stamp .logo {
@@ -214,17 +204,19 @@ nav.nav--scrolled {
   height: auto;
   display: block;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-  animation: logoTumble 28s linear infinite; /* Apply animation only to the image */
 }
 
+/* Removed the glowing ring */
+.brand-stamp::before {
+  content: none;
+}
 
 /* Hero copy + CTA */
 p.lead {
-  color: #f0c870; /* Base gold */
+  color: var(--lava-glow);
   font-size: clamp(16px, 2.4vw, 20px);
-  text-shadow: 0 0 8px rgba(245, 90, 16, .35), 0 0 16px rgba(245, 90, 16, .24), 0 1px 2px rgba(0, 0, 0, .6);
-  margin: var(--spacing-2) 0 var(--spacing-4); /* Space below logo, above button */
-  max-width: 58ch;
+  margin: var(--spacing-2) 0 var(--spacing-4);
+  text-shadow: 0 0 10px var(--lava-glow);
 }
 
 /* Updated button styles to match lava theme */
@@ -255,32 +247,31 @@ p.lead {
   border: 1px solid rgba(245, 90, 16, 0.18);
   box-shadow: none;
 }
-
 .btn-ghost:hover {
   border-color: rgba(245, 90, 16, 0.35);
 }
 
 /* Tagline section */
 .tagline-section {
-  text-align: center;
-  padding: 24px 0;
+    text-align: center;
+    padding: 24px 0;
 }
 
 .tagline-title {
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 700;
-  color: var(--brand-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin: 0;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 700;
+    color: var(--brand-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0;
 }
 
 .tagline-subhead {
-  font-size: clamp(16px, 2.2vw, 20px);
-  color: var(--lava-glow);
-  text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
-  margin-top: 8px;
-  margin-bottom: 24px;
+    font-size: clamp(16px, 2.2vw, 20px);
+    color: var(--lava-glow);
+    text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
+    margin-top: 8px;
+    margin-bottom: 24px;
 }
 
 /* ========== Footer ========== */
@@ -412,7 +403,116 @@ footer {
   color: var(--muted);
 }
 
+@media (max-width: 640px) {
+  .wrap {
+    padding: 36px 16px;
+  }
+  .hero {
+    padding: 56px 18px 40px;
+  }
+  .fire-logo {
+    width: 94%;
+  }
+  nav {
+    gap: var(--spacing-3);
+    font-size: 16px;
+  }
+}
+
+/* Optional tighter hero variant */
+.hero.hero--tight {
+  padding-top: 26px;
+}
+
 /* Keyframes */
+@keyframes ff-stampIn {
+  0% {
+    transform: scale(2) rotate(-8deg);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.96) rotate(2deg);
+    filter: blur(1.4px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes ff-fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ff-imprintGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  50% {
+    box-shadow: 0 0 16px var(--brand-gold);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes ff-brandFlash {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+  }
+  50% {
+    box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+  }
+}
+
+@keyframes ff-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes logoSwing {
+  0%, 100% {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: rotateX(20deg) rotateY(30deg);
+  }
+  75% {
+    transform: rotateX(-20deg) rotateY(-30deg);
+  }
+}
+
+@keyframes logoSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
 @keyframes logoTumble {
   0%   { transform: rotateX(0deg) rotateY(0deg); }
   25%  { transform: rotateX(45deg) rotateY(90deg); }
@@ -421,208 +521,170 @@ footer {
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 
-/* Mobile adjustments */
-@media (max-width: 640px) {
-  .wrap {
-    padding: 36px 16px;
-  }
-  .hero {
-    padding: 56px 18px 40px;
-  }
-  .fire-logo {
-    width: 94%;
-  }
-  nav {
-    gap: var(--spacing-3);
-    font-size: 16px;
-  }
-  /* Adjustments for kicker and stamp on mobile */
-  .kicker {
-    margin-bottom: -30px; /* Adjust negative margin for stamp overlap on mobile */
-  }
-  .brand-stamp {
-    margin-top: -40px; /* Adjust this value for mobile overlap */
-    width: min(80vw, 300px);
-  }
-}
-
-/* Optional tighter hero variant */
-.hero.hero--tight {
-  padding-top: 26px; /* Adjust top padding for tight variant */
-}
-
-/* --- Ensure old conflicting styles are neutralized --- */
-/* These were from your previous attempts and might be interfering */
-.hero-header { all: unset; display: contents; } /* Flatten wrapper */
-.title-wrap, .title-under { all: unset; }
-
-/* Mobile adjustments */
-@media (max-width: 640px) {
-  .wrap {
-    padding: 36px 16px;
-  }
-  .hero {
-    padding: 56px 18px 40px;
-  }
-  .fire-logo {
-    width: 94%;
-  }
-  nav {
-    gap: var(--spacing-3);
-    font-size: 16px;
-  }
-  /* Adjustments for kicker and stamp on mobile */
-  .kicker {
-    margin-bottom: -30px; /* Adjust negative margin for stamp overlap on mobile */
-  }
-  .brand-stamp {
-    margin-top: -40px; /* Adjust this value for mobile overlap */
-    width: min(80vw, 300px);
-  }
-}
-
-/* Optional tighter hero variant */
-.hero.hero--tight {
-  padding-top: 26px; /* Adjust top padding for tight variant */
-}
-
-/* --- Ensure old conflicting styles are neutralized --- */
-/* These were from your previous attempts and might be interfering */
-.hero-header { all: unset; display: contents; } /* Flatten wrapper */
-.title-wrap, .title-under { all: unset; }
-/* ================= HERO — HARD RESET (ID-scoped) ================= */
-#hero {                                  /* neutralize older .hero/.hero--tight rules */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding-top: clamp(40px, 10vh, 120px) !important;
-  padding-bottom: var(--spacing-5);
+footer {
+  margin: 64px 0 0;
   text-align: center;
-  overflow: visible !important;
+  color: var(--muted);
 }
 
-#hero .hero-content{
-  display:flex; flex-direction:column; align-items:center; gap:0;
-  max-width: var(--content-width); margin:0 auto;
-}
-
-/* Title image */
-#hero .fire-title{ margin:0 0 var(--gap-title-kicker); filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245,90,16,.5)); }
-#hero .fire-logo{ width:min(92%,850px); height:auto; display:block; }
-
-/* Kicker directly under the title */
-#hero .kicker{
-  margin:0;
-  font-family:'sparatedregular',sans-serif;
-  font-size: clamp(28px, 4.2vw, 42px);
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
-  -webkit-background-clip:text; background-clip:text; color:transparent;
-  text-shadow: 0 0 10px rgba(245,90,16,.28), 0 0 20px rgba(245,90,16,.22);
-  z-index:1;
-}
-
-/* Spinning stamp centered UNDER the kicker (floated up) */
-#hero .brand-stamp{
-  position:relative;                 /* keep in flow, so responsive is easy */
-  width:min(70vw,360px);
-  margin: calc(-1 * var(--pull-stamp)) auto 0; /* pull upward toward kicker */
-  pointer-events:none;
-  z-index:0;                          /* kicker stays visually on top if overlapping */
-  animation:none !important;          /* container must NOT animate transform */
-}
-#hero .brand-stamp .logo{
-  display:block; width:100%; height:auto;
-  animation: logoTumble 28s linear infinite;    /* spin only the image */
-  filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245,90,16,.5));
-}
-
-/* Subheading and button tight under the logo */
-#hero .lead{
-  margin: var(--gap-stamp-lead) auto var(--gap-lead-btn);
-  max-width:58ch; text-align:center;
-  color:#f0c870;
-  text-shadow: 0 0 8px rgba(245,90,16,.35), 0 0 16px rgba(245,90,16,.24), 0 1px 2px rgba(0,0,0,.6);
-}
-#hero .btn{ margin-top:0; }
-
-/* If .hero--tight tried to shrink the top padding elsewhere, neutralize it */
-#hero.hero--tight{ padding-top: clamp(40px,10vh,120px) !important; }
-
-/* Mobile nudge */
-@media (max-width:640px){
-  #hero .brand-stamp{ width:min(80vw,300px); margin: calc(-1 * clamp(60px,18vh,110px)) auto 0; }
-}
-/* ===== HERO FINAL LAYOUT (ID-scoped so it wins) ===== */
-
-:root{
-  --title-kicker-gap: clamp(22px, 5vw, 64px);   /* how close 'MEDIA SOLUTIONS' sits to the glow letters */
-  --stamp-pull:      clamp(120px, 18vh, 220px); /* how far the stamp floats up toward the kicker */
-  --gap-stamp-lead:  12px;                      /* space between stamp and subheading */
-}
-
-#hero{ overflow: visible; } /* allow the stamp to float upward */
-
-/* Title overlay: puts the kicker on top of the PNG so it’s tight under the letters */
-#hero .title-wrap{ position: relative; display: inline-block; }
-#hero .fire-logo{ width:min(92%, 850px); height:auto; display:block; }
-#hero .title-under{
-  position: absolute;
-  left: 50%; transform: translateX(-50%);
-  bottom: var(--title-kicker-gap);
-  width: 100%;
-  text-align: center;
+/* ========== Canvas: embers layer ========== */
+#bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: var(--z-canvas);
   pointer-events: none;
-  z-index: 2;
+  background: transparent;
 }
 
-/* Kicker style (gold + soft lava glow) */
-#hero .kicker{
-  margin: 0;
-  font-family: 'sparatedregular', sans-serif;
-  font-size: clamp(28px, 4.2vw, 42px);
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 55%,#b6863b 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  text-shadow: 0 0 10px rgba(245,90,16,.28), 0 0 20px rgba(245,90,16,.22);
-}
-
-/* Stamp: centered, then floated UP with a negative margin */
-#hero .brand-stamp{
+/* Content above canvas */
+main,
+.wrap,
+.hero,
+.card,
+nav,
+footer {
   position: relative;
-  width: min(70vw, 360px);
-  margin: calc(-1 * var(--stamp-pull)) auto 0;   /* pull toward kicker */
-  pointer-events: none;
-  animation: none !important;                    /* don't animate the container */
-  z-index: 1;
-}
-#hero .brand-stamp .logo{
-  display:block; width:100%; height:auto;
-  animation: logoTumble 28s linear infinite;     /* spin only the image */
-  filter: drop-shadow(0 0 15px var(--lava-glow))
-          drop-shadow(0 0 25px rgba(245,90,16,.5));
+  z-index: var(--z-content);
 }
 
-/* Subhead + CTA tight under the stamp */
-#hero .lead{
-  margin: var(--gap-stamp-lead) auto 10px;
-  max-width: 58ch; text-align: center;
-  color:#f0c870;
-  text-shadow: 0 0 8px rgba(245,90,16,.35), 0 0 16px rgba(245,90,16,.24), 0 1px 2px rgba(0,0,0,.6);
+/* ========== Services ========== */
+.services {
+  margin: var(--spacing-5) 0 var(--spacing-2);
 }
-#hero .btn{ margin-top: 0; }
 
-/* Mobile */
-@media (max-width:640px){
-  :root{
-    --title-kicker-gap: clamp(18px, 7vw, 28px);
-    --stamp-pull: clamp(90px, 22vh, 150px);
-    --gap-stamp-lead: 10px;
+.services > h2 {
+  font-size: clamp(24px, 3.8vw, 36px);
+  margin: 0 0 18px;
+}
+
+.services-grid {
+  display: grid;
+  gap: var(--spacing-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  #hero .brand-stamp{ width:min(80vw, 300px); }
+}
+
+@media (max-width: 640px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.svc {
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(10, 10, 14, 0.35);
+  backdrop-filter: blur(4px) saturate(110%);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.svc:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.svc-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 170, 60, 0.12);
+  color: #f5c375;
+  margin-bottom: 10px;
+}
+
+.svc h3 {
+  margin: 0 0 6px;
+  font-size: clamp(18px, 2.6vw, 22px);
+}
+
+.svc p {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.svc-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.svc-link:hover {
+  text-decoration: underline;
+}
+
+/* ========== Contact band ========== */
+.contact-band {
+  margin: 56px 0 0;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.contact-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.contact-inner h2 {
+  margin: 0 0 6px;
+  font-size: clamp(24px, 3.8vw, 36px);
+}
+
+.contact-lead {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.contact-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: none;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ========== Responsive tweaks ========== */
+@media (max-width: 640px) {
+  .wrap {
+    padding: 36px 16px;
+  }
+  .hero {
+    padding: 56px 18px 40px;
+  }
+  .fire-logo {
+    width: 94%;
+  }
+  nav {
+    gap: var(--spacing-3);
+    font-size: 16px;
+  }
+}
+
+/* Optional tighter hero variant */
+.hero.hero--tight {
+  padding-top: 26px;
 }
