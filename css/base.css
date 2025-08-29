@@ -911,71 +911,74 @@ footer {
 #hero .hero-content{
   display: grid; justify-items: center; text-align: center;
 }
-/* ===== HERO STACK: Title -> Kicker -> Logo -> Subhead -> Button ===== */
+
+/* ===== FINAL, HIGH-SPECIFICITY RESET FOR HERO STACK ===== */
+/* Order: 1) Title  2) Kicker  3) Logo (full size)  4) Subheading  5) Button */
+
 :root{
-  /* how close the kicker sits under the fire title */
-  --title-kicker-gap: clamp(10px, 1.8vw, 16px);
-
-  /* spacing from kicker down to the logo */
-  --gap-kicker-logo: clamp(28px, 6vh, 60px);
-
-  /* logo size (use a big cap so it's not reduced; lower if needed on small screens) */
-  --logo-size: clamp(320px, 32vw, 520px);
-
-  /* spacing from logo to subheading, and to the button */
-  --gap-logo-lead: clamp(12px, 3vh, 22px);
-  --gap-lead-btn: 8px;
+  --gap-title-kicker: clamp(8px, 1.6vw, 14px);   /* title → kicker gap (small = tight) */
+  --gap-kicker-logo:  clamp(28px, 5vh, 56px);    /* kicker → logo gap */
+  --gap-logo-lead:    clamp(14px, 2.6vh, 22px);  /* logo → subheading gap */
+  --gap-lead-btn:     10px;                      /* subheading → button gap */
 }
 
-/* Center everything and keep the vertical order */
+/* Keep the stack centered and in normal flow */
 #hero .hero-content{
   display: grid !important;
-  justify-items: center !important;
-  text-align: center;
+  grid-auto-flow: row;
+  justify-items: center;
   row-gap: 0;
+  text-align: center;
 }
 
-/* Kicker sits tight under the title letters */
-#hero .title-wrap{ position: relative; display: inline-block; }
+/* --- Title + Kicker (kicker directly under title) --- */
+#hero .fire-title{ margin: 0 0 var(--gap-title-kicker) 0 !important; }
+#hero .kicker{ margin: 0 !important; }
+
+/* If you have an older overlay version (.title-under), force it back into flow */
 #hero .title-under{
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: var(--title-kicker-gap);  /* closer = smaller */
-  width: 100%;
-  z-index: 2;
-  pointer-events: none;
+  position: static !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: auto !important;
+  margin: 0 0 0 0 !important;
+  pointer-events: auto !important;
 }
-#hero .kicker{ margin: 0; }
 
-/* LOGO: below the kicker with a clear gap (no negative pull) */
+/* --- Logo BELOW the kicker (no pull-up, no absolute) --- */
 #hero .brand-stamp{
-  position: relative;
-  width: var(--logo-size);
-  aspect-ratio: 1 / 1;
-  margin: var(--gap-kicker-logo) auto 0;   /* positive gap under kicker */
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  animation: none !important;             /* container never animates */
+  display: block !important;
+  margin: var(--gap-kicker-logo) auto 0 !important;  /* clean gap below kicker */
   pointer-events: none;
-  animation: none !important;              /* container never animates */
   perspective: 1000px;
   overflow: visible;
 }
 
-/* Tumble the image itself, keep it visible while edge-on */
+/* Logo at its natural/intrinsic size (not reduced).
+   It will only shrink on very small viewports for responsiveness. */
 #hero .brand-stamp .logo{
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  display: block !important;
+  width: auto !important;            /* keep original width */
+  height: auto !important;
+  max-width: min(92vw, 100%) !important;  /* responsive safety without upscaling */
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
-  backface-visibility: visible;            /* don't disappear on the back side */
+  backface-visibility: visible;      /* no “vanish” when edge-on */
   -webkit-backface-visibility: visible;
-  animation: logoTumbleSoft 26s linear infinite;
+  animation: logoTumbleSoft 26s linear infinite;   /* your tumble */
   filter: drop-shadow(0 0 15px var(--lava-glow))
           drop-shadow(0 0 25px rgba(245,90,16,.5));
 }
 
-/* Gentle 3D tumble (no vanishing) */
+/* Softer tumble to avoid harsh edge-on disappearance */
 @keyframes logoTumbleSoft{
   0%   { transform: rotateX(0deg)  rotateY(0deg); }
   25%  { transform: rotateX(30deg) rotateY(60deg); }
@@ -984,15 +987,11 @@ footer {
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 
-/* Subheading and button spacing */
-#hero .lead{ margin: var(--gap-logo-lead) auto var(--gap-lead-btn); max-width: 58ch; }
-#hero .btn{ margin-top: 0; }
+/* --- Subheading & Button spacing --- */
+#hero .lead{ margin: var(--gap-logo-lead) auto var(--gap-lead-btn) !important; max-width: 58ch; }
+#hero .btn{  margin-top: 0 !important; }
 
-/* Optional phone tweaks */
+/* Optional: on phones only, allow logo to scale down a bit so it fits */
 @media (max-width: 640px){
-  :root{
-    --title-kicker-gap: clamp(10px, 4vw, 16px);
-    --gap-kicker-logo: clamp(20px, 7vh, 40px);
-    --logo-size: clamp(260px, 70vw, 420px);
-  }
+  #hero .brand-stamp .logo{ max-width: 86vw !important; }
 }
