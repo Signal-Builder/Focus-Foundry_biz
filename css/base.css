@@ -751,3 +751,35 @@ footer {
 .title-under {
   bottom: clamp(20px, 4vw, 60px);                 /* closer to title */
 }
+/* Premium gold kicker (polished, not gimmicky) */
+.kicker {
+  margin: 6px 0 2px;
+  font-family: 'sparatedregular', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: clamp(28px, 4.2vw, 42px);
+  background: linear-gradient(180deg,#ffe7ad 0%,#f0c870 60%,#b6863b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;                 /* gradient text */
+  text-shadow: 0 1px 0 rgba(0,0,0,.45), 0 0 10px rgba(240,200,112,.18);
+}
+.kicker::after {                       /* molten underline */
+  content:"";
+  display:block;
+  width: clamp(140px, 26vw, 320px);
+  height: 2px;
+  margin: 8px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(245,90,16,.75), transparent);
+  filter: drop-shadow(0 0 10px rgba(245,90,16,.45));
+}
+
+/* Subhead: clear, readable, slightly warm */
+.lead {
+  color: rgba(231,231,238,.92);
+  text-shadow: 0 1px 2px rgba(0,0,0,.7);
+  max-width: 48ch;
+  margin-left: auto;
+  margin-right: auto;
+}
