@@ -99,13 +99,15 @@ nav.nav--scrolled {
 
 /* ========== Hero ========== */
 .hero {
-  position: relative;
-  padding: 30px var(--spacing-4) var(--spacing-5);
-  text-align: center;
-  border-radius: var(--spacing-4);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
+    position: relative;
+    padding: 30px var(--spacing-4) var(--spacing-5);
+    text-align: center;
+    border-radius: var(--spacing-4);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    display: flex; /* Add this line */
+    justify-content: center; /* And this line to center the content */
 }
 
 /* Legibility mask */
