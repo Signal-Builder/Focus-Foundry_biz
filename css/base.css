@@ -150,9 +150,9 @@ nav.nav--scrolled {
 .fire-title {
   margin: 0;
   text-align: center;
-  filter: drop-shadow(0 12px 30px rgba(0,0,0,.65));
+  /* Updated filter for a clean, permanent glow */
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
-
 .fire-logo {
   width: min(92%, 850px);
   height: auto;
