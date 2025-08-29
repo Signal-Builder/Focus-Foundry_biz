@@ -27,17 +27,24 @@
     <a href="pages/contact.html">Contact</a>
   </nav>
 
-  <section class="hero hero--tight" id="hero">
+<section class="hero hero--tight" id="hero">
   <h1 class="sr-only">Focus Foundry</h1>
 
   <div class="hero-content">
-    <div class="fire-title">
-      <img class="fire-logo" src="assets/fonts/h1-ff.png" alt="Focus Foundry brand title image" />
+
+    <!-- Title image with overlayed kicker -->
+    <div class="title-wrap">
+      <img class="fire-logo" src="assets/fonts/h1-ff.png"
+           alt="Focus Foundry brand title image" />
+      <div class="title-under">
+        <p class="kicker kicker--glow">MEDIA SOLUTIONS</p>
+      </div>
     </div>
 
-    <p class="kicker kicker--glow">MEDIA SOLUTIONS</p>
-
-    <img class="brand-stamp logo" src="assets/logos/clear.png" alt="" />
+    <!-- Spinning stamp BELOW the header, pulled up into the dead space -->
+    <figure class="brand-stamp" aria-hidden="true">
+      <img class="logo" id="brandLogo" src="assets/logos/clear.png" alt="">
+    </figure>
 
     <p class="lead lead--glow">Cinematic landing pages and immersive web funnels that convert.</p>
     <a class="btn" href="#services">View Services</a>
