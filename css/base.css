@@ -17,6 +17,7 @@
   --accent: #66e0ff;
   --brand-gold: #f0c870;
   --lava-glow: #f55a10;
+  --lava-glow-red: #d94b0d; /* New color for a more reddish glow */
 
   /* Spacing Scale (based on an 8px grid) */
   --spacing-1: 8px;
@@ -150,8 +151,8 @@ nav.nav--scrolled {
 .fire-title {
   margin: 0;
   text-align: center;
-  /* Updated filter for a clean, permanent glow */
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  /* Updated to a more reddish glow */
+  filter: drop-shadow(0 0 15px var(--lava-glow-red)) drop-shadow(0 0 25px rgba(217, 75, 13, 0.5));
 }
 
 .fire-logo {
@@ -168,12 +169,13 @@ nav.nav--scrolled {
   font-size: clamp(28px, 4.2vw, 42px);
   font-weight: normal;
   letter-spacing: 0.12em;
-  color: var(--lava-glow);
+  color: var(--lava-glow-red);
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
   transform: none;
-  text-shadow: 0 0 10px var(--lava-glow), 0 0 20px var(--lava-glow);
+  /* Kicker now has a constant, glowing text shadow */
+  text-shadow: 0 0 10px var(--lava-glow-red), 0 0 20px var(--lava-glow-red);
 }
 
 /* Brand stamp animation */
@@ -182,11 +184,9 @@ nav.nav--scrolled {
   width: min(90%, 360px);
   height: min(90%, 360px);
   margin: 0;
-  /* Remove rotation from here to let the keyframes control it */
-  animation: logoTumble 15s infinite ease-in-out;
-  /* Add a perspective property for 3D illusion */
   transform-style: preserve-3d;
   perspective: 1000px;
+  animation: logoTumble 15s infinite ease-in-out;
 }
 
 .brand-stamp .logo {
@@ -195,8 +195,8 @@ nav.nav--scrolled {
   display: block;
   /* Add shadows to create a 3D coin-like effect */
   box-shadow: 
-    inset 0 0 50px rgba(0,0,0,0.4), /* Inner shadow for a beveled edge */
-    0 0 20px rgba(0,0,0,0.5); /* Outer shadow for depth */
+    inset 0 0 50px rgba(0,0,0,0.4), 
+    0 0 20px rgba(0,0,0,0.5); 
 }
 
 /* Removed the glowing ring */
@@ -206,10 +206,10 @@ nav.nav--scrolled {
 
 /* Hero copy + CTA */
 p.lead {
-  color: var(--lava-glow);
+  color: var(--lava-glow-red);
   font-size: clamp(16px, 2.4vw, 20px);
   margin: var(--spacing-2) 0 var(--spacing-4);
-  text-shadow: 0 0 10px var(--lava-glow);
+  text-shadow: 0 0 10px var(--lava-glow-red);
 }
 
 /* Updated button styles to match lava theme */
@@ -220,14 +220,14 @@ p.lead {
   text-decoration: none;
   font-weight: 700;
   color: var(--bg);
-  background: var(--lava-glow);
-  box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
+  background: var(--lava-glow-red);
+  box-shadow: 0 8px 24px rgba(217, 75, 13, 0.35);
   transition: transform .12s ease, box-shadow .12s ease;
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45);
+  box-shadow: 0 12px 28px rgba(217, 75, 13, 0.45);
 }
 
 .btn:active {
@@ -236,12 +236,12 @@ p.lead {
 
 .btn-ghost {
   background: transparent;
-  color: var(--lava-glow);
-  border: 1px solid rgba(245, 90, 16, 0.18);
+  color: var(--lava-glow-red);
+  border: 1px solid rgba(217, 75, 13, 0.18);
   box-shadow: none;
 }
 .btn-ghost:hover {
-  border-color: rgba(245, 90, 16, 0.35);
+  border-color: rgba(217, 75, 13, 0.35);
 }
 
 /* Tagline section */
@@ -261,8 +261,8 @@ p.lead {
 
 .tagline-subhead {
     font-size: clamp(16px, 2.2vw, 20px);
-    color: var(--lava-glow);
-    text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
+    color: var(--lava-glow-red);
+    text-shadow: 0 0 10px rgba(217, 75, 13, 0.8);
     margin-top: 8px;
     margin-bottom: 24px;
     animation: pulseGlow 2s infinite ease-in-out;
@@ -397,6 +397,13 @@ footer {
   color: var(--muted);
 }
 
+.contact-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 640px) {
   .wrap {
     padding: 36px 16px;
@@ -514,6 +521,7 @@ footer {
   75%  { transform: rotateX(225deg) rotateY(270deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
+
 
 /* ========== Footer ========== */
 footer {
