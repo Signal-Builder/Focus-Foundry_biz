@@ -102,7 +102,7 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
-  padding: 80px var(--spacing-4); 
+  padding: 80px var(--spacing-4) 40px; 
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
@@ -111,8 +111,7 @@ nav.nav--scrolled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  /* Removed min-height to allow content to flow naturally */
 }
 
 /* Legibility mask */
@@ -151,6 +150,7 @@ nav.nav--scrolled {
 .fire-title {
   margin: 0;
   text-align: center;
+  /* Updated glow color */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
@@ -171,10 +171,9 @@ nav.nav--scrolled {
   color: var(--lava-glow);
   text-transform: uppercase;
   text-align: center;
-  line-height: 1.50;
+  line-height: 1.15;
   transform: none;
-   /* Updated to apply the glowing effect to the logo */
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  text-shadow: 0 0 10px var(--lava-glow), 0 0 20px var(--lava-glow);
 }
 
 /* Brand stamp animation */
@@ -192,13 +191,7 @@ nav.nav--scrolled {
   width: 100%;
   height: auto;
   display: block;
-  /* Updated to apply the glowing effect to the logo */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-/* Removed the glowing ring */
-.brand-stamp::before {
-  content: none;
 }
 
 /* Hero copy + CTA */
