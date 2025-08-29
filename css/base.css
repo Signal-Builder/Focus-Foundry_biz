@@ -793,3 +793,53 @@ footer {
   }
   .brand-stamp{ width: min(80vw, 300px); }
 }
+/* === HERO TIGHTENING (final spacing + centering) === */
+:root{
+  /* how close MEDIA SOLUTIONS is to the glow title */
+  --title-kicker-gap: clamp(18px, 3vw, 32px);
+  /* how far the logo is pulled upward toward the kicker */
+  --stamp-pull: clamp(170px, 22vh, 260px);
+  /* space from logo -> subheading */
+  --gap-stamp-lead: 8px;
+}
+
+/* Make every hero item hard-centered */
+#hero .hero-content{
+  display: grid !important;
+  justify-items: center !important;
+  align-content: start;
+  row-gap: 0;
+  text-align: center;
+}
+
+/* Kicker overlays the title so it hugs the letters */
+#hero .title-wrap{ position: relative; display: inline-block; }
+#hero .title-under{
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: var(--title-kicker-gap); width: 100%; z-index: 2; pointer-events: none;
+}
+#hero .kicker{ margin: 0; }
+
+/* Logo centered + pulled up under the kicker */
+#hero .brand-stamp{
+  position: relative;
+  width: min(70vw, 360px);
+  margin: calc(-1 * var(--stamp-pull)) auto 0;  /* negative = float up */
+  pointer-events: none;
+  animation: none !important;                   /* container never animates */
+  z-index: 1;
+}
+
+/* Keep the stamp perfectly centered while spinning (no 3D drift) */
+@keyframes flatSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+#hero .brand-stamp .logo{
+  display:block; width:100%; height:auto;
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;      /* change to your 3D tumble if you prefer */
+  filter: drop-shadow(0 0 15px var(--lava-glow))
+          drop-shadow(0 0 25px rgba(245,90,16,.5));
+}
+
+/* Subheading right under the logo; button under that */
+#hero .lead{ margin: var(--gap-stamp-lead) auto 10px; max-width:58ch; }
+#hero .btn{ margin-top: 6px; }
