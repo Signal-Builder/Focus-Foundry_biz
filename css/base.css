@@ -33,7 +33,7 @@
   --z-content: 20;
   --z-nav: 25;
 
-  /* HERO-SPECIFIC KNOBS - Adjusted for no overlap */
+  /* HERO-SPECIFIC KNOBS */
   --gap-title-kicker: 1.5rem;   /* Space between title and kicker */
   --gap-kicker-stamp: 2rem;     /* Space between kicker and logo */
   --gap-stamp-lead: 1.5rem;     /* Space between logo and subheading */
@@ -112,7 +112,7 @@ nav.nav--scrolled {
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: hidden; /* No need for visible if no overlap */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -152,8 +152,7 @@ nav.nav--scrolled {
   /* Use Flexbox for vertical layout within the hero */
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center horizontally */
-  justify-content: center; /* Center vertically within available space */
+  align-items: center;
 }
 
 /* Container for all hero-header elements */
@@ -161,16 +160,16 @@ nav.nav--scrolled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Removed gap here to control spacing via individual element margins below */
-  margin-bottom: 0; /* Let elements within manage their own spacing */
+  gap: 8px;
+  margin-bottom: var(--spacing-4);
 }
 
 /* Fire brand header (single image) */
 .fire-title {
   margin: 0;
   text-align: center;
+  /* Updated glow color */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-  margin-bottom: var(--gap-title-kicker); /* Space below title */
 }
 
 .fire-logo {
@@ -182,35 +181,28 @@ nav.nav--scrolled {
 
 /* "Media Solutions" kicker text */
 .kicker {
-  margin: 0; /* Reset previous margins */
+  margin: 0;
   font-family: 'sparatedregular', sans-serif;
   font-size: clamp(28px, 4.2vw, 42px);
   font-weight: normal;
   letter-spacing: 0.12em;
+  color: var(--lava-glow);
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
-  background: linear-gradient(180deg, #ffe7ad 0%, #f0c870 55%, #b6863b 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent; /* Makes gradient visible */
-  text-shadow: 0 0 10px rgba(245, 90, 16, .28), 0 0 20px rgba(245, 90, 16, .22);
-  margin-bottom: var(--gap-kicker-stamp); /* Space below kicker */
-  position: relative; /* Needed for z-index even without direct overlap, just in case */
-  z-index: 0; /* Ensure no accidental layering issues */
+  transform: none;
+  text-shadow: 0 0 10px var(--lava-glow), 0 0 20px var(--lava-glow);
 }
 
 /* Brand stamp animation */
 .brand-stamp {
-  position: relative; /* Stays in normal flow */
-  width: min(70vw, 360px); /* Keep it responsive */
-  height: auto; /* Adjust height based on width */
-  margin: 0 auto; /* Center horizontally */
-  margin-bottom: var(--gap-stamp-lead); /* Space below logo */
+  position: relative;
+  width: min(90%, 360px);
+  height: min(90%, 360px);
+  margin: 0;
   transform-style: preserve-3d;
   perspective: 1000px;
-  animation: none !important; /* Container does NOT animate */
-  z-index: 1; /* Ensure logo is above other content layers if they happen to overlap */
+  animation: logoTumble 15s infinite ease-in-out;
 }
 
 .brand-stamp .logo {
@@ -218,7 +210,6 @@ nav.nav--scrolled {
   height: auto;
   display: block;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-  animation: logoTumble 28s linear infinite; /* Spin only the image */
 }
 
 /* Removed the glowing ring */
@@ -230,10 +221,8 @@ nav.nav--scrolled {
 p.lead {
   color: var(--lava-glow);
   font-size: clamp(16px, 2.4vw, 20px);
-  margin: 0 auto; /* Center lead text */
-  margin-bottom: var(--gap-lead-btn); /* Space below subheading */
+  margin: var(--spacing-2) 0 var(--spacing-4);
   text-shadow: 0 0 10px var(--lava-glow);
-  max-width: 58ch; /* Keep it readable */
 }
 
 /* Updated button styles to match lava theme */
@@ -247,7 +236,6 @@ p.lead {
   background: var(--lava-glow);
   box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
   transition: transform .12s ease, box-shadow .12s ease;
-  margin-top: 0; /* Ensure no extra top margin */
 }
 
 .btn:hover {
@@ -461,60 +449,53 @@ footer {
   padding-top: 26px;
 }
 
-/* === FINAL HERO LAYOUT (OVERRIDE OLD RULES) === */
-/* All elements are centered and stacked using flexbox */
-
-/* This div now acts as the main flex container for the hero content */
+/* FINAL HERO LAYOUT */
+/* Uses Flexbox to stack and center all elements with clean margins */
 .hero-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Horizontally center all children */
-  /* No justify-content here, let margins handle vertical spacing */
   max-width: var(--content-width);
+  width: 100%;
   margin: 0 auto;
   padding: 0 var(--spacing-4);
-  position: relative; /* Establish positioning context */
-  z-index: var(--z-content); /* Ensure it's above canvas */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* No longer needed as a flex container, just acts as a logical grouping */
+/* The hero-header wrapper is no longer needed for flex layout */
 .hero-header {
   display: contents; /* Makes children participate directly in hero-wrap's flex layout */
 }
 
-/* 1. Hero Title - h1-ff.png */
+/* All elements now have clear margins to define spacing */
 .fire-title {
-  margin-bottom: var(--gap-title-kicker); /* Space below the title */
-  /* Remove any positioning that might interfere */
-  position: static;
-  z-index: auto;
+  margin-bottom: var(--gap-title-kicker);
 }
 
-/* 2. Kicker - "MEDIA SOLUTIONS" */
 .kicker {
-  margin-top: 0; /* No need for special top margin */
-  margin-bottom: var(--gap-kicker-stamp); /* Space below kicker */
-  /* Ensure text color is transparent to show gradient */
+  margin-top: 0;
+  margin-bottom: var(--gap-kicker-stamp);
+  font-family: 'sparatedregular', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: clamp(28px, 4.2vw, 42px);
   background: linear-gradient(180deg, #ffe7ad 0%, #f0c870 55%, #b6863b 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  /* Reset any z-index or positioning that might have been for overlap */
-  position: static;
-  z-index: auto;
+  text-shadow: 0 0 10px rgba(245, 90, 16, .28), 0 0 20px rgba(245, 90, 16, .22);
 }
 
-/* 3. Logo - clear.png */
 .brand-stamp {
-  position: relative; /* Keep for potential z-index or subtle effects */
+  position: relative;
   width: min(70vw, 360px);
-  height: auto; /* Allow height to adjust naturally */
-  margin-top: 0; /* No negative margin, it stacks naturally */
-  margin-bottom: var(--gap-stamp-lead); /* Space below the logo */
-  z-index: 1; /* Keep it above other content if necessary */
-  animation: none !important; /* Stop container from animating */
-  perspective: 1000px; /* For 3D animation on child */
-  transform-style: preserve-3d; /* For 3D animation on child */
+  height: auto;
+  margin-top: 0;
+  margin-bottom: var(--gap-stamp-lead);
+  z-index: 1;
+  animation: none !important;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .brand-stamp .logo {
@@ -525,41 +506,305 @@ footer {
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  animation: logoTumble 28s ease-in-out infinite; /* Apply tumble animation here */
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245,90,16,.5));
+  animation: logoTumble 28s ease-in-out infinite;
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-/* 4. Subheading - p.lead */
 p.lead {
-  margin-top: 0; /* Already correctly spaced from the logo */
-  margin-bottom: var(--gap-lead-btn); /* Space below subheading */
+  margin-top: 0;
+  margin-bottom: var(--gap-lead-btn);
   max-width: 58ch;
   color: var(--lava-glow);
   text-shadow: 0 0 8px rgba(245, 90, 16, .35), 0 0 16px rgba(245, 90, 16, .24), 0 1px 2px rgba(0, 0, 0, .6);
 }
 
-/* 5. Button */
 .btn {
-  margin-top: 0; /* Already correctly spaced from the subheading */
+  margin-top: 0;
 }
 
-/* Keyframes - consolidated and simplified */
+/* Keyframes */
 @keyframes logoTumble {
-  0%   { transform: rotateX(0deg) rotateY(0deg); }
-  25%  { transform: rotateX(35deg) rotateY(65deg); }
-  50%  { transform: rotateX(110deg) rotateY(180deg); }
-  75%  { transform: rotateX(215deg) rotateY(295deg); }
+  0%  { transform: rotateX(0deg) rotateY(0deg); }
+  25% { transform: rotateX(35deg) rotateY(65deg); }
+  50% { transform: rotateX(110deg) rotateY(180deg); }
+  75% { transform: rotateX(215deg) rotateY(295deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 
+@keyframes ff-stampIn {
+ 0% {
+ transform: scale(2) rotate(-8deg);
+ filter: blur(10px);
+ opacity: 0;
+ }
+ 60% {
+ transform: scale(0.96) rotate(2deg);
+ filter: blur(1.4px);
+ opacity: 1;
+ }
+ 100% {
+ transform: scale(1) rotate(0deg);
+ filter: blur(0);
+ opacity: 1;
+ }
+}
+
+@keyframes ff-fadeOut {
+ to {
+ opacity: 0;
+ }
+}
+
+@keyframes ff-imprintGlow {
+ 0% {
+ box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+ }
+ 50% {
+ box-shadow: 0 0 16px var(--brand-gold);
+ }
+ 100% {
+ box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+ }
+}
+
+@keyframes ff-brandFlash {
+ 0% {
+ box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+ }
+ 50% {
+ box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8);
+ }
+ 100% {
+ box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+ }
+}
+
+@keyframes ff-fadeIn {
+ from {
+ opacity: 0;
+ }
+ to {
+ opacity: 1;
+ }
+}
+
+@keyframes logoSwing {
+ 0%, 100% {
+ transform: rotateX(0deg) rotateY(0deg);
+ }
+ 25% {
+ transform: rotateX(20deg) rotateY(30deg);
+ }
+75% {
+ transform: rotateX(-20deg) rotateY(-30deg);
+ }
+}
+
+@keyframes logoSpin {  from {
+ transform: rotate(0deg);
+ }to {
+   transform: rotate(360deg);}
+}
+
+@keyframes logoPulse {
+ 0%, 100% {
+ transform: scale(1);
+ opacity: 0.8;
+}
+ 50% {
+  transform: scale(1.1);
+  opacity: 1;
+  }
+}
+
+/* Tagline section */
+.tagline-section {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.tagline-title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--brand-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+}
+
+.tagline-subhead {
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: var(--lava-glow);
+  text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+/* Footer */
+footer {
+  margin: 64px 0 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Canvas: embers layer */
+#bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  background: transparent;
+}
+
+/* Content above canvas */
+main,
+.wrap,
+.hero,
+.card,
+nav,
+footer {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* Services */
+.services {
+  margin: var(--spacing-5) 0 var(--spacing-2);
+}
+
+.services > h2 {
+  font-size: clamp(24px, 3.8vw, 36px);
+  margin: 0 0 18px;
+}
+
+.services-grid {
+  display: grid;
+  gap: var(--spacing-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 640px) {
-  :root {
-    --gap-title-kicker: 1rem;
-    --gap-kicker-stamp: 1.5rem;
-    --gap-stamp-lead: 1rem;
-    --gap-lead-btn: 0.8rem;
+  .services-grid {
+    grid-template-columns: 1fr;
   }
-  .brand-stamp {
-    width: min(80vw, 300px); /* Adjust size for mobile */
+}
+
+.svc {
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(10, 10, 14, 0.35);
+  backdrop-filter: blur(4px) saturate(110%);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.svc:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.svc-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 170, 60, 0.12);
+  color: #f5c375;
+  margin-bottom: 10px;
+}
+
+.svc h3 {
+  margin: 0 0 6px;
+  font-size: clamp(18px, 2.6vw, 22px);
+}
+
+.svc p {
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.svc-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.svc-link:hover {
+  text-decoration: underline;
+}
+
+/* Contact band */
+.contact-band {
+  margin: 56px 0 0;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.contact-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.contact-inner h2 {
+  margin: 0 0 6px;
+  font-size: clamp(24px, 3.8vw, 36px);
+}
+
+.contact-lead {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
+.contact-actions {
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: none;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .wrap {
+    padding: 36px 16px;
   }
+  .hero {
+    padding: 56px 18px 40px;
+  }
+  .fire-logo {
+    width: 94%;
+  }
+  nav {
+    gap: var(--spacing-3);
+    font-size: 16px;
+  }
+}
+
+/* Optional tighter hero variant */
+.hero.hero--tight {
+  padding-top: 26px;
 }
