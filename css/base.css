@@ -703,3 +703,18 @@ p.lead{
 @media (max-width: 640px){
   :root{ --title-lift: clamp(-48px, -7vh, -24px); }
 }
+:root { --lead-lift: clamp(-120px, -14vh, -60px); } /* more negative = higher */
+
+.hero .lead{
+  position: relative;
+  top: var(--lead-lift);
+  margin: 0 0 10px;       /* tight gap below lead */
+  z-index: 3;             /* stay above any glow */
+}
+
+/* If you want the button to move with it too: */
+.hero .btn{
+  position: relative;
+  top: var(--lead-lift);
+  margin: 0;              /* keep it snug under the lead */
+}
