@@ -529,33 +529,43 @@ footer {
     opacity: 0;
   }
 }
-/* Make the hero stack start near the top, not fully centered */
+/* --- HERO LAYOUT (final, minimal) --------------------------------------- */
 .hero {
-  justify-content: flex-start;              /* stop full-height vertical centering */
-  padding-top: clamp(40px, 10vh, 120px);    /* space above the title */
+  justify-content: flex-start;                 /* stop full-height centering */
+  padding-top: clamp(40px, 9vh, 120px);        /* space above title */
 }
 
-/* Keep title+kicker tight as a unit */
+/* Title + Kicker (tight stack under the fire title) */
 .hero-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;                                /* small space between title and kicker */
+  gap: 6px;
   margin: 0;
 }
+.fire-title { margin: 0; }
+.kicker     { margin: 0; }
 
-/* Group logo + subheading + button and float that group toward visual center */
+/* Logo + subhead + button as a single group, pulled toward center */
 .hero-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;                                /* space between logo/lead/button */
-  margin-top: clamp(28px, 12vh, 140px);     /* <- move this up/down to taste */
+  gap: 12px;                                   /* space within group */
+  margin-top: clamp(18px, 8vh, 140px);         /* <-- raise/lower whole group */
 }
 
-/* Keep the logo its original size (remove any unintended downscaling) */
+/* Logo stays full size + tumble */
 .brand-stamp {
+  position: relative;
   width: min(90%, 360px);
   height: auto;
-  animation: logoTumble 15s infinite ease-in-out;
+  margin: 0;
+  animation: logoTumble 15s linear infinite;
+}
+.brand-stamp .logo {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
