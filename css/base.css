@@ -690,3 +690,16 @@ p.lead{
 /* Keep a tight vertical stack once lifted */
 .hero .lead { margin: 0 0 10px; }
 .hero .btn  { margin: 0; }
+/* --- Title lift (negative margin) --- */
+:root{
+  /* make this more negative to move the title higher */
+  --title-lift: clamp(-80px, -10vh, -36px);
+}
+
+.fire-title{
+  margin-top: var(--title-lift);
+}
+.hero{ overflow: visible; }  /* only if you see cropping */
+@media (max-width: 640px){
+  :root{ --title-lift: clamp(-48px, -7vh, -24px); }
+}
