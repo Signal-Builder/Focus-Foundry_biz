@@ -625,3 +625,20 @@ p.lead{
 
 /* If any old text kicker is still in the DOM, hide it */
 .kicker, .kicker--brand, .kicker-stamp { display: none !important; }
+/* --- Make the hero title bigger & keep it centered --- */
+.fire-logo{
+  width: min(1200px, 96vw);   /* was ~900px; bump for legibility */
+  height: auto;
+  display: block;
+  margin: 0 auto var(--gap-title-logo, 24px);
+}
+
+/* --- Pull the logo up toward the title --- */
+.brand-stamp{
+  /* negative top margin = move upward; tune the middle value */
+  margin: clamp(-140px, -12vh, -60px) auto var(--gap-logo-lead, 18px);
+  width: min(70vw, 360px);   /* keep your original size */
+}
+
+/* Optional: bring the whole stack a bit higher on the page */
+.hero{ padding-top: clamp(40px, 8vh, 96px); }
