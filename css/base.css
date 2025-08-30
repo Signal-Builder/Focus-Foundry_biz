@@ -568,4 +568,60 @@ footer {
   height: auto;
   display: block;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}/* === Focus Foundry hero stack (title+kicker image → logo → subhead → button) === */
+
+:root{
+  --gap-title-logo: clamp(14px, 3vh, 32px);   /* space: title+kicker → logo   */
+  --gap-logo-lead:  clamp(12px, 2.6vh, 26px); /* space: logo → subheading     */
+  --gap-lead-btn:   clamp(8px, 1.8vh, 16px);  /* space: subheading → button   */
 }
+
+.hero{
+  /* keep the hero high on the page; adjust if you want more/less top air */
+  justify-content: flex-start;
+  padding-top: clamp(56px, 12vh, 120px);
+}
+
+.hero-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* center everything horizontally */
+}
+
+/* Your combined title+kicker image (whatever class you’re using for it) */
+.fire-title { margin: 0; }
+.fire-logo{
+  width: min(92%, 900px);
+  height: auto;
+  margin: 0 auto var(--gap-title-logo);
+  /* optional: a gentle glow so it sits in the lava */
+  filter:
+    drop-shadow(0 0 10px rgba(245,90,16,.30))
+    drop-shadow(0 0 20px rgba(245,90,16,.20));
+}
+
+/* Logo: keep container still; animate ONLY the image so it never “disappears” */
+.brand-stamp{
+  position: relative;
+  width: min(70vw, 360px);
+  margin: 0 auto var(--gap-logo-lead);
+  pointer-events: none;
+}
+.brand-stamp .logo{
+  display: block;
+  width: 100%;
+  height: auto;
+  animation: logoTumble 28s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Subheading + CTA */
+p.lead{
+  margin: 0 auto var(--gap-lead-btn);
+  text-align: center;
+  max-width: 58ch;
+}
+.btn{ margin: 0; }
+
+/* If any old text kicker is still in the DOM, hide it */
+.kicker, .kicker--brand, .kicker-stamp { display: none !important; }
