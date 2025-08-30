@@ -671,3 +671,22 @@ p.lead{
   max-width: 58ch;
 }
 #hero .btn { margin-top: 6px; }
+/* --- Lift subhead + button together (no HTML changes) --- */
+:root{
+  /* how far to pull the CTA group upward */
+  --cta-lift: clamp(-120px, -14vh, -60px);
+}
+
+/* remove any extra gap from older attempts */
+.hero-content { gap: 0; }
+
+/* Pull the subheading and button up as an overlay (keeps layout intact) */
+.hero .lead,
+.hero .btn {
+  position: relative;
+  transform: translateY(var(--cta-lift));
+}
+
+/* Keep a tight vertical stack once lifted */
+.hero .lead { margin: 0 0 10px; }
+.hero .btn  { margin: 0; }
