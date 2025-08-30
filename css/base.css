@@ -649,7 +649,7 @@ p.lead{
 /* LOGO: position with margin, do NOT animate the container */
 #hero .brand-stamp {
   width: min(68vw, 420px);
-  margin: -40px auto 10px;                    /* ↑ pull up (make more negative to raise) */
+  margin: -80px auto 10px;                    /* ↑ pull up (make more negative to raise) */
   animation: none !important;                 /* kill container animation */
 }
 
