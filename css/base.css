@@ -642,3 +642,30 @@ p.lead{
 
 /* Optional: bring the whole stack a bit higher on the page */
 .hero{ padding-top: clamp(40px, 8vh, 96px); }
+/* Pull the logo up and keep it centered */
+.brand-stamp{
+  animation: none !important;           /* stop animating the container */
+  width: min(65vw, 420px);
+  margin: 0 auto 12px;                  /* center + a little gap below */
+  transform: translateY(-120px);        /* <-- tune this to move up/down */
+}
+
+/* Spin only the image so positioning isn't clobbered */
+.brand-stamp .logo{
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;
+}
+
+/* Tighten spacing under the logo */
+.lead{
+  margin-top: 6px;                      /* closer to the logo */
+  margin-bottom: 12px;
+}
+
+.btn{ margin-top: 8px; }
+
+/* (optional) if you want the whole stack a bit higher */
+.hero{ padding-top: clamp(48px, 9vh, 110px); }
