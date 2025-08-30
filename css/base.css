@@ -102,7 +102,7 @@ nav.nav--scrolled {
 .hero {
   position: relative;
   /* Use a consistent padding system. We'll add top/bottom padding here. */
-  padding: 80px var(--spacing-4) 40px; 
+  padding: 80px var(--spacing-4) 120px; 
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
