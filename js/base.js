@@ -9,7 +9,8 @@
 (() => {
   const canvas = document.getElementById('bg');
   if (!canvas) { console.warn('No #bg canvas found'); return; }
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) { console.warn('2D context not available'); return; }
 
   // ---- Tweakables ----
   const SETTINGS = {
@@ -68,11 +69,12 @@
   }
 
   function step(dt) {
-    // subtle motion blur for trails
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.fillStyle = `rgba(0,0,0,${SETTINGS.tailFade})`;
+    // fade existing pixels (reduce alpha) without darkening the page behind
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,' + SETTINGS.tailFade + ')';
     ctx.fillRect(0, 0, W, H);
 
+    // then draw glowing embers additively
     ctx.globalCompositeOperation = 'lighter';
 
     for (let p of particles) {
@@ -86,7 +88,7 @@
       p.x += p.vx;
       p.y += p.vy;
 
-      // per-particle flicker
+      // per-particle flicker (irregular)
       const t = p.life * p.freq + p.seed;
       const base = 0.65 + 0.35 * Math.sin(t * 6.283 + Math.sin(t * 2.7) * 0.7);
 
@@ -122,7 +124,7 @@
   function loop(ts) {
     if (!running) return;
     if (!lastTs) lastTs = ts;
-    const dt = Math.min(0.05, (ts - lastTs) / 1000);
+    const dt = Math.min(0.05, (ts - lastTs) / 1000); // clamp delta
     lastTs = ts;
     step(dt);
     requestAnimationFrame(loop);
@@ -176,7 +178,7 @@
   const activate = () => hero.classList.add('play-stamp');
 
   // after load (guarantee)
-  window.addEventListener('load', () => setTimeout(activate, 300), { passive: true });
+  window.addEventListener('load', () => setTimeout(activate, 300));
 
   // when visible first time
   if ('IntersectionObserver' in window) {
