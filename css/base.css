@@ -730,3 +730,109 @@ p.lead{
 }
 
 /* If you lifted both with top/translate, this still works—gap is from lead's bottom margin */
+/* Smoothly animatable custom props (so the glow pulses, not jumps) */
+@property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
+@property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
+@property --gAlpha { syntax: '<number>'; inherits: true; initial-value: 0.45; }
+
+/* Irregular flicker curve (not just a simple sine) */
+@keyframes lavaFlicker {
+  0%   { --g1: 9px;  --g2: 20px; --gAlpha: .32; transform: scale(1.000); opacity: .98; }
+  7%   { --g1: 13px; --g2: 28px; --gAlpha: .50; transform: scale(1.006); opacity: 1;   }
+  17%  { --g1: 10px; --g2: 22px; --gAlpha: .36; transform: scale(1.002); opacity: .99; }
+  33%  { --g1: 15px; --g2: 34px; --gAlpha: .60; transform: scale(1.010); opacity: 1;   }
+  46%  { --g1: 11px; --g2: 24px; --gAlpha: .40; transform: scale(1.003); opacity: .99; }
+  63%  { --g1: 16px; --g2: 36px; --gAlpha: .64; transform: scale(1.012); opacity: 1;   }
+  78%  { --g1: 12px; --g2: 26px; --gAlpha: .48; transform: scale(1.005); opacity: .995;}
+  100% { --g1: 9px;  --g2: 20px; --gAlpha: .32; transform: scale(1.000); opacity: .98; }
+}
+
+/* Apply to the title glow */
+body.mood-volcano .fire-title {
+  animation: lavaFlicker 2.9s infinite;
+  will-change: filter, transform, opacity;
+  filter:
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gAlpha)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gAlpha) * .8)));
+}
+
+/* Apply to the logo image (NOT the container) so positioning isn’t affected */
+body.mood-volcano .brand-stamp .logo {
+  animation:
+    logoTumble 28s linear infinite,    /* your existing tumble */
+    lavaFlicker 3.6s infinite;         /* independent glow flicker */
+  will-change: filter, transform, opacity;
+  filter:
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gAlpha)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gAlpha) * .8)));
+}
+/* === HERO STACK OVERRIDES (final) ======================================= */
+:root{
+  /* knobs */
+  --title-max: 1100px;                           /* hero title max width */
+  --gap-title-logo: clamp(14px, 3vh, 32px);      /* title → logo */
+  --gap-logo-lead:  clamp(12px, 2.6vh, 26px);    /* logo → subheading */
+  --gap-lead-btn:   clamp(8px, 1.8vh, 16px);     /* subheading → button */
+  --cta-lift: clamp(-90px, -12vh, -50px);        /* raise lead+button together */
+}
+
+#hero.hero{
+  justify-content: flex-start;                   /* stop vertical centering */
+  padding-top: clamp(48px, 10vh, 120px);
+  overflow: visible;                              /* avoid crop if we pull things up */
+}
+
+#hero .hero-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;                                        /* tight stack; we control gaps below */
+}
+
+/* Title image (your fire title+kicker combined png) */
+#hero .fire-title{ margin: 0; }
+#hero .fire-logo{
+  width: min(96vw, var(--title-max));
+  height: auto;
+  display: block;
+  margin: 0 auto var(--gap-title-logo);
+  filter:
+    drop-shadow(0 0 10px rgba(245,90,16,.30))
+    drop-shadow(0 0 20px rgba(245,90,16,.20));
+}
+
+/* Logo: keep container still; animate the image only */
+#hero .brand-stamp{
+  position: relative;
+  width: min(70vw, 420px);
+  margin: 0 auto var(--gap-logo-lead);
+  animation: none !important;                    /* stop container animation */
+  pointer-events: none;
+}
+#hero .brand-stamp .logo{
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;     /* tumble */
+  filter:
+    drop-shadow(0 0 15px var(--lava-glow))
+    drop-shadow(0 0 25px rgba(245, 90, 16, .5));
+}
+
+/* Subheading + button (lift together to center) */
+#hero .lead{
+  margin: 0 auto var(--gap-lead-btn);
+  text-align: center;
+  max-width: 58ch;
+  position: relative;
+  transform: translateY(var(--cta-lift));
+}
+#hero .btn{
+  position: relative;
+  transform: translateY(var(--cta-lift));
+  margin: 0;
+}
+
+/* Hide any leftover text kicker elements */
+.kicker, .kicker--brand, .kicker-stamp { display: none !important; }
