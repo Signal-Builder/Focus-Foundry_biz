@@ -528,4 +528,146 @@ footer {
     transform: translateY(-120vh) scale(0.5);
     opacity: 0;
   }
+}/* === HERO STACK OVERRIDES (final) ======================================= */
+:root{
+  /* knobs */
+  --title-max: 1100px;                           /* hero title max width */
+  --gap-title-logo: clamp(14px, 3vh, 32px);      /* title → logo */
+  --gap-logo-lead:  clamp(12px, 2.6vh, 26px);    /* logo → subheading */
+  --gap-lead-btn:   clamp(8px, 1.8vh, 16px);     /* subheading → button */
+  --cta-lift: clamp(-90px, -12vh, -50px);        /* raise lead+button together */
 }
+
+#hero.hero{
+  justify-content: flex-start;                   /* stop vertical centering */
+  padding-top: clamp(48px, 10vh, 120px);
+  overflow: visible;                              /* avoid crop if we pull things up */
+}
+
+#hero .hero-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;                                        /* tight stack; we control gaps below */
+}
+
+/* Title image (your fire title+kicker combined png) */
+#hero .fire-title{ margin: 0; }
+#hero .fire-logo{
+  width: min(96vw, var(--title-max));
+  height: auto;
+  display: block;
+  margin: 0 auto var(--gap-title-logo);
+  filter:
+    drop-shadow(0 0 10px rgba(245,90,16,.30))
+    drop-shadow(0 0 20px rgba(245,90,16,.20));
+}
+
+/* Logo: keep container still; animate the image only */
+#hero .brand-stamp{
+  position: relative;
+  width: min(70vw, 420px);
+  margin: 0 auto var(--gap-logo-lead);
+  animation: none !important;                    /* stop container animation */
+  pointer-events: none;
+}
+#hero .brand-stamp .logo{
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;     /* tumble */
+  filter:
+    drop-shadow(0 0 15px var(--lava-glow))
+    drop-shadow(0 0 25px rgba(245, 90, 16, .5));
+}
+
+/* Subheading + button (lift together to center) */
+#hero .lead{
+  margin: 0 auto var(--gap-lead-btn);
+  text-align: center;
+  max-width: 58ch;
+  position: relative;
+  transform: translateY(var(--cta-lift));
+}
+#hero .btn{
+  position: relative;
+  transform: translateY(var(--cta-lift));
+  margin: 0;
+}
+
+/* Hide any leftover text kicker elements */
+.kicker, .kicker--brand, .kicker-stamp { display: none !important; }
+
+/* === HERO RESET (place at the very bottom) ============================== */
+/* simple knobs */
+:root{
+  --hero-top: clamp(56px, 12vh, 120px);  /* moves whole stack up/down */
+  --title-max: 1100px;                   /* max width of fire title image */
+  --logo-max: 420px;                     /* max width of spinning logo */
+  --gap-title-logo: 24px;                /* title → logo gap */
+  --gap-logo-lead: 18px;                 /* logo → subheading gap */
+  --gap-lead-btn: 12px;                  /* subheading → button gap */
+}
+
+/* stop vertical centering; anchor to top padding */
+#hero.hero,
+#hero.hero.hero--tight{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding-top: var(--hero-top) !important;
+  overflow: visible;
+}
+
+/* one clean column; we control all gaps below */
+#hero .hero-content{
+  display: grid !important;
+  grid-auto-flow: row;
+  justify-items: center;
+  row-gap: 0;
+}
+
+/* title (your combined fire title/kicker image) */
+#hero .fire-title{ margin: 0 !important; }
+#hero .fire-logo{
+  width: min(96vw, var(--title-max));
+  height: auto;
+  display: block;
+  margin: 0 auto var(--gap-title-logo) !important;
+}
+
+/* logo: container stays still; only the image tumbles */
+#hero .brand-stamp{
+  position: relative !important;
+  width: min(70vw, var(--logo-max));
+  margin: 0 auto var(--gap-logo-lead) !important;
+  animation: none !important;       /* prevent container animations */
+  pointer-events: none;
+}
+#hero .brand-stamp .logo{
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;
+  filter:
+    drop-shadow(0 0 15px var(--lava-glow))
+    drop-shadow(0 0 25px rgba(245,90,16,.5));
+}
+
+/* subheading + button */
+#hero .lead{
+  margin: 0 auto var(--gap-lead-btn) !important;
+  max-width: 58ch; text-align:center;
+}
+#hero .btn{ margin: 0 !important; }
+
+/* nuke any previous “lift” hacks so nothing gets slammed mid-screen */
+#hero .lead, #hero .btn{
+  top: auto !important;
+  transform: none !important;
+}
+
+/* hide any leftover text kicker elements (you’ve baked it into the image) */
+.kicker, .kicker--brand, .kicker-stamp{ display:none !important; }
