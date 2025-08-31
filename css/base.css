@@ -671,3 +671,118 @@ footer {
 
 /* hide any leftover text kicker elements (you’ve baked it into the image) */
 .kicker, .kicker--brand, .kicker-stamp{ display:none !important; }
+/* === Focus Foundry: hero stack + positioning ========================= */
+:root{
+  /* tweak these numbers (more negative = higher) */
+  --title-lift:  -12px;       /* move the title image up a bit */
+  --logo-lift:   -120px;      /* pull the logo toward the title */
+  --cta-lift:    -140px;      /* lift subhead + button together */
+
+  /* vertical gaps in the stack */
+  --gap-title-logo: 18px;     /* title → logo */
+  --gap-logo-lead:  14px;     /* logo → subhead */
+  --gap-lead-btn:   10px;     /* subhead → button */
+}
+
+/* keep the hero high on the page; content stacked, not middle-centered */
+#hero.hero{
+  justify-content: flex-start;
+  padding-top: clamp(56px, 12vh, 120px);
+  overflow: visible; /* allows negative lifts without clipping */
+}
+#hero .hero-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* Title (your combined fire title + kicker image) */
+#hero .fire-logo{
+  display: block;
+  width: min(92vw, 1000px);
+  height: auto;
+  margin: var(--title-lift) auto var(--gap-title-logo);
+  /* subtle baseline glow; the “heat mode” below can enhance this */
+  filter:
+    drop-shadow(0 0 10px rgba(245,90,16,.25))
+    drop-shadow(0 0 20px rgba(245,90,16,.15));
+}
+
+/* Logo: position with margin only; animate only the image (not container) */
+#hero .brand-stamp{
+  width: min(68vw, 420px);
+  margin: var(--logo-lift) auto var(--gap-logo-lead);
+  animation: none !important;
+}
+#hero .brand-stamp .logo{
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;
+  filter:
+    drop-shadow(0 0 14px rgba(245,90,16,.35))
+    drop-shadow(0 0 24px rgba(245,90,16,.25));
+}
+
+/* Subheading + Button: lift as a unit and keep a tight gap */
+#hero .lead{
+  position: relative;
+  transform: translateY(var(--cta-lift));
+  margin: 0 auto var(--gap-lead-btn);
+  text-align: center;
+  max-width: 58ch;
+  z-index: 3;
+}
+#hero .btn{
+  position: relative;
+  transform: translateY(var(--cta-lift));
+  margin: 0;
+  z-index: 3;
+}
+
+/* Mobile: ease the lifts so nothing crowds */
+@media (max-width: 700px){
+  :root{
+    --title-lift: -6px;
+    --logo-lift:  -80px;
+    --cta-lift:   -90px;
+  }
+}
+@media (max-width: 480px){
+  :root{
+    --title-lift: -4px;
+    --logo-lift:  -60px;
+    --cta-lift:   -70px;
+  }
+}
+
+/* === “Heat mode” flicker/pulse (optional; toggle via .mood-volcano on <body>) */
+@property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
+@property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
+@property --gA {  syntax: '<number>'; inherits: true; initial-value: .45; }
+
+@keyframes lavaFlicker {
+  0%   { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
+  8%   { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
+  22%  { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
+  38%  { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
+  57%  { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
+  76%  { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
+  100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
+}
+
+/* turn on by adding class="mood-volcano" to <body> */
+body.mood-volcano #hero .fire-logo{
+  animation: lavaFlicker 3s infinite;
+  filter:
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+}
+body.mood-volcano #hero .brand-stamp .logo{
+  animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
+  filter:
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+}
