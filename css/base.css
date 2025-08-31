@@ -693,7 +693,7 @@ p.lead{
 /* --- Title lift (negative margin) --- */
 :root{
   /* make this more negative to move the title higher */
-  --title-lift: clamp(-80px, -10vh, -36px);
+  --title-lift: clamp(-50px, -10vh, -36px);
 }
 
 .fire-title{
