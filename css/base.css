@@ -600,3 +600,82 @@ transform: scale(1);
   opacity: 1;
 }
 }
+/* === Focus Foundry: SAFE RESET (stick this at the bottom) ============== */
+:root{
+  /* tweak these (more negative = higher) */
+  --logo-lift:  -90px;   /* move logo up/down */
+  --cta-lift:   -110px;  /* move subhead+button up/down together */
+
+  /* gaps in the stack */
+  --gap-title-logo: 18px; /* title → logo */
+  --gap-logo-lead:  14px; /* logo → subhead */
+  --gap-lead-btn:   10px; /* subhead → button */
+}
+
+/* canvas sits behind content, doesn’t intercept clicks */
+#bg{
+  position: fixed; inset: 0; z-index: 10;
+  pointer-events: none; background: transparent; display: block;
+}
+
+/* nav back to the top, above canvas */
+nav{ position: sticky; top: 0; z-index: 25; }
+
+/* content above the canvas */
+main, .wrap, .hero, footer{ position: relative; z-index: 20; }
+
+/* HERO: stack high on the page, centered */
+#hero.hero{
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  padding-top: clamp(56px, 12vh, 120px);
+  overflow: visible;
+}
+#hero .hero-content{ display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+/* Title image (your combined title+kicker graphic) */
+#hero .fire-logo{
+  display: block;
+  width: min(92vw, 1000px); height: auto;
+  margin: 0 auto var(--gap-title-logo);
+  filter:
+    drop-shadow(0 0 10px rgba(245,90,16,.25))
+    drop-shadow(0 0 20px rgba(245,90,16,.15));
+}
+
+/* Logo: center; size clamps; lift with one var; animate only the img */
+#hero .brand-stamp{
+  width: min(68vw, 420px);
+  margin: var(--logo-lift) auto var(--gap-logo-lead);
+  animation: none !important;
+}
+#hero .brand-stamp .logo{
+  display: block; width: 100%; height: auto;
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;
+  filter:
+    drop-shadow(0 0 14px rgba(245,90,16,.35))
+    drop-shadow(0 0 24px rgba(245,90,16,.25));
+}
+
+/* Subheading + Button: move together; tight gap */
+#hero .lead{
+  position: relative; transform: translateY(var(--cta-lift));
+  margin: 0 auto var(--gap-lead-btn);
+  text-align: center; max-width: 58ch; z-index: 3;
+}
+#hero .btn{
+  position: relative; transform: translateY(var(--cta-lift));
+  margin: 0; z-index: 3;
+}
+
+/* kill any leftover text kicker nodes if they exist */
+.kicker, .kicker--brand, .kicker-stamp{ display: none !important; }
+
+/* gentle mobile easing */
+@media (max-width: 700px){
+  :root{ --logo-lift: -70px; --cta-lift: -85px; }
+}
+@media (max-width: 480px){
+  :root{ --logo-lift: -52px; --cta-lift: -70px; }
+}
