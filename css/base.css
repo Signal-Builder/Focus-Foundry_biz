@@ -1,4 +1,4 @@
-/*  /* ========== Fonts ========== */
+/* ========== Fonts ========== */
 @font-face {
   font-family: 'sparatedregular';
   src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
@@ -32,6 +32,12 @@
   --z-canvas: 10;
   --z-content: 20;
   --z-nav: 25;
+
+  /* HERO-SPECIFIC KNOBS - Adjusted for no overlap */
+  --gap-title-kicker: 1.5rem;
+  --gap-kicker-stamp: 2rem;
+  --gap-stamp-lead: 1.5rem;
+  --gap-lead-btn: 1rem;
 }
 
 /* ========== Base ========== */
@@ -101,7 +107,6 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
-  /* Use a consistent padding system. We'll add top/bottom padding here. */
   padding: 80px var(--spacing-4) 40px; 
   text-align: center;
   border-radius: var(--spacing-4);
@@ -138,31 +143,28 @@ nav.nav--scrolled {
   border: 0;
 }
 
-/* The new container for the hero's core content */
+/*
+  The following hero styles consolidate all of your previous attempts
+  into a single, reliable layout using Flexbox.
+*/
 .hero-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Use the existing wrap for max-width and centering */
   max-width: var(--content-width);
   margin: 0 auto;
 }
 
-/* Container for all hero-header elements */
 .hero-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: var(--spacing-4);
+  display: contents; /* Makes children participate directly in hero-content's flex layout */
 }
 
-/* Fire brand header (single image) */
+/* 1. Fire title */
 .fire-title {
   margin: 0;
   text-align: center;
-  /* Updated glow color */
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  margin-bottom: var(--gap-title-kicker);
 }
 
 .fire-logo {
@@ -172,53 +174,60 @@ nav.nav--scrolled {
   margin: 0 auto;
 }
 
-/* "Media Solutions" kicker text */
+/* 2. Kicker */
 .kicker {
   margin: 0;
   font-family: 'sparatedregular', sans-serif;
   font-size: clamp(28px, 4.2vw, 42px);
   font-weight: normal;
   letter-spacing: 0.12em;
-  color: var(--lava-glow);
   text-transform: uppercase;
   text-align: center;
   line-height: 1.15;
-  transform: none;
-  text-shadow: 0 0 10px var(--lava-glow), 0 0 20px var(--lava-glow);
+  background: linear-gradient(180deg, #ffe7ad 0%, #f0c870 55%, #b6863b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(245, 90, 16, .28), 0 0 20px rgba(245, 90, 16, .22);
+  margin-bottom: var(--gap-kicker-stamp);
 }
 
-/* Brand stamp animation */
+/* 3. Brand stamp */
 .brand-stamp {
   position: relative;
-  width: min(90%, 360px);
-  height: min(90%, 360px);
-  margin: 0;
-  transform-style: preserve-3d;
+  width: min(70vw, 360px);
+  height: auto;
+  margin-top: 0;
+  margin-bottom: var(--gap-stamp-lead);
+  z-index: 1;
+  animation: none !important;
   perspective: 1000px;
-  animation: logoTumble 15s infinite ease-in-out;
+  transform-style: preserve-3d;
 }
 
 .brand-stamp .logo {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  animation: logoTumble 28s ease-in-out infinite;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-/* Removed the glowing ring */
-.brand-stamp::before {
-  content: none;
-}
-
-/* Hero copy + CTA */
+/* 4. Subheading */
 p.lead {
+  margin-top: 0;
+  margin-bottom: var(--gap-lead-btn);
+  max-width: 58ch;
   color: var(--lava-glow);
   font-size: clamp(16px, 2.4vw, 20px);
-  margin: var(--spacing-2) 0 var(--spacing-4);
-  text-shadow: 0 0 10px var(--lava-glow);
+  text-shadow: 0 0 8px rgba(245, 90, 16, .35), 0 0 16px rgba(245, 90, 16, .24), 0 1px 2px rgba(0, 0, 0, .6);
 }
 
-/* Updated button styles to match lava theme */
+/* 5. Button */
 .btn {
   display: inline-block;
   padding: 14px var(--spacing-4);
@@ -229,17 +238,15 @@ p.lead {
   background: var(--lava-glow);
   box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
   transition: transform .12s ease, box-shadow .12s ease;
+  margin-top: 0;
 }
-
 .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45);
 }
-
 .btn:active {
   transform: translateY(0);
 }
-
 .btn-ghost {
   background: transparent;
   color: var(--lava-glow);
@@ -252,25 +259,25 @@ p.lead {
 
 /* Tagline section */
 .tagline-section {
-    text-align: center;
-    padding: 24px 0;
+  text-align: center;
+  padding: 24px 0;
 }
 
 .tagline-title {
-    font-size: clamp(28px, 4vw, 48px);
-    font-weight: 700;
-    color: var(--brand-gold);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin: 0;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--brand-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
 }
 
 .tagline-subhead {
-    font-size: clamp(16px, 2.2vw, 20px);
-    color: var(--lava-glow);
-    text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
-    margin-top: 8px;
-    margin-bottom: 24px;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: var(--lava-glow);
+  text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
+  margin-top: 8px;
+  margin-bottom: 24px;
 }
 
 /* ========== Footer ========== */
@@ -423,366 +430,173 @@ footer {
   padding-top: 26px;
 }
 
+/* FINAL HERO LAYOUT */
+/* Uses Flexbox to stack and center all elements with clean margins */
+.hero-wrap {
+  max-width: var(--content-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The hero-header wrapper is no longer needed for flex layout */
+.hero-header {
+  display: contents;
+}
+
+/* All elements now have clear margins to define spacing */
+.fire-title {
+  margin-bottom: var(--gap-title-kicker);
+}
+
+.kicker {
+  margin-top: 0;
+  margin-bottom: var(--gap-kicker-stamp);
+  font-family: 'sparatedregular', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: clamp(28px, 4.2vw, 42px);
+  background: linear-gradient(180deg, #ffe7ad 0%, #f0c870 55%, #b6863b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(245, 90, 16, .28), 0 0 20px rgba(245, 90, 16, .22);
+}
+
+.brand-stamp {
+  position: relative;
+  width: min(70vw, 360px);
+  height: auto;
+  margin-top: 0;
+  margin-bottom: var(--gap-stamp-lead);
+  z-index: 1;
+  animation: none !important;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.brand-stamp .logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  animation: logoTumble 28s ease-in-out infinite;
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+
+p.lead {
+  margin-top: 0;
+  margin-bottom: var(--gap-lead-btn);
+  max-width: 58ch;
+  color: var(--lava-glow);
+  text-shadow: 0 0 8px rgba(245, 90, 16, .35), 0 0 16px rgba(245, 90, 16, .24), 0 1px 2px rgba(0, 0, 0, .6);
+}
+
+.btn {
+  margin-top: 0;
+}
+
 /* Keyframes */
+@keyframes logoTumble {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  25% { transform: rotateX(35deg) rotateY(65deg); }
+  50% { transform: rotateX(110deg) rotateY(180deg); }
+  75% { transform: rotateX(215deg) rotateY(295deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
 @keyframes ff-stampIn {
-  0% {
-    transform: scale(2) rotate(-8deg);
-    filter: blur(10px);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(0.96) rotate(2deg);
-    filter: blur(1.4px);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) rotate(0deg);
-    filter: blur(0);
-    opacity: 1;
-  }
+ 0% {
+ transform: scale(2) rotate(-8deg);
+ filter: blur(10px);
+ opacity: 0;
+ }
+ 60% {
+ transform: scale(0.96) rotate(2deg);
+ filter: blur(1.4px);
+ opacity: 1;
+ }
+ 100% {
+ transform: scale(1) rotate(0deg);
+ filter: blur(0);
+ opacity: 1;
+ }
 }
 
 @keyframes ff-fadeOut {
-  to {
-    opacity: 0;
-  }
+ to {
+ opacity: 0;
+ }
 }
 
 @keyframes ff-imprintGlow {
-  0% {
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  }
-  50% {
-    box-shadow: 0 0 16px var(--brand-gold);
-  }
-  100% {
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-  }
+ 0% {
+ box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+ }
+ 50% {
+ box-shadow: 0 0 16px var(--brand-gold);
+ }
+ 100% {
+ box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+ }
 }
 
 @keyframes ff-brandFlash {
-  0% {
-    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
-  }
-  50% {
-    box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 0 rgba(255, 160, 60, 0);
-  }
+ 0% {
+ box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+ }
+ 50% {
+ box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8);
+ }
+ 100% {
+ box-shadow: 0 0 0 rgba(255, 160, 60, 0);
+ }
 }
 
 @keyframes ff-fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+ from {
+ opacity: 0;
+ }
+ to {
+ opacity: 1;
+ }
 }
 
 @keyframes logoSwing {
-  0%, 100% {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-  25% {
-    transform: rotateX(20deg) rotateY(30deg);
-  }
-  75% {
-    transform: rotateX(-20deg) rotateY(-30deg);
-  }
+ 0%, 100% {
+ transform: rotateX(0deg) rotateY(0deg);
+ }
+ 25% {
+ transform: rotateX(20deg) rotateY(30deg);
+ }
+ 75% {
+  transform: rotateX(-20deg) rotateY(-30deg);
+ }
 }
 
 @keyframes logoSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+ from {
+ transform: rotate(0deg);
+ }
+ to {
+transform: rotate(360deg);
+}
 }
 
 @keyframes logoPulse {
   0%, 100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
+transform: scale(1);
+ opacity: 0.8;
+ }
+ 50% {
+ transform: scale(1.1);
+  opacity: 1;
 }
-@keyframes logoTumble {
-  0%   { transform: rotateX(0deg) rotateY(0deg); }
-  25%  { transform: rotateX(45deg) rotateY(90deg); }
-  50%  { transform: rotateX(120deg) rotateY(180deg); }
-  75%  { transform: rotateX(225deg) rotateY(270deg); }
-  100% { transform: rotateX(360deg) rotateY(360deg); }
-}
-@keyframes emberRise {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-120vh) scale(0.5);
-    opacity: 0;
-  }
-}/* === HERO STACK OVERRIDES (final) ======================================= */
-:root{
-  /* knobs */
-  --title-max: 1100px;                           /* hero title max width */
-  --gap-title-logo: clamp(14px, 3vh, 32px);      /* title → logo */
-  --gap-logo-lead:  clamp(12px, 2.6vh, 26px);    /* logo → subheading */
-  --gap-lead-btn:   clamp(8px, 1.8vh, 16px);     /* subheading → button */
-  --cta-lift: clamp(-90px, -12vh, -50px);        /* raise lead+button together */
-}
-
-#hero.hero{
-  justify-content: flex-start;                   /* stop vertical centering */
-  padding-top: clamp(48px, 10vh, 120px);
-  overflow: visible;                              /* avoid crop if we pull things up */
-}
-
-#hero .hero-content{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;                                        /* tight stack; we control gaps below */
-}
-
-/* Title image (your fire title+kicker combined png) */
-#hero .fire-title{ margin: 0; }
-#hero .fire-logo{
-  width: min(96vw, var(--title-max));
-  height: auto;
-  display: block;
-  margin: 0 auto var(--gap-title-logo);
-  filter:
-    drop-shadow(0 0 10px rgba(245,90,16,.30))
-    drop-shadow(0 0 20px rgba(245,90,16,.20));
-}
-
-/* Logo: keep container still; animate the image only */
-#hero .brand-stamp{
-  position: relative;
-  width: min(70vw, 420px);
-  margin: 0 auto var(--gap-logo-lead);
-  animation: none !important;                    /* stop container animation */
-  pointer-events: none;
-}
-#hero .brand-stamp .logo{
-  display: block;
-  width: 100%;
-  height: auto;
-  transform-origin: 50% 50%;
-  animation: logoTumble 28s linear infinite;     /* tumble */
-  filter:
-    drop-shadow(0 0 15px var(--lava-glow))
-    drop-shadow(0 0 25px rgba(245, 90, 16, .5));
-}
-
-/* Subheading + button (lift together to center) */
-#hero .lead{
-  margin: 0 auto var(--gap-lead-btn);
-  text-align: center;
-  max-width: 58ch;
-  position: relative;
-  transform: translateY(var(--cta-lift));
-}
-#hero .btn{
-  position: relative;
-  transform: translateY(var(--cta-lift));
-  margin: 0;
-}
-
-/* Hide any leftover text kicker elements */
-.kicker, .kicker--brand, .kicker-stamp { display: none !important; }
-
-/* === HERO RESET (place at the very bottom) ============================== */
-/* simple knobs */
-:root{
-  --hero-top: clamp(56px, 12vh, 120px);  /* moves whole stack up/down */
-  --title-max: 1100px;                   /* max width of fire title image */
-  --logo-max: 420px;                     /* max width of spinning logo */
-  --gap-title-logo: 24px;                /* title → logo gap */
-  --gap-logo-lead: 18px;                 /* logo → subheading gap */
-  --gap-lead-btn: 12px;                  /* subheading → button gap */
-}
-
-/* stop vertical centering; anchor to top padding */
-#hero.hero,
-#hero.hero.hero--tight{
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  padding-top: var(--hero-top) !important;
-  overflow: visible;
-}
-
-/* one clean column; we control all gaps below */
-#hero .hero-content{
-  display: grid !important;
-  grid-auto-flow: row;
-  justify-items: center;
-  row-gap: 0;
-}
-
-/* title (your combined fire title/kicker image) */
-#hero .fire-title{ margin: 0 !important; }
-#hero .fire-logo{
-  width: min(96vw, var(--title-max));
-  height: auto;
-  display: block;
-  margin: 0 auto var(--gap-title-logo) !important;
-}
-
-/* logo: container stays still; only the image tumbles */
-#hero .brand-stamp{
-  position: relative !important;
-  width: min(70vw, var(--logo-max));
-  margin: 0 auto var(--gap-logo-lead) !important;
-  animation: none !important;       /* prevent container animations */
-  pointer-events: none;
-}
-#hero .brand-stamp .logo{
-  display: block;
-  width: 100%;
-  height: auto;
-  transform-origin: 50% 50%;
-  animation: logoTumble 28s linear infinite;
-  filter:
-    drop-shadow(0 0 15px var(--lava-glow))
-    drop-shadow(0 0 25px rgba(245,90,16,.5));
-}
-
-/* subheading + button */
-#hero .lead{
-  margin: 0 auto var(--gap-lead-btn) !important;
-  max-width: 58ch; text-align:center;
-}
-#hero .btn{ margin: 0 !important; }
-
-/* nuke any previous “lift” hacks so nothing gets slammed mid-screen */
-#hero .lead, #hero .btn{
-  top: auto !important;
-  transform: none !important;
-}
-
-/* hide any leftover text kicker elements (you’ve baked it into the image) */
-.kicker, .kicker--brand, .kicker-stamp{ display:none !important; }
-/* === Focus Foundry: hero stack + positioning ========================= */
-:root{
-  /* tweak these numbers (more negative = higher) */
-  --title-lift:  -12px;       /* move the title image up a bit */
-  --logo-lift:   -120px;      /* pull the logo toward the title */
-  --cta-lift:    -140px;      /* lift subhead + button together */
-
-  /* vertical gaps in the stack */
-  --gap-title-logo: 18px;     /* title → logo */
-  --gap-logo-lead:  14px;     /* logo → subhead */
-  --gap-lead-btn:   10px;     /* subhead → button */
-}
-
-/* keep the hero high on the page; content stacked, not middle-centered */
-#hero.hero{
-  justify-content: flex-start;
-  padding-top: clamp(56px, 12vh, 120px);
-  overflow: visible; /* allows negative lifts without clipping */
-}
-#hero .hero-content{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-}
-
-/* Title (your combined fire title + kicker image) */
-#hero .fire-logo{
-  display: block;
-  width: min(92vw, 1000px);
-  height: auto;
-  margin: var(--title-lift) auto var(--gap-title-logo);
-  /* subtle baseline glow; the “heat mode” below can enhance this */
-  filter:
-    drop-shadow(0 0 10px rgba(245,90,16,.25))
-    drop-shadow(0 0 20px rgba(245,90,16,.15));
-}
-
-/* Logo: position with margin only; animate only the image (not container) */
-#hero .brand-stamp{
-  width: min(68vw, 420px);
-  margin: var(--logo-lift) auto var(--gap-logo-lead);
-  animation: none !important;
-}
-#hero .brand-stamp .logo{
-  display: block;
-  width: 100%;
-  height: auto;
-  transform-origin: 50% 50%;
-  animation: logoTumble 28s linear infinite;
-  filter:
-    drop-shadow(0 0 14px rgba(245,90,16,.35))
-    drop-shadow(0 0 24px rgba(245,90,16,.25));
-}
-
-/* Subheading + Button: lift as a unit and keep a tight gap */
-#hero .lead{
-  position: relative;
-  transform: translateY(var(--cta-lift));
-  margin: 0 auto var(--gap-lead-btn);
-  text-align: center;
-  max-width: 58ch;
-  z-index: 3;
-}
-#hero .btn{
-  position: relative;
-  transform: translateY(var(--cta-lift));
-  margin: 0;
-  z-index: 3;
-}
-
-/* Mobile: ease the lifts so nothing crowds */
-@media (max-width: 700px){
-  :root{
-    --title-lift: -6px;
-    --logo-lift:  -80px;
-    --cta-lift:   -90px;
-  }
-}
-@media (max-width: 480px){
-  :root{
-    --title-lift: -4px;
-    --logo-lift:  -60px;
-    --cta-lift:   -70px;
-  }
-}
-
-/* === “Heat mode” flicker/pulse (optional; toggle via .mood-volcano on <body>) */
-@property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
-@property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
-@property --gA {  syntax: '<number>'; inherits: true; initial-value: .45; }
-
-@keyframes lavaFlicker {
-  0%   { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-  8%   { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
-  22%  { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
-  38%  { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
-  57%  { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
-  76%  { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
-  100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-}
-
-/* turn on by adding class="mood-volcano" to <body> */
-body.mood-volcano #hero .fire-logo{
-  animation: lavaFlicker 3s infinite;
-  filter:
-    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
-}
-body.mood-volcano #hero .brand-stamp .logo{
-  animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
-  filter:
-    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
 }
