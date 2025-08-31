@@ -703,7 +703,7 @@ p.lead{
 @media (max-width: 640px){
   :root{ --title-lift: clamp(-48px, -7vh, -24px); }
 }
-:root { --lead-lift: clamp(-120px, -14vh, -60px); } /* more negative = higher */
+:root { --lead-lift: clamp(-160px, -14vh, -60px); } /* more negative = higher */
 
 .hero .lead{
   position: relative;
