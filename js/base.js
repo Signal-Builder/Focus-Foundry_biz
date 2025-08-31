@@ -189,4 +189,3 @@
     io.observe(hero);
   }
 })();
-
