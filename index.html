@@ -1,102 +1,316 @@
-<script>
-/* ===== Full-screen embers (robust + visible) ========================== */
+maybe there is a problem here wiht the html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus Foundry · Cinematic Web Experiences</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base.css">
+
+  <!-- Icons / PWA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <link rel="icon" href="assets/favicon/favicon.ico"><!-- optional legacy .ico -->
+
+  <!-- Colors (supported by modern browsers + Windows tiles) -->
+  <meta name="theme-color" content="#0b0b0f">
+  <meta name="msapplication-TileColor" content="#0b0b0f">
+</head>
+>
+  <!-- Small override block to “lock in” the hero stack & spacing -->
+  <style>
+    :root{
+      --gap-title-logo: 14px;   /* title image → logo   */
+      --gap-logo-lead:  14px;   /* logo → subheading    */
+      --gap-lead-btn:   10px;   /* subheading → button  */
+    }
+
+    /* Canvas always behind content, but above background */
+    #bg { position:fixed; inset:0; z-index:10; pointer-events:none; display:block; background:transparent; }
+
+    /* Sticky nav should always be on top */
+    nav { z-index:25; }
+
+    /* HERO RESET (title+kicker image → logo → subhead → button) */
+    #hero.hero{
+      min-height: 100svh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: clamp(56px, 10vh, 120px);
+      overflow: visible;
+    }
+    #hero .hero-content{
+      width: min(1100px, 96vw);
+      margin-inline: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* Fire title (your combined image with the kicker baked in) */
+    #hero .fire-title{ margin:0; }
+    #hero .fire-logo{
+      width: min(980px, 96vw);
+      height: auto;
+      display: block;
+      margin: 0 auto var(--gap-title-logo);
+      filter:
+        drop-shadow(0 0 10px rgba(245,90,16,.30))
+        drop-shadow(0 0 20px rgba(245,90,16,.20));
+    }
+
+    /* Logo: container stays still; animate only the image */
+    #hero .brand-stamp{
+      width: min(420px, 70vw);
+      margin: 0 auto var(--gap-logo-lead);
+      animation: none !important;
+      pointer-events: none;
+    }
+    #hero .brand-stamp .logo{
+      display: block;
+      width: 100%;
+      height: auto;
+      transform-origin: 50% 50%;
+      animation: logoTumble 28s linear infinite;
+      filter:
+        drop-shadow(0 0 15px var(--lava-glow))
+        drop-shadow(0 0 25px rgba(245,90,16,.5));
+    }
+
+    /* Subheading + button (tight) */
+    #hero .lead{
+      margin: 0 0 var(--gap-lead-btn);
+      max-width: 58ch;
+      text-align: center;
+      position: static !important;
+      transform: none !important;
+      top: auto !important;
+    }
+    #hero .btn{
+      margin: 0;
+      position: static !important;
+      transform: none !important;
+      top: auto !important;
+    }
+
+    /* Hide any stray text-kicker nodes if they still exist */
+    .kicker, .kicker--brand, .kicker-stamp { display:none !important; }
+  </style>
+</head>
+<body class="mood-volcano">
+
+  <!-- Full-screen embers canvas -->
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <!-- Sticky primary nav -->
+  <nav id="site-nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/services.html">Services</a>
+    <a href="pages/case-studies.html">Case Studies</a>
+    <a href="pages/contact.html">Contact</a>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="fire-title">
+          <!-- This image already includes the kicker text -->
+          <img class="fire-logo" src="assets/fonts/h1-ff.png" alt="Focus Foundry">
+        </div>
+
+        <figure class="brand-stamp" aria-hidden="true">
+          <img class="logo" src="assets/logos/clear.png" alt="">
+        </figure>
+
+        <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
+        <a class="btn" href="#services">View Services</a>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="tagline-section">
+        <h2 class="tagline-title">Forged. Stamped. Remembered.</h2>
+        <p class="tagline-subhead">Every spark shapes presence. Every strike builds legacy.</p>
+      </section>
+
+      <section class="services" id="services">
+        <h2>Services</h2>
+        <div class="services-grid">
+          <article class="svc">
+            <div class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M17 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3.5l5 3.5V7l-5 3.5z"/></svg>
+            </div>
+            <h3>Cinematic Landing Pages</h3>
+            <p>High-impact hero visuals, motion, and clear CTAs tuned for conversions.</p>
+            <a class="svc-link" href="#contact">Learn more →</a>
+          </article>
+
+          <article class="svc">
+            <div class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>
+            </div>
+            <h3>Sales Funnels</h3>
+            <p>Opt-in → nurture emails → checkout. Done-for-you or modular builds.</p>
+            <a class="svc-link" href="#contact">See packages →</a>
+          </article>
+
+          <article class="svc">
+            <div class="svc-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M13 3L4 14h6l-1 7 9-11h-6l1-7z"/></svg>
+            </div>
+            <h3>Rapid Prototypes</h3>
+            <p>Clickable demos & PoCs for pitches, pilots, and speed-to-value.</p>
+            <a class="svc-link" href="#contact">Start a prototype →</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact-band" id="contact" aria-labelledby="contact-title">
+        <div class="contact-inner">
+          <h2 id="contact-title">Let’s build something cinematic</h2>
+          <p class="contact-lead">Tell us your goal. We’ll propose a crisp plan and timeline.</p>
+          <div class="contact-actions">
+            <a class="btn" href="mailto:hello@focusfoundry.ca?subject=Project%20inquiry">Email Us</a>
+            <a class="btn btn-ghost" href="https://calendly.com/your-handle/intro" target="_blank" rel="noopener">Book a 15-min Intro</a>
+          </div>
+        </div>
+      </section>
+
+      <footer>© 2025 Briteminds · Focus Foundry</footer>
+    </div>
+  </main>
+
+  <!-- Ember field (full-screen), plus sticky-nav tightening -->
+  <script>
+  /* ===== Full-screen embers (robust) =================================== */
 (() => {
   const canvas = document.getElementById('bg');
-  if (!canvas) return;
+  if (!canvas) { console.warn('No #bg canvas found.'); return; }
   const ctx = canvas.getContext('2d', { alpha: true });
-  if (!ctx) return;
+  if (!ctx) { console.warn('No 2D context.'); return; }
 
+  // ---- Tweakables ----
   const SETTINGS = {
     countBase: 200,
-    densityFactor: 0.00018,     // more embers on large screens
+    densityFactor: 0.00022,     // more embers on big screens
     sizeMin: 1.2,
-    sizeMax: 3.2,
-    vx: [-0.25, 0.25],          // lateral drift
-    vy: [-0.90, -0.35],         // upward drift (negative = up)
-    lifeMin: 3.5,
-    lifeMax: 7.5,
-    glowBlur: 22
+    sizeMax: 3.6,
+    speedY: [-0.90, -0.35],     // upward drift
+    speedX: [-0.25, 0.25],      // lateral meander
+    lifeMin: 3.8,
+    lifeMax: 7.8,
+    glowBlur: 24,
+    flickerFreqMin: 1.2,
+    flickerFreqMax: 2.2,
+    flareChance: 0.015,
+    flareBoost: 1.6,
+
+    // Fade strategy
+    USE_DEST_OUT_TRAILS: false, // set true to try destination-out trails again
+    tailFade: 0.10,             // used by destination-out
+    veilAlpha: 0.035            // used by source-over (super light)
   };
 
-  let DPR = 1, W = 0, H = 0, last = 0, running = true;
+  const DPR_MAX = 2;
+  let DPR = 1, W = 0, H = 0, lastTs = 0, running = true;
   const particles = [];
   const rand = (a, b) => a + Math.random() * (b - a);
 
-  function spawn() {
+  function spawnParticle() {
     return {
       x: Math.random() * W,
       y: Math.random() * H,
       r: rand(SETTINGS.sizeMin, SETTINGS.sizeMax),
-      vx: rand(SETTINGS.vx[0], SETTINGS.vx[1]),
-      vy: rand(SETTINGS.vy[0], SETTINGS.vy[1]),
+      vx: rand(SETTINGS.speedX[0], SETTINGS.speedX[1]),
+      vy: rand(SETTINGS.speedY[0], SETTINGS.speedY[1]),
       life: 0,
       lifeMax: rand(SETTINGS.lifeMin, SETTINGS.lifeMax),
       seed: Math.random() * 1000,
-      freq: rand(1.2, 2.2)
+      freq: rand(SETTINGS.flickerFreqMin, SETTINGS.flickerFreqMax),
+      flare: 0
     };
   }
 
   function resize() {
-    DPR = Math.min(2, window.devicePixelRatio || 1);
-    W = Math.max(1, window.innerWidth  | 0);
-    H = Math.max(1, window.innerHeight | 0);
+    DPR = Math.min(DPR_MAX, window.devicePixelRatio || 1);
+    W = Math.max(1, window.innerWidth);
+    H = Math.max(1, window.innerHeight);
 
     canvas.width  = Math.floor(W * DPR);
     canvas.height = Math.floor(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+    // keep CSS size in lockstep (important for Safari/Edge)
     canvas.style.width  = W + 'px';
     canvas.style.height = H + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
     const target = Math.round(SETTINGS.countBase + W * H * SETTINGS.densityFactor);
     if (particles.length > target) particles.length = target;
-    while (particles.length < target) particles.push(spawn());
+    while (particles.length < target) particles.push(spawnParticle());
   }
 
   function step(dt) {
-    // Clear each frame (no “sinking to bottom” issue)
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect(0, 0, W, H);
+    // ---- Fade previous frame ----
+    if (SETTINGS.USE_DEST_OUT_TRAILS) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = `rgba(0,0,0,${SETTINGS.tailFade})`;
+      ctx.fillRect(0, 0, W, H);
+    } else {
+      // ultra-light veil; doesn’t make the page look “darker”
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = SETTINGS.veilAlpha;
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 1;
+    }
 
-    // Draw additively for glow
+    // ---- Draw embers additively ----
     ctx.globalCompositeOperation = 'lighter';
 
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-
-      // recycle if out of bounds or expired
+    for (const p of particles) {
       p.life += dt;
       if (p.life > p.lifeMax || p.y < -16 || p.x < -16 || p.x > W + 16) {
-        particles[i] = spawn();
-        particles[i].y = H + Math.random() * 40; // respawn near bottom
-        continue;
+        Object.assign(p, spawnParticle());
+        p.y = H + Math.random() * 60; // respawn from bottom-ish
       }
 
       // motion
       p.x += p.vx;
       p.y += p.vy;
 
-      // gentle flicker
+      // flicker + flare
       const t = p.life * p.freq + p.seed;
-      const base = 0.70 + 0.30 * Math.sin(t * 6.283 + Math.sin(t * 2.7) * 0.7);
+      const base = 0.65 + 0.35 * Math.sin(t * 6.283 + Math.sin(t * 2.7) * 0.7);
+      if (Math.random() < SETTINGS.flareChance * dt) p.flare = 0.5;
+      if (p.flare > 0) p.flare -= dt;
+      const flare = p.flare > 0 ? SETTINGS.flareBoost : 1.0;
 
-      const r   = p.r * (0.9 + 0.35 * base);
-      const blur = SETTINGS.glowBlur * (0.7 + 0.6 * base);
+      const rNow    = p.r * (0.9 + 0.35 * base) * flare;
+      const blurNow = SETTINGS.glowBlur * (0.7 + 0.6 * base) * flare;
 
-      // warm color ramp (center hot → fade)
-      const hot = 0.90 * base;
-      const mid = 0.55 * base;
+      const hotAlpha = 0.92 * (0.8 + 0.2 * base);
+      const midAlpha = 0.55 * (0.8 + 0.2 * base);
 
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 2.2);
-      grad.addColorStop(0.00, `rgba(255,230,160,${hot})`);
-      grad.addColorStop(0.35, `rgba(255,170,70,${mid})`);
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rNow * 2.2);
+      grad.addColorStop(0.00, `rgba(255,230,160,${hotAlpha})`);
+      grad.addColorStop(0.35, `rgba(255,170,70,${midAlpha})`);
       grad.addColorStop(1.00, `rgba(120,20,0,0)`);
 
       ctx.save();
-      ctx.shadowBlur  = blur;
-      ctx.shadowColor = `rgba(255,120,30,${0.5 * base})`;
+      ctx.shadowBlur  = blurNow;
+      ctx.shadowColor = `rgba(255,120,30,${0.55 * (0.8 + 0.2 * base)})`;
       ctx.fillStyle   = grad;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, r * 1.8, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, rNow * 1.8, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
@@ -104,9 +318,9 @@
 
   function loop(ts) {
     if (!running) return;
-    if (!last) last = ts;
-    const dt = Math.min(0.05, (ts - last) / 1000);
-    last = ts;
+    if (!lastTs) lastTs = ts;
+    const dt = Math.min(0.05, (ts - lastTs) / 1000);
+    lastTs = ts;
     step(dt);
     requestAnimationFrame(loop);
   }
@@ -114,8 +328,8 @@
   // init
   resize();
   addEventListener('resize', resize, { passive: true });
+  ctx.clearRect(0, 0, W, H);
 
-  // make sure canvas sits behind content
   Object.assign(canvas.style, {
     position: 'fixed',
     inset: '0',
@@ -126,20 +340,17 @@
   });
 
   document.addEventListener('visibilitychange', () => {
-    const was = running;
+    const wasRunning = running;
     running = !document.hidden;
-    if (running && !was) { last = 0; requestAnimationFrame(loop); }
+    if (running && !wasRunning) { lastTs = 0; requestAnimationFrame(loop); }
   }, { passive: true });
 
   requestAnimationFrame(loop);
-})();
 
-/* ===== Sticky nav tighten on scroll =================================== */
-(() => {
-  const nav = document.getElementById('site-nav') || document.querySelector('nav');
-  if (!nav) return;
-  const setSticky = () => nav.classList.toggle('nav--scrolled', window.scrollY > 10);
-  setSticky();
-  addEventListener('scroll', setSticky, { passive: true });
+  // handy debug
+  window.embers = {
+    count: () => particles.length,
+    boost(n=80){ for (let i=0;i<n;i++) particles.push(spawnParticle()); },
+    fewer(n=80){ particles.length = Math.max(0, particles.length - n); }
+  };
 })();
-</script>
