@@ -497,7 +497,7 @@ body.mood-volcano .brand-stamp .logo{
 /* Make these numbers more negative to move each item UP */
 :root{
   --title-lift: -24px;   /* fire title image */
-  --logo-lift:  -160px;  /* round FF logo */
+  --logo-lift:  -190px;  /* round FF logo */
   --lead-lift:  -150px;  /* subheading */
   --btn-lift:   -150px;  /* CTA button */
   --lead-btn-gap: 10px;  /* spacing between subheading and button */
