@@ -490,58 +490,46 @@ body.mood-volcano .brand-stamp .logo{
   filter:
     drop_shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
     drop_shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
-/* ===== Independent lifts for hero pieces (use negatives to move up) ===== */
+
+    /* ===== HERO LIFTS (the simple version that worked) ===================== */
+/* Make these numbers more negative to move each item UP */
 :root{
-  --title-lift: -100px;   /* hero title image (fire title) */
-  --logo-lift:  -580px;  /* round FF logo */
-  --lead-lift:  -270px;  /* subheading */
-  --btn-lift:   -270px;  /* button */
+  --title-lift: -24px;   /* fire title image */
+  --logo-lift:  -160px;  /* round FF logo */
+  --lead-lift:  -150px;  /* subheading */
+  --btn-lift:   -150px;  /* CTA button */
   --lead-btn-gap: 10px;  /* spacing between subheading and button */
 }
 
-#hero{ position: relative; overflow: visible; } /* avoid clipping */
+#hero{ overflow: visible; } /* so negative offsets don't get clipped */
 
-/* Make each element float independently without reflow */
 #hero .fire-title,
 #hero .brand-stamp,
 #hero .lead,
 #hero .btn{
-  position: relative;
-  will-change: transform;
-  z-index: 3; /* stay above glows/sparks */
+  position: relative;     /* enables top: … offsets */
+  z-index: 3;
 }
 
-/* Title (your fire title image sits inside .fire-title) */
-#hero .fire-title{ transform: translateY(var(--title-lift)); }
-
-/* Logo: keep container still; animate only the image */
-#hero .brand-stamp{
-  transform: translateY(var(--logo-lift));
-  animation: none !important;         /* container stays fixed */
-}
-#hero .brand-stamp .logo{
-  animation: logoTumble 28s linear infinite;
-  transform-origin: 50% 50%;
-}
-
-/* Subheading + Button (independent, but usually same value) */
+/* Lift each piece independently */
+#hero .fire-title{ top: var(--title-lift); }
+#hero .brand-stamp{ top: var(--logo-lift); }
 #hero .lead{
-  transform: translateY(var(--lead-lift));
-  margin: 0 0 var(--lead-btn-gap);    /* tight gap below lead */
+  top: var(--lead-lift);
+  margin-bottom: var(--lead-btn-gap);
   text-align: center;
 }
 #hero .btn{
-  transform: translateY(var(--btn-lift));
-  margin: 0;
+  top: var(--btn-lift);
+  margin-top: 0;
 }
 
-/* Optional: smaller lifts on very small screens */
+/* Optional: soften lifts on small screens */
 @media (max-width: 640px){
   :root{
-    --title-lift: -24px;
-    --logo-lift:  -120px;
-    --lead-lift:  -110px;
-    --btn-lift:   -110px;
+    --title-lift: -14px;
+    --logo-lift:  -110px;
+    --lead-lift:  -100px;
+    --btn-lift:   -100px;
   }
-};
 }
