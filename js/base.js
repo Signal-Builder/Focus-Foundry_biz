@@ -1,26 +1,30 @@
-/* ===== Full-screen embers ============================================ */
+/* ===== Full-screen embers (robust) =================================== */
 (() => {
   const canvas = document.getElementById('bg');
-  if (!canvas) { console.warn('No #bg canvas found. Embers animation will not run.'); return; }
+  if (!canvas) { console.warn('No #bg canvas found.'); return; }
   const ctx = canvas.getContext('2d', { alpha: true });
-  if (!ctx) { console.warn('2D context not available. Embers animation will not run.'); return; }
+  if (!ctx) { console.warn('No 2D context.'); return; }
 
-  // ---- Tweakables (slightly brighter/bigger by default) ----
+  // ---- Tweakables ----
   const SETTINGS = {
     countBase: 200,
-    densityFactor: 0.00020,
+    densityFactor: 0.00022,     // more embers on big screens
     sizeMin: 1.2,
-    sizeMax: 3.4,            // was 3.0
-    speedY: [-0.90, -0.35],
-    speedX: [-0.25, 0.25],
+    sizeMax: 3.6,
+    speedY: [-0.90, -0.35],     // upward drift
+    speedX: [-0.25, 0.25],      // lateral meander
     lifeMin: 3.8,
     lifeMax: 7.8,
-    tailFade: 0.10,          // was 0.12 (longer trails, less fade-out look)
-    glowBlur: 24,            // was 18
+    glowBlur: 24,
     flickerFreqMin: 1.2,
     flickerFreqMax: 2.2,
     flareChance: 0.015,
-    flareBoost: 1.6
+    flareBoost: 1.6,
+
+    // Fade strategy
+    USE_DEST_OUT_TRAILS: false, // set true to try destination-out trails again
+    tailFade: 0.10,             // used by destination-out
+    veilAlpha: 0.035            // used by source-over (super light)
   };
 
   const DPR_MAX = 2;
@@ -52,7 +56,7 @@
     canvas.height = Math.floor(H * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-    // Keep CSS size explicitly synced (improves Safari/Edge behavior)
+    // keep CSS size in lockstep (important for Safari/Edge)
     canvas.style.width  = W + 'px';
     canvas.style.height = H + 'px';
 
@@ -62,12 +66,21 @@
   }
 
   function step(dt) {
-    // Fade previous ember pixels only (does NOT dim the page behind)
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.fillStyle = `rgba(0,0,0,${SETTINGS.tailFade})`;
-    ctx.fillRect(0, 0, W, H);
+    // ---- Fade previous frame ----
+    if (SETTINGS.USE_DEST_OUT_TRAILS) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = `rgba(0,0,0,${SETTINGS.tailFade})`;
+      ctx.fillRect(0, 0, W, H);
+    } else {
+      // ultra-light veil; doesn’t make the page look “darker”
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = SETTINGS.veilAlpha;
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 1;
+    }
 
-    // Draw glowing embers additively
+    // ---- Draw embers additively ----
     ctx.globalCompositeOperation = 'lighter';
 
     for (const p of particles) {
@@ -81,7 +94,7 @@
       p.x += p.vx;
       p.y += p.vy;
 
-      // per-particle flicker + occasional flare
+      // flicker + flare
       const t = p.life * p.freq + p.seed;
       const base = 0.65 + 0.35 * Math.sin(t * 6.283 + Math.sin(t * 2.7) * 0.7);
       if (Math.random() < SETTINGS.flareChance * dt) p.flare = 0.5;
@@ -113,7 +126,7 @@
   function loop(ts) {
     if (!running) return;
     if (!lastTs) lastTs = ts;
-    const dt = Math.min(0.05, (ts - lastTs) / 1000); // clamp delta
+    const dt = Math.min(0.05, (ts - lastTs) / 1000);
     lastTs = ts;
     step(dt);
     requestAnimationFrame(loop);
@@ -121,12 +134,9 @@
 
   // init
   resize();
-  window.addEventListener('resize', resize, { passive: true });
-
-  // soft clear (avoid first-frame flash)
+  addEventListener('resize', resize, { passive: true });
   ctx.clearRect(0, 0, W, H);
 
-  // keep canvas pinned behind content
   Object.assign(canvas.style, {
     position: 'fixed',
     inset: '0',
@@ -136,17 +146,18 @@
     background: 'transparent'
   });
 
-  // pause/resume on tab visibility
   document.addEventListener('visibilitychange', () => {
+    const wasRunning = running;
     running = !document.hidden;
-    if (running) { lastTs = 0; requestAnimationFrame(loop); }
+    if (running && !wasRunning) { lastTs = 0; requestAnimationFrame(loop); }
   }, { passive: true });
 
   requestAnimationFrame(loop);
 
-  // quick console helpers
+  // handy debug
   window.embers = {
-    start(){ if (!running){ running = true; lastTs = 0; requestAnimationFrame(loop); } },
-    stop(){ running = false; }
+    count: () => particles.length,
+    boost(n=80){ for (let i=0;i<n;i++) particles.push(spawnParticle()); },
+    fewer(n=80){ particles.length = Math.max(0, particles.length - n); }
   };
 })();
