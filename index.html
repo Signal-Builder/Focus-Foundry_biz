@@ -1,271 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Focus Foundry · Cinematic Web Experiences</title>
+<script>
+/* ===== Full-screen embers (robust + visible) ========================== */
+(() => {
+  const canvas = document.getElementById('bg');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
 
-  <link rel="stylesheet" href="css/base.css" />
+  const SETTINGS = {
+    countBase: 200,
+    densityFactor: 0.00018,     // more embers on large screens
+    sizeMin: 1.2,
+    sizeMax: 3.2,
+    vx: [-0.25, 0.25],          // lateral drift
+    vy: [-0.90, -0.35],         // upward drift (negative = up)
+    lifeMin: 3.5,
+    lifeMax: 7.5,
+    glowBlur: 22
+  };
 
-  <!-- Favicons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-  <link rel="manifest" href="assets/favicon/site.webmanifest">
-  <link rel="shortcut icon" href="assets/favicon/favicon.ico">
-  <meta name="msapplication-TileColor" content="#0b0b0f">
-  <meta name="theme-color" content="#0b0b0f">
+  let DPR = 1, W = 0, H = 0, last = 0, running = true;
+  const particles = [];
+  const rand = (a, b) => a + Math.random() * (b - a);
 
-  <!-- Small override block to “lock in” the hero stack & spacing -->
-  <style>
-    :root{
-      --gap-title-logo: 14px;   /* title image → logo   */
-      --gap-logo-lead:  14px;   /* logo → subheading    */
-      --gap-lead-btn:   10px;   /* subheading → button  */
-    }
-
-    /* Canvas always behind content, but above background */
-    #bg { position:fixed; inset:0; z-index:10; pointer-events:none; display:block; background:transparent; }
-
-    /* Sticky nav should always be on top */
-    nav { z-index:25; }
-
-    /* HERO RESET (title+kicker image → logo → subhead → button) */
-    #hero.hero{
-      min-height: 100svh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding-top: clamp(56px, 10vh, 120px);
-      overflow: visible;
-    }
-    #hero .hero-content{
-      width: min(1100px, 96vw);
-      margin-inline: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-    }
-
-    /* Fire title (your combined image with the kicker baked in) */
-    #hero .fire-title{ margin:0; }
-    #hero .fire-logo{
-      width: min(980px, 96vw);
-      height: auto;
-      display: block;
-      margin: 0 auto var(--gap-title-logo);
-      filter:
-        drop-shadow(0 0 10px rgba(245,90,16,.30))
-        drop-shadow(0 0 20px rgba(245,90,16,.20));
-    }
-
-    /* Logo: container stays still; animate only the image */
-    #hero .brand-stamp{
-      width: min(420px, 70vw);
-      margin: 0 auto var(--gap-logo-lead);
-      animation: none !important;
-      pointer-events: none;
-    }
-    #hero .brand-stamp .logo{
-      display: block;
-      width: 100%;
-      height: auto;
-      transform-origin: 50% 50%;
-      animation: logoTumble 28s linear infinite;
-      filter:
-        drop-shadow(0 0 15px var(--lava-glow))
-        drop-shadow(0 0 25px rgba(245,90,16,.5));
-    }
-
-    /* Subheading + button (tight) */
-    #hero .lead{
-      margin: 0 0 var(--gap-lead-btn);
-      max-width: 58ch;
-      text-align: center;
-      position: static !important;
-      transform: none !important;
-      top: auto !important;
-    }
-    #hero .btn{
-      margin: 0;
-      position: static !important;
-      transform: none !important;
-      top: auto !important;
-    }
-
-    /* Hide any stray text-kicker nodes if they still exist */
-    .kicker, .kicker--brand, .kicker-stamp { display:none !important; }
-  </style>
-</head>
-<body class="mood-volcano">
-
-  <!-- Full-screen embers canvas -->
-  <canvas id="bg" aria-hidden="true"></canvas>
-
-  <!-- Sticky primary nav -->
-  <nav id="site-nav" aria-label="Primary">
-    <a href="index.html">Home</a>
-    <a href="pages/about.html">About</a>
-    <a href="pages/services.html">Services</a>
-    <a href="pages/case-studies.html">Case Studies</a>
-    <a href="pages/contact.html">Contact</a>
-  </nav>
-
-  <main>
-    <!-- HERO -->
-    <section class="hero" id="hero">
-      <div class="hero-content">
-        <div class="fire-title">
-          <!-- This image already includes the kicker text -->
-          <img class="fire-logo" src="assets/fonts/h1-ff.png" alt="Focus Foundry">
-        </div>
-
-        <figure class="brand-stamp" aria-hidden="true">
-          <img class="logo" src="assets/logos/clear.png" alt="">
-        </figure>
-
-        <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
-        <a class="btn" href="#services">View Services</a>
-      </div>
-    </section>
-
-    <div class="wrap">
-      <section class="tagline-section">
-        <h2 class="tagline-title">Forged. Stamped. Remembered.</h2>
-        <p class="tagline-subhead">Every spark shapes presence. Every strike builds legacy.</p>
-      </section>
-
-      <section class="services" id="services">
-        <h2>Services</h2>
-        <div class="services-grid">
-          <article class="svc">
-            <div class="svc-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M17 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3.5l5 3.5V7l-5 3.5z"/></svg>
-            </div>
-            <h3>Cinematic Landing Pages</h3>
-            <p>High-impact hero visuals, motion, and clear CTAs tuned for conversions.</p>
-            <a class="svc-link" href="#contact">Learn more →</a>
-          </article>
-
-          <article class="svc">
-            <div class="svc-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/></svg>
-            </div>
-            <h3>Sales Funnels</h3>
-            <p>Opt-in → nurture emails → checkout. Done-for-you or modular builds.</p>
-            <a class="svc-link" href="#contact">See packages →</a>
-          </article>
-
-          <article class="svc">
-            <div class="svc-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M13 3L4 14h6l-1 7 9-11h-6l1-7z"/></svg>
-            </div>
-            <h3>Rapid Prototypes</h3>
-            <p>Clickable demos & PoCs for pitches, pilots, and speed-to-value.</p>
-            <a class="svc-link" href="#contact">Start a prototype →</a>
-          </article>
-        </div>
-      </section>
-
-      <section class="contact-band" id="contact" aria-labelledby="contact-title">
-        <div class="contact-inner">
-          <h2 id="contact-title">Let’s build something cinematic</h2>
-          <p class="contact-lead">Tell us your goal. We’ll propose a crisp plan and timeline.</p>
-          <div class="contact-actions">
-            <a class="btn" href="mailto:hello@focusfoundry.ca?subject=Project%20inquiry">Email Us</a>
-            <a class="btn btn-ghost" href="https://calendly.com/your-handle/intro" target="_blank" rel="noopener">Book a 15-min Intro</a>
-          </div>
-        </div>
-      </section>
-
-      <footer>© 2025 Briteminds · Focus Foundry</footer>
-    </div>
-  </main>
-
-  <!-- Ember field (full-screen), plus sticky-nav tightening -->
-  <script>
-  /* ===== Full-screen embers (stable, full-viewport) ===== */
-  (() => {
-    const canvas = document.getElementById('bg');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
-
-    const SETTINGS = {
-      countBase: 200,
-      densityFactor: 0.00015,
-      sizeMin: 1.2,
-      sizeMax: 2.6,
-      vx: [-0.25, 0.25],
-      vy: [-0.90, -0.35],
-      lifeMin: 3.5,
-      lifeMax: 7.5,
-      glowBlur: 18
+  function spawn() {
+    return {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: rand(SETTINGS.sizeMin, SETTINGS.sizeMax),
+      vx: rand(SETTINGS.vx[0], SETTINGS.vx[1]),
+      vy: rand(SETTINGS.vy[0], SETTINGS.vy[1]),
+      life: 0,
+      lifeMax: rand(SETTINGS.lifeMin, SETTINGS.lifeMax),
+      seed: Math.random() * 1000,
+      freq: rand(1.2, 2.2)
     };
+  }
 
-    let W = 0, H = 0, last = 0;
-    const particles = [];
-    const rand = (a,b) => a + Math.random() * (b - a);
+  function resize() {
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, window.innerWidth  | 0);
+    H = Math.max(1, window.innerHeight | 0);
 
-    function resize(){
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      const w = window.innerWidth  | 0;
-      const h = window.innerHeight | 0;
-      canvas.width  = Math.max(1, Math.floor(w * dpr));
-      canvas.height = Math.max(1, Math.floor(h * dpr));
-      canvas.style.width  = w + 'px';
-      canvas.style.height = h + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      W = w; H = h;
+    canvas.width  = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-      const target = Math.round(SETTINGS.countBase + w * h * SETTINGS.densityFactor);
-      if (particles.length > target) particles.length = target;
-      while (particles.length < target) particles.push(spawn());
+    const target = Math.round(SETTINGS.countBase + W * H * SETTINGS.densityFactor);
+    if (particles.length > target) particles.length = target;
+    while (particles.length < target) particles.push(spawn());
+  }
+
+  function step(dt) {
+    // Clear each frame (no “sinking to bottom” issue)
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, W, H);
+
+    // Draw additively for glow
+    ctx.globalCompositeOperation = 'lighter';
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      // recycle if out of bounds or expired
+      p.life += dt;
+      if (p.life > p.lifeMax || p.y < -16 || p.x < -16 || p.x > W + 16) {
+        particles[i] = spawn();
+        particles[i].y = H + Math.random() * 40; // respawn near bottom
+        continue;
+      }
+
+      // motion
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // gentle flicker
+      const t = p.life * p.freq + p.seed;
+      const base = 0.70 + 0.30 * Math.sin(t * 6.283 + Math.sin(t * 2.7) * 0.7);
+
+      const r   = p.r * (0.9 + 0.35 * base);
+      const blur = SETTINGS.glowBlur * (0.7 + 0.6 * base);
+
+      // warm color ramp (center hot → fade)
+      const hot = 0.90 * base;
+      const mid = 0.55 * base;
+
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 2.2);
+      grad.addColorStop(0.00, `rgba(255,230,160,${hot})`);
+      grad.addColorStop(0.35, `rgba(255,170,70,${mid})`);
+      grad.addColorStop(1.00, `rgba(120,20,0,0)`);
+
+      ctx.save();
+      ctx.shadowBlur  = blur;
+      ctx.shadowColor = `rgba(255,120,30,${0.5 * base})`;
+      ctx.fillStyle   = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r * 1.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
+  }
 
-    function spawn(){
-      return {
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: rand(SETTINGS.sizeMin, SETTINGS.sizeMax),
-        vx: rand(SETTINGS.vx[0], SETTINGS.vx[1]),
-        vy: rand(SETTINGS.vy[0], SETTINGS.vy[1]),
-        life: 0,
-        lifeMax: rand(SETTINGS.lifeMin, SETTINGS.lifeMax),
-        seed: Math.random() * 1000,
-        freq: rand(1.2, 2.2)
-      };
-    }
+  function loop(ts) {
+    if (!running) return;
+    if (!last) last = ts;
+    const dt = Math.min(0.05, (ts - last) / 1000);
+    last = ts;
+    step(dt);
+    requestAnimationFrame(loop);
+  }
 
-    function loop(ts){
-      if (!last) last = ts;
-      const dt = Math.min(0.05, (ts - last) / 1000);
-      last = ts;
+  // init
+  resize();
+  addEventListener('resize', resize, { passive: true });
 
-      ctx.clearRect(0, 0, W, H);           // no bottom “sinking”
-      ctx.globalCompositeOperation = 'lighter';
+  // make sure canvas sits behind content
+  Object.assign(canvas.style, {
+    position: 'fixed',
+    inset: '0',
+    zIndex: '10',
+    pointerEvents: 'none',
+    display: 'block',
+    background: 'transparent'
+  });
 
-      for (let i = 0; i < particles.length; i++){
-        const p = particles[i];
+  document.addEventListener('visibilitychange', () => {
+    const was = running;
+    running = !document.hidden;
+    if (running && !was) { last = 0; requestAnimationFrame(loop); }
+  }, { passive: true });
 
-        // recycle if out of bounds or expired
-        p.life += dt;
-        if (p.life > p.lifeMax || p.y < -12 || p.x < -12 || p.x > W + 12){
-          particles[i] = spawn();
-          particles[i].y = H + Math.random() * 40;  // respawn near bottom
-          continue;
-        }
+  requestAnimationFrame(loop);
+})();
 
-        // drift
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // gentle flicker
-        const t = p.life * p.freq + p.seed;
-        const base = 0.7 + 0.3 * Math.sin(t * 6.283);
-        const r = p.r * (0.9 + 0.35 * base);
-        const blur = SETTINGS.glowBlur * base;
-
-        // warm ramp
-        const hot = 0.9 * base;
-        const mid = 0.55 * base;
+/* ===== Sticky nav tighten on scroll =================================== */
+(() => {
+  const nav = document.getElementById('site-nav') || document.querySelector('nav');
+  if (!nav) return;
+  const setSticky = () => nav.classList.toggle('nav--scrolled', window.scrollY > 10);
+  setSticky();
+  addEventListener('scroll', setSticky, { passive: true });
+})();
+</script>
