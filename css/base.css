@@ -490,35 +490,57 @@ body.mood-volcano .brand-stamp .logo{
   filter:
     drop_shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
     drop_shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
-}/* ===== quick hero lift (scoped) ===== */
+/* ===== Independent lifts for hero pieces (use negatives to move up) ===== */
 :root{
-  /* make these more negative to move things higher */
-  --hero-logo-lift: -180px;   /* lifts the round FF logo */
-  --hero-cta-lift:  -170px;   /* lifts the subheading + button */
+  --title-lift: -40px;   /* hero title image (fire title) */
+  --logo-lift:  -180px;  /* round FF logo */
+  --lead-lift:  -170px;  /* subheading */
+  --btn-lift:   -170px;  /* button */
+  --lead-btn-gap: 10px;  /* spacing between subheading and button */
 }
 
 #hero{ position: relative; overflow: visible; } /* avoid clipping */
 
-/* Move the logo up. Stop animating the container so position is stable. */
-#hero .brand-stamp{
-  position: relative;
-  top: var(--hero-logo-lift);
-  margin-bottom: clamp(8px, 1.6vh, 14px);
-  animation: none !important;           /* keep container still */
-}
-#hero .brand-stamp .logo{
-  animation: logoTumble 28s linear infinite;  /* animate the image only */
-  transform-origin: 50% 50%;
-}
-
-/* Move the subheading + button up together */
+/* Make each element float independently without reflow */
+#hero .fire-title,
+#hero .brand-stamp,
 #hero .lead,
 #hero .btn{
   position: relative;
-  top: var(--hero-cta-lift);
-  z-index: 3;                 /* stay above glows/sparks */
+  will-change: transform;
+  z-index: 3; /* stay above glows/sparks */
 }
 
-/* Keep their spacing tight */
-#hero .lead{ margin: 0 0 10px; text-align: center; }
-#hero .btn{  margin: 0; }
+/* Title (your fire title image sits inside .fire-title) */
+#hero .fire-title{ transform: translateY(var(--title-lift)); }
+
+/* Logo: keep container still; animate only the image */
+#hero .brand-stamp{
+  transform: translateY(var(--logo-lift));
+  animation: none !important;         /* container stays fixed */
+}
+#hero .brand-stamp .logo{
+  animation: logoTumble 28s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+/* Subheading + Button (independent, but usually same value) */
+#hero .lead{
+  transform: translateY(var(--lead-lift));
+  margin: 0 0 var(--lead-btn-gap);    /* tight gap below lead */
+  text-align: center;
+}
+#hero .btn{
+  transform: translateY(var(--btn-lift));
+  margin: 0;
+}
+
+/* Optional: smaller lifts on very small screens */
+@media (max-width: 640px){
+  :root{
+    --title-lift: -24px;
+    --logo-lift:  -120px;
+    --lead-lift:  -110px;
+    --btn-lift:   -110px;
+  }
+}
