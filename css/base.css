@@ -198,7 +198,7 @@ nav.nav--scrolled {
 /* Hero copy + CTA */
 p.lead {
   color: var(--lava-glow);
-  font-size: clamp(20px, 2.8vw, 24px); /* Increased font size */
+  font-size: clamp(24px, 2.8vw, 32px); /* Increased font size */
   margin: 0 auto var(--gap-lead-btn);
   text-shadow: 0 0 10px var(--lava-glow);
   max-width: 58ch;
