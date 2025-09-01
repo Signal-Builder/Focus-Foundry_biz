@@ -492,8 +492,8 @@ body.mood-volcano .brand-stamp .logo{
     drop_shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
 /* ===== Independent lifts for hero pieces (use negatives to move up) ===== */
 :root{
-  --title-lift: -40px;   /* hero title image (fire title) */
-  --logo-lift:  -180px;  /* round FF logo */
+  --title-lift: -60px;   /* hero title image (fire title) */
+  --logo-lift:  -280px;  /* round FF logo */
   --lead-lift:  -170px;  /* subheading */
   --btn-lift:   -170px;  /* button */
   --lead-btn-gap: 10px;  /* spacing between subheading and button */
