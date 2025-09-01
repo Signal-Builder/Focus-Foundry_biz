@@ -34,10 +34,10 @@
   --z-nav: 25;
 
   /* HERO-SPECIFIC KNOBS - Tuned for vertical stacking */
-  --hero-padding-top: clamp(80px, 15vh, 180px);
-  --gap-title-stamp: clamp(24px, 4vh, 48px);
-  --gap-stamp-lead: clamp(16px, 3vh, 32px);
-  --gap-lead-btn: clamp(12px, 2vh, 24px);
+  --hero-padding-top: clamp(80px, 15vh, 180px); /* Adjust top padding of the hero */
+  --gap-title-stamp: clamp(24px, 4vh, 48px);    /* Space between title image and spinning logo */
+  --gap-stamp-lead: clamp(16px, 3vh, 32px);     /* Space between spinning logo and lead paragraph */
+  --gap-lead-btn: clamp(12px, 2vh, 24px);       /* Space between lead paragraph and button */
 }
 
 /* ========== Base ========== */
@@ -108,17 +108,18 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
+  /* Use flexbox to position content vertically at the top */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding-top: var(--hero-padding-top);
+  justify-content: flex-start; /* Corrected to start from the top */
+  padding-top: var(--hero-padding-top); /* Push content down from the nav */
   padding-bottom: var(--spacing-5);
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: visible;
+  overflow: hidden;
   min-height: 100vh;
 }
 
@@ -147,14 +148,12 @@ nav.nav--scrolled {
 
 /* Container for all hero's core content, now acts as the main stack */
 .hero-content {
-  position: relative; /* Changed to relative to contain absolute children */
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: var(--content-width);
   margin: 0 auto;
-  gap: 0;
-  z-index: var(--z-content);
+  gap: 0; /* Control gaps explicitly with margins on children */
 }
 
 /* Fire brand header (single image with baked-in kicker) */
@@ -199,7 +198,7 @@ nav.nav--scrolled {
 /* Hero copy + CTA */
 p.lead {
   color: var(--lava-glow);
-  font-size: clamp(20px, 2.8vw, 24px);
+  font-size: clamp(20px, 2.8vw, 24px); /* Increased font size */
   margin: 0 auto var(--gap-lead-btn);
   text-shadow: 0 0 10px var(--lava-glow);
   max-width: 58ch;
@@ -324,16 +323,22 @@ footer {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   background: rgba(10, 10, 14, 0.35);
+
+  /* Safari + older engines */
   -webkit-backdrop-filter: blur(4px) saturate(110%);
+  /* Standards */
   backdrop-filter: blur(4px) saturate(110%);
+
   transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
 
+/* Fallback when backdrop-filter isn’t supported */
 @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
   .svc {
     background: rgba(10, 10, 14, 0.65);
   }
 }
+
 
 .svc:hover {
   transform: translateY(-2px);
@@ -453,54 +458,9 @@ footer {
   75% { transform: rotateX(215deg) rotateY(295deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
-
-/* "Dragonflies" animation */
 @keyframes emberRise {
   0% { transform: translateY(0) scale(1); opacity: 1; }
   100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
-}
-
-.dragonfly-spark {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background-color: var(--lava-glow);
-  border-radius: 50%;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.dragonfly-spark:nth-child(1) {
-  top: 80%;
-  left: 10%;
-  animation: emberRise 10s linear infinite 0s;
-}
-
-.dragonfly-spark:nth-child(2) {
-  top: 70%;
-  left: 30%;
-  animation: emberRise 12s linear infinite 2s;
-}
-
-.dragonfly-spark:nth-child(3) {
-  top: 90%;
-  left: 60%;
-  animation: emberRise 9s linear infinite 4s;
-}
-.dragonfly-spark:nth-child(4) {
-  top: 85%;
-  left: 45%;
-  animation: emberRise 11s linear infinite 5s;
-}
-.dragonfly-spark:nth-child(5) {
-  top: 75%;
-  left: 80%;
-  animation: emberRise 13s linear infinite 3s;
-}
-.dragonfly-spark:nth-child(6) {
-  top: 95%;
-  left: 20%;
-  animation: emberRise 10.5s linear infinite 6s;
 }
 
 /* === “Heat mode” flicker/pulse (optional; toggle via .mood-volcano on <body>) */
@@ -518,6 +478,7 @@ footer {
   100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
 }
 
+/* turn on by adding class="mood-volcano" to <body> */
 body.mood-volcano #hero .fire-logo{
   animation: lavaFlicker 3s infinite;
   filter:
@@ -533,24 +494,26 @@ body.mood-volcano .brand-stamp .logo{
 }
 
 /* ===== HERO LIFTS (the simple version that worked) ===================== */
+/* Make these numbers more negative to move each item UP */
 :root{
-  --title-lift: -01px;
-  --logo-lift:  -300px;
-  --lead-lift:  -2900px;
-  --btn-lift:   -290px;
-  --lead-btn-gap: 10px;
+  --title-lift: -30px;   /* fire title image */
+  --logo-lift:  -250px;  /* round FF logo */
+  --lead-lift:  -150px;  /* subheading */
+  --btn-lift:   -150px;  /* CTA button */
+  --lead-btn-gap: 10px;  /* spacing between subheading and button */
 }
 
-#hero{ overflow: visible; }
+#hero{ overflow: visible; } /* so negative offsets don't get clipped */
 
 #hero .fire-title,
 #hero .brand-stamp,
 #hero .lead,
 #hero .btn{
-  position: relative;
+  position: relative;     /* enables top: … offsets */
   z-index: 3;
 }
 
+/* Lift each piece independently */
 #hero .fire-title{ top: var(--title-lift); }
 #hero .brand-stamp{ top: var(--logo-lift); }
 #hero .lead{
@@ -563,6 +526,7 @@ body.mood-volcano .brand-stamp .logo{
   margin-top: 0;
 }
 
+/* Optional: soften lifts on small screens */
 @media (max-width: 640px){
   :root{
     --title-lift: -14px;
