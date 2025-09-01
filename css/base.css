@@ -537,3 +537,16 @@ body.mood-volcano .brand-stamp .logo{
     --btn-lift:   -100px;
   }
 }
+/* Center the image with CSS Grid */
+.fire-title {
+  display: grid;
+  justify-items: center;
+}
+
+/* Ensure the img can be centered cleanly */
+.fire-logo {
+  display: block;
+  margin: 0;          /* reset any auto margins */
+  max-width: 100%;
+  height: auto;
+}
