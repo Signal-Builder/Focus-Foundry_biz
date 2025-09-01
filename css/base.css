@@ -534,10 +534,10 @@ body.mood-volcano .brand-stamp .logo{
 
 /* ===== HERO LIFTS (the simple version that worked) ===================== */
 :root{
-  --title-lift: -10px;
-  --logo-lift:  -350px;
-  --lead-lift:  -350px;
-  --btn-lift:   -350px;
+  --title-lift: -01px;
+  --logo-lift:  -300px;
+  --lead-lift:  -2900px;
+  --btn-lift:   -290px;
   --lead-btn-gap: 10px;
 }
 
