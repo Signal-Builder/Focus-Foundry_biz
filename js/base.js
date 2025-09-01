@@ -1,4 +1,3 @@
-/* ===== Full-screen embers (robust) =================================== */
 /* This script has been cleaned to remove redundant CSS assignments */
 (() => {
     const canvas = document.getElementById('bg');
