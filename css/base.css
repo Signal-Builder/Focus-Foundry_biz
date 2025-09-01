@@ -469,29 +469,31 @@ footer {
 @property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
 
 @keyframes lavaFlicker {
-  0% { --g1: 9px; --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-  8% { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
-  22% { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
-  38% { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
-  57% { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
-  76% { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
-  100% { --g1: 9px; --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
+  0%   { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
+  8%   { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
+  22%  { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
+  38%  { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
+  57%  { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
+  76%  { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
+  100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
 }
 
 /* turn on by adding class="mood-volcano" to <body> */
 body.mood-volcano #hero .fire-logo{
   animation: lavaFlicker 3s infinite;
   filter:
-    drop_shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop_shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
 }
+
 body.mood-volcano .brand-stamp .logo{
   animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
   filter:
-    drop_shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop_shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+}
 
-    /* ===== HERO LIFTS (the simple version that worked) ===================== */
+/* ===== HERO LIFTS (the simple version that worked) ===================== */
 /* Make these numbers more negative to move each item UP */
 :root{
   --title-lift: -24px;   /* fire title image */
