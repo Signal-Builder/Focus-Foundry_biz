@@ -157,14 +157,14 @@ nav.nav--scrolled {
 }
 
 /* Fire brand header (single image with baked-in kicker) */
-.fire-title {
-  margin: 0 auto var(--gap-title-stamp);
+fire-title {
+  margin: 0 auto 4px;
   text-align: center;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
 .fire-logo {
-  width: min(100%, 1100px);
+  width: min(98%, 1200px); /* was 880px, increase max width */
   height: auto;
   display: block;
   margin: 0 auto;
