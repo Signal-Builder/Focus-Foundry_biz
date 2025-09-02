@@ -498,7 +498,7 @@ body.mood-volcano .brand-stamp .logo{
 /* ===== HERO LIFTS (the simple version that worked) ===================== */
 /* Make these numbers more negative to move each item UP */
 :root{
-  --title-lift: -20px;   /* fire title image */
+  --title-lift: -14px;   /* fire title image */
   --logo-lift:  -250px;  /* round FF logo */
   --lead-lift:  -275px;  /* subheading */
   --btn-lift:   -275px;  /* CTA button */
@@ -531,10 +531,10 @@ body.mood-volcano .brand-stamp .logo{
 /* Optional: soften lifts on small screens */
 @media (max-width: 840px){
   :root{
-    --title-lift: -10px;
+    --title-lift: -14px;
     --logo-lift:  -110px;
-    --lead-lift:  -120px;
-    --btn-lift:   -120px;
+    --lead-lift:  -100px;
+    --btn-lift:   -100px;
   }
 }
 /* Center the image with CSS Grid */
