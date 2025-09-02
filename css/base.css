@@ -465,7 +465,7 @@ footer {
 @media (max-width: 1800px){
   :root{
     --title-lift: -14px;
-    --logo-lift: -90px;
+    --logo-lift: -80px;
     --lead-lift: -80px;
     --btn-lift: -80px;
   }
