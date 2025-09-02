@@ -26,20 +26,24 @@
   --spacing-4: 24px;
   --spacing-5: 48px;
 
-  /* Layout */
-  --content-width: 1100px;
+/* Ember glow (RGB triple!) */
+  --lava-glow: 255,170,60; /* r,g,b */
+  --lava-alpha: .28;
 
+/* Layout */
+  --content-width: 1100px;
+  
   /* Z-Index Layers */
   --z-canvas: 10;
   --z-content: 20;
   --z-nav: 25;
-
+  
   /* HERO-SPECIFIC KNOBS - Tuned for vertical stacking */
   --hero-padding-top: clamp(80px, 15vh, 180px);
   --gap-title-stamp: clamp(24px, 4vh, 48px);
   --gap-stamp-lead: clamp(16px, 3vh, 32px);
   --gap-lead-btn: clamp(12px, 2vh, 24px);
-
+  
   /* HERO LIFTS - These are essential for the layout */
   --title-lift: -14px;
   --logo-lift: -300px;
@@ -53,6 +57,24 @@
   @property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
 }
 
+@keyframes lavaFlicker {
+  0% { --g1: 9px;  --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
+  8% { --g1: 13px; --g2: 28px; --gA: .50; transform: scale(1.006); opacity: 1; }
+  22% { --g1: 10px; --g2: 22px; --gA: .36; transform: scale(1.002); opacity: .99; }
+  38% { --g1: 15px; --g2: 34px; --gA: .60; transform: scale(1.010); opacity: 1; }
+  57% { --g1: 11px; --g2: 24px; --gA: .40; transform: scale(1.003); opacity: .99; }
+  76% { --g1: 16px; --g2: 36px; --gA: .64; transform: scale(1.012); opacity: 1; }
+  100% { --g1: 9px;  --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
+}
+
+/* Corrected body.mood-volcano styles */
+body.mood-volcano #hero .fire-logo,
+body.mood-volcano .brand-stamp .logo {
+  animation: lavaFlicker 3.6s linear infinite, logoTumble 28s linear infinite;
+  filter:
+    drop-shadow(0 0 var(--g1) rgba(245, 90, 16, var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245, 90, 16, calc(var(--gA) * .8)));
+}
 /* ========== Base ========== */
 *,
 *::before,
@@ -83,23 +105,23 @@ body {
   padding: var(--spacing-5) var(--spacing-4);
 }
 
-/* ========== Sticky translucent nav ========== */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: var(--z-nav);
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-4);
-  padding: 14px 0;
-  background: rgba(10, 10, 14, 0.45);
-  -webkit-backdrop-filter: saturate(120%) blur(8px);
-  backdrop-filter: saturate(120%) blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 17px;
-  letter-spacing: 0.02em;
-  transition: background 0.2s ease, padding 0.2s ease, box-shadow 0.2s ease;
+/* ========= Sticky nav ========= */
+nav{
+  position: sticky; top: 0; z-index: 25;
+  display:flex; justify-content:center; gap:24px;
+  padding:14px 0; background:rgba(10,10,14,.45);
+  -webkit-backdrop-filter:saturate(120%) blur(8px);
+  backdrop-filter:saturate(120%) blur(8px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:17px; letter-spacing:.02em;
 }
+nav a{
+  color:var(--brand-gold); text-decoration:none; font-weight:600;
+  text-shadow:
+    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha)*0.7)),
+    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha)*0.45));
+}
+nav a:hover{ color:#ffd88a; text-decoration:underline }
 
 /* Nav link glow with correct variables */
 nav a {
