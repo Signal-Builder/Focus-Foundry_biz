@@ -1,8 +1,8 @@
 /* ========== Fonts ========== */
 @font-face {
   font-family: 'sparatedregular';
-  src: url('../assets/separated/sparated-webfont.woff2') format('woff2'),
-       url('../assets/separated/sparated-webfont.woff') format('woff');
+  src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
+       url('../assets/fonts/separated/sparated-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -38,11 +38,7 @@
   --gap-title-stamp: clamp(24px, 4vh, 48px);
   --gap-stamp-lead: clamp(16px, 3vh, 32px);
   --gap-lead-btn: clamp(12px, 2vh, 24px);
-
-  /* Ember glow tokens (unified and correct) */
-  --lava-glow-rgb: 255, 170, 60;
-  --lava-alpha: 0.28;
-
+  
   /* HERO LIFTS */
   --title-lift: -14px;
   --logo-lift: -300px;
@@ -50,7 +46,7 @@
   --btn-lift: -370px;
   --lead-btn-gap: 10px;
 
-  /* CSS Houdini properties for flickering glow */
+  /* “Heat mode” custom properties */
   @property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
   @property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
   @property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
@@ -104,24 +100,15 @@ nav {
   transition: background 0.2s ease, padding 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Nav link glow */
 nav a {
-  position: relative;
   color: var(--brand-gold);
   text-decoration: none;
   font-weight: 600;
-  transition: color .2s ease;
-  text-shadow:
-    0 0 6px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.7)),
-    0 0 14px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.45));
 }
 
 nav a:hover {
   color: #ffd88a;
   text-decoration: underline;
-  text-shadow:
-    0 0 10px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 1.2)),
-    0 0 22px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.7));
 }
 
 nav.nav--scrolled {
@@ -180,39 +167,23 @@ nav.nav--scrolled {
   gap: 0;
 }
 
-/* Fire brand header (single image with baked-in kicker) */
+/* Hero title, image, lead and button now have the correct glow */
+.fire-title, .fire-logo, p.lead, .btn {
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+
+/* Correctly targeting the class for the fire title */
 .fire-title {
   margin: 0 auto var(--gap-title-stamp);
   text-align: center;
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-  position: relative;
-  /* Soft colored drop-shadows using --lava-glow-rgb / --lava-alpha */
-  filter:
-    drop-shadow(0 0 22px rgba(var(--lava-glow-rgb), var(--lava-alpha)))
-    drop-shadow(0 0 42px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * .55)));
-  animation: ff-breathe 3.8s ease-in-out infinite;
 }
 
-.fire-title::after {
-  content: "";
-  position: absolute;
-  inset: -2% -3%;
-  pointer-events: none;
-  background: radial-gradient(60% 55% at 50% 50%,
-    rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * .50)) 0%,
-    rgba(var(--lava-glow-rgb), 0) 65%);
-  filter: blur(14px);
-  opacity: .55;
-  animation: ff-breathe 4.2s ease-in-out infinite;
-  z-index: -1;
-}
-
+/* The fire-logo image itself also needs the drop shadow */
 .fire-logo {
   width: min(98%, 1200px);
   height: auto;
   display: block;
   margin: 0 auto;
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
 /* Hiding kicker text, as it's part of the image */
@@ -249,7 +220,7 @@ p.lead {
   max-width: 58ch;
 }
 
-/* Button styles */
+/* Updated button styles to match lava theme */
 .btn {
   display: inline-block;
   padding: 14px var(--spacing-4);
@@ -261,7 +232,6 @@ p.lead {
   box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
   transition: transform .12s ease, box-shadow .12s ease;
   margin: 0;
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
 .btn:hover {
@@ -505,7 +475,7 @@ footer {
   100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
 }
 
-/* This is the flicker for the fire-logo and brand-stamp */
+/* === “Heat mode” flicker/pulse (optional; toggle via .mood-volcano on <body>) */
 @keyframes lavaFlicker {
   0% { --g1: 9px; --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
   8% { --g1: 13px; --g2: 28px; --gA: .50; transform: scale(1.006); opacity: 1; }
@@ -516,37 +486,45 @@ footer {
   100% { --g1: 9px; --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
 }
 
-/* Turn on by adding class="mood-volcano" to <body> */
-body.mood-volcano #hero .fire-logo,
-body.mood-volcano .brand-stamp .logo {
-  animation: lavaFlicker 3.6s linear infinite, logoTumble 28s linear infinite;
+body.mood-volcano .fire-logo {
+  animation: lavaFlicker 3s infinite;
   filter:
     drop-shadow(0 0 var(--g1) rgba(245, 90, 16, var(--gA)))
     drop-shadow(0 0 var(--g2) rgba(245, 90, 16, calc(var(--gA) * .8)));
 }
 
-/* Hero title glow */
-.fire-title {
+body.mood-volcano .brand-stamp .logo {
+  animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
   filter:
-    drop-shadow(0 0 15px var(--lava-glow))
-    drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+    drop-shadow(0 0 var(--g1) rgba(245, 90, 16, var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245, 90, 16, calc(var(--gA) * .8)));
 }
 
-/* Lead paragraph glow */
-p.lead {
-  filter:
-    drop-shadow(0 0 15px var(--lava-glow))
-    drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+/* ===== HERO LIFTS (the simple version that worked) ===================== */
+#hero { overflow: visible; }
+
+#hero .fire-title,
+#hero .brand-stamp,
+#hero .lead,
+#hero .btn {
+  position: relative;
+  z-index: 3;
 }
 
-/* Button glow */
-.btn {
-  filter:
-    drop-shadow(0 0 15px var(--lava-glow))
-    drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+/* Lift each piece independently */
+#hero .fire-title { top: var(--title-lift); }
+#hero .brand-stamp { top: var(--logo-lift); }
+#hero .lead {
+  top: var(--lead-lift);
+  margin-bottom: var(--lead-btn-gap);
+  text-align: center;
+}
+#hero .btn {
+  top: var(--btn-lift);
+  margin-top: 0;
 }
 
-/* Mobile responsive styles */
+/* Optional: soften lifts on small screens */
 @media (max-width: 840px){
   :root{
     --title-lift: -14px;
@@ -556,17 +534,48 @@ p.lead {
   }
 }
 
-/* Final layout adjustments */
-.fire-title {
-  display: grid;
-  justify-items: center;
+/* Hero elements with glow filter */
+.fire-title, .brand-stamp, p.lead, .btn {
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+/* Re-applying the button glow */
+.btn {
+  background: var(--lava-glow);
+  color: var(--bg);
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--lava-glow);
+  filter: none; /* Ghost button should not have a background glow */
 }
 
 .fire-logo {
-  display: block;
-  margin: 0;
-  max-width: 100%;
+  width: min(98%, 1200px);
   height: auto;
+  display: block;
+  margin: 0 auto;
+}
+.fire-title::after {
+  content:"";
+  position:absolute; inset:-2% -3%;
+  pointer-events:none;
+  background: radial-gradient(60% 55% at 50% 50%,
+    rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * .50)) 0%,
+    rgba(var(--lava-glow-rgb), 0) 65%);
+  filter: blur(14px);
+  opacity:.55;
+  animation: ff-breathe 4.2s ease-in-out infinite;
+  z-index:-1;
+}
+.fire-title{
+  animation: ff-breathe 3.8s ease-in-out infinite;
+}
+
+@keyframes ff-breathe{
+  0% { opacity:.85; }
+  50% { opacity:1; }
+  100% { opacity:.85; }
 }
 
 .hero--full {
@@ -586,3 +595,4 @@ p.lead {
 .hero--full p.lead {
   font-size: clamp(20px, 3vw, 30px);
 }
+
