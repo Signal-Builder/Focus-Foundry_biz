@@ -500,8 +500,8 @@ body.mood-volcano .brand-stamp .logo{
 :root{
   --title-lift: -14px;   /* fire title image */
   --logo-lift:  -300px;  /* round FF logo */
-  --lead-lift:  -275px;  /* subheading */
-  --btn-lift:   -275px;  /* CTA button */
+  --lead-lift:  -300px;  /* subheading */
+  --btn-lift:   -300px;  /* CTA button */
   --lead-btn-gap: 10px;  /* spacing between subheading and button */
 }
 
