@@ -27,6 +27,12 @@
     background: 'transparent'
   });
 
+  function getLavaRGB(){
+  const glow = getComputedStyle(document.documentElement)
+                .getPropertyValue('--lava-glow').trim();   // "255, 170, 60"
+  const [r,g,b] = glow.split(',').map(v => parseInt(v, 10));
+  return { r, g, b };
+}
   // Particle model
   const baseCount = innerWidth < 640 ? 90 : innerWidth < 1024 ? 130 : 170;
   const P = [];
@@ -113,51 +119,51 @@
     }
   }
 
-  function drawParticle(p) {
-    // flicker & radii
-    const flick = 1 + (Math.random() - 0.5) * 0.25;
-    const Rcore = p.r * 2.5 * flick;   // was ~2.2
-    const Rhalo = p.r * 10.5 * flick;  // was ~9.0
+  function drawParticle(p, rgb) {
+  // flicker & radii
+  const flick  = 1 + (Math.random() - 0.5) * 0.25;
+  const Rcore  = p.r * 2.5 * flick;
+  const Rhalo  = p.r * 10.5 * flick;
 
-    // bright core (normal blend)
-    ctx.globalCompositeOperation = 'source-over';
-    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
-    g.addColorStop(0.0, 'rgba(255, 240, 170, 0.80)');
-    g.addColorStop(1.0, 'rgba(255, 160,  60, 0.00)');
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(p.x, p.y, Rcore, 0, Math.PI * 2); ctx.fill();
+  // bright core (normal blend)
+  ctx.globalCompositeOperation = 'source-over';
+  let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
+  g.addColorStop(0.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.90)`);
+  g.addColorStop(1.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.00)`);
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(p.x, p.y, Rcore, 0, Math.PI * 2); ctx.fill();
 
-    // warm halo (additive)
-    ctx.globalCompositeOperation = 'lighter';
-    g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rhalo);
-    g.addColorStop(0.0, 'rgba(255, 200, 80, 0.18)');
-    g.addColorStop(0.70,'rgba(255, 140, 40, 0.09)');
-    g.addColorStop(1.0, 'rgba(255, 140, 40, 0.00)');
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(p.x, p.y, Rhalo, 0, Math.PI * 2); ctx.fill();
-  }
+  // warm halo (additive)
+  ctx.globalCompositeOperation = 'lighter';
+  g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rhalo);
+  g.addColorStop(0.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.25)`);
+  g.addColorStop(0.70,`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.12)`);
+  g.addColorStop(1.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.00)`);
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(p.x, p.y, Rhalo, 0, Math.PI * 2); ctx.fill();
+}
 
   function frame(){
-    t += 0.006;
+  t += 0.006;
 
-    // keep the canvas transparent each frame
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect(0, 0, W, H);
+  // keep the canvas transparent each frame
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.clearRect(0, 0, W, H);
 
-    // update & draw
-    // (loop over a copy so we can splice/recycle safely)
-    const copy = P.slice();
-    for (const p of copy) {
-      update(p, t);
-      drawParticle(p);
-    }
+  const rgb = getLavaRGB();   // <-- read current CSS glow color once
 
-    requestAnimationFrame(frame);
+  // ... update positions / attraction etc ...
+
+  for (const p of P) {
+    // (your motion math ...)
+    drawParticle(p, rgb);     // <-- pass the color into the drawer
   }
-  frame();
-})();
 
-/* Sticky nav: adds a tighter style when scrolled */
+  requestAnimationFrame(frame);
+}
+  
+})();
+ Sticky nav: adds a tighter style when scrolled */
 (() => {
   const nav = document.getElementById('site-nav') || document.querySelector('nav');
   if (!nav) return;
