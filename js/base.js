@@ -27,12 +27,21 @@
     background: 'transparent'
   });
 
+  // SAFE reader for --lava-glow (expects "r,g,b"; falls back if not)
   function getLavaRGB(){
-  const glow = getComputedStyle(document.documentElement)
-                .getPropertyValue('--lava-glow').trim();   // "255, 170, 60"
-  const [r,g,b] = glow.split(',').map(v => parseInt(v, 10));
-  return { r, g, b };
-}
+    try {
+      const raw = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--lava-glow').trim();
+      // if it's like "255, 170, 60"
+      const triple = raw.split(',').map(v => parseInt(v.trim(), 10));
+      if (triple.length === 3 && triple.every(Number.isFinite)) {
+        return { r: triple[0], g: triple[1], b: triple[2] };
+      }
+    } catch (_) {}
+    // fallback warm orange
+    return { r: 255, g: 170, b: 60 };
+  }
+
   // Particle model
   const baseCount = innerWidth < 640 ? 90 : innerWidth < 1024 ? 130 : 170;
   const P = [];
@@ -59,8 +68,8 @@
     }
 
     // direction primarily toward the center, with some spread
-    const c = CENTER();
-    const dx = c.x - x, dy = c.y - y;
+    const cpos = CENTER();
+    const dx = cpos.x - x, dy = cpos.y - y;
     const len = Math.hypot(dx, dy) || 1;
     const dirx = dx / len, diry = dy / len;
 
@@ -84,10 +93,10 @@
     });
   }
 
-  // Seed particles (half from edges right now, half from all edges quickly)
+  // Seed particles
   for (let i = 0; i < baseCount; i++) spawnFromEdge();
 
-  function update(p, dt) {
+  function update(p) {
     // gentle curl noise around the velocity vector
     const curlStrength = 0.08 * dpr;                   // subtle
     const nx = -p.vy;                                  // perpendicular to velocity
@@ -102,15 +111,14 @@
     p.x += p.vx + nux * wobble;
     p.y += p.vy + nuy * wobble;
 
-    // if particle reaches near the center or exits far outside, respawn from an edge
-    const c = CENTER();
-    const distToCenter = Math.hypot(p.x - c.x, p.y - c.y);
-    const nearCenter = distToCenter < Math.min(W, H) * 0.12;  // reached the hearth zone
+    // recycle when reaching the hearth zone or far outside
+    const cpos = CENTER();
+    const distToCenter = Math.hypot(p.x - cpos.x, p.y - cpos.y);
+    const nearCenter = distToCenter < Math.min(W, H) * 0.12;
     const offscreen = (p.x < -EDGE_MARGIN*2 || p.x > W + EDGE_MARGIN*2 ||
                        p.y < -EDGE_MARGIN*2 || p.y > H + EDGE_MARGIN*2);
 
     if (nearCenter || offscreen) {
-      // recycle this particle
       const idx = P.indexOf(p);
       if (idx !== -1) {
         P.splice(idx, 1);
@@ -120,106 +128,48 @@
   }
 
   function drawParticle(p, rgb) {
-  // flicker & radii
-  const flick  = 1 + (Math.random() - 0.5) * 0.25;
-  const Rcore  = p.r * 2.5 * flick;
-  const Rhalo  = p.r * 10.5 * flick;
+    // flicker & radii
+    const flick  = 1 + (Math.random() - 0.5) * 0.25;
+    const Rcore  = p.r * 2.5 * flick;
+    const Rhalo  = p.r * 10.5 * flick;
 
-  // bright core (normal blend)
-  ctx.globalCompositeOperation = 'source-over';
-  let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
-  g.addColorStop(0.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.90)`);
-  g.addColorStop(1.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.00)`);
-  ctx.fillStyle = g;
-  ctx.beginPath(); ctx.arc(p.x, p.y, Rcore, 0, Math.PI * 2); ctx.fill();
+    // bright core (normal blend)
+    ctx.globalCompositeOperation = 'source-over';
+    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
+    g.addColorStop(0.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.90)`);
+    g.addColorStop(1.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.00)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rcore, 0, Math.PI * 2); ctx.fill();
 
-  // warm halo (additive)
-  ctx.globalCompositeOperation = 'lighter';
-  g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rhalo);
-  g.addColorStop(0.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.25)`);
-  g.addColorStop(0.70,`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.12)`);
-  g.addColorStop(1.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.00)`);
-  ctx.fillStyle = g;
-  ctx.beginPath(); ctx.arc(p.x, p.y, Rhalo, 0, Math.PI * 2); ctx.fill();
-}
+    // warm halo (additive)
+    ctx.globalCompositeOperation = 'lighter';
+    g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rhalo);
+    g.addColorStop(0.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.25)`);
+    g.addColorStop(0.70,`rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.12)`);
+    g.addColorStop(1.0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.00)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rhalo, 0, Math.PI * 2); ctx.fill();
+  }
 
   function frame(){
-  t += 0.006;
+    t += 0.006;
 
-  // keep the canvas transparent each frame
-  ctx.globalCompositeOperation = 'source-over';
-  ctx.clearRect(0, 0, W, H);
+    // keep the canvas transparent each frame
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, W, H);
 
-  const rgb = getLavaRGB();   // <-- read current CSS glow color once
+    const rgb = getLavaRGB();   // read current CSS glow color once
 
-  // ... update positions / attraction etc ...
+    // UPDATE + DRAW
+    // (loop over copy not required since we only splice on recycle in update)
+    for (let i = 0; i < P.length; i++) {
+      const p = P[i];
+      update(p);                // <-- you were missing this!
+      drawParticle(p, rgb);
+    }
 
-  for (const p of P) {
-    // (your motion math ...)
-    drawParticle(p, rgb);     // <-- pass the color into the drawer
+    requestAnimationFrame(frame);
   }
 
-  requestAnimationFrame(frame);
-}
-  
-})();
-/* Sticky nav: adds a tighter style when scrolled */
-(() => {
-  const nav = document.getElementById('site-nav') || document.querySelector('nav');
-  if (!nav) return;
-  const set = () => nav.classList.toggle('nav--scrolled', scrollY > 10);
-  set();
-  addEventListener('scroll', set, { passive:true });
-})();
-
-/* Stamp trigger: reliable—fires on load and when hero is visible */
-(() => {
-  const hero = document.getElementById('hero');
-  if (!hero) return;
-
-  const activate = () => hero.classList.add('play-stamp');
-
-  // Guaranteed after load
-  window.addEventListener('load', () => setTimeout(activate, 300));
-
-  // Also when visible (covers SPA/back/anchors)
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { activate(); io.disconnect(); } });
-    }, { threshold: 0.2 });
-    io.observe(hero);
-  }
-})();
-/* Ember glow color shuffler: slow, random warm hues */
-(() => {
-  const root = document.documentElement;
-
-  // warm palette: orange / yellow / red-orange
-  const palette = [
-    [255, 170,  60],  // orange
-    [255, 200,  80],  // yellow
-    [255, 140,  50],  // red-orange
-    [255, 185,  70],  // amber
-    [255, 160,  60]   // tangerine
-  ];
-
-  function tick(){
-    // pick a random warm color and a gentle opacity range
-    const [r,g,b] = palette[Math.floor(Math.random() * palette.length)];
-    const alpha   = 0.18 + Math.random() * 0.14; // 0.18–0.32
-
-    root.style.setProperty('--lava-glow',  `${r}, ${g}, ${b}`);
-    root.style.setProperty('--lava-alpha', alpha.toFixed(3));
-
-    // next change in 2.2–4.8s to feel organic
-    const next = 2200 + Math.random() * 2600;
-    setTimeout(tick, next);
-  }
-
-  // start shortly after load
-  if (document.readyState === 'complete') {
-    setTimeout(tick, 500);
-  } else {
-    window.addEventListener('load', () => setTimeout(tick, 500), { once:true });
-  }
+  frame();                      // <-- you were missing this!
 })();
