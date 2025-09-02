@@ -1,44 +1,61 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Focus Foundry · Cinematic Web Experiences</title>
-    <link rel="stylesheet" href="css/base.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Focus Foundry · Cinematic Web Experiences</title>
 
-    <!-- Favicons & App Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon.ico/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico/favicon-16x16.png">
-    <link rel="manifest" href="favicon.ico/site.webmanifest">
-    <link rel="shortcut icon" href="favicon.ico/favicon.ico">
-    <meta name="msapplication-TileColor" content="#0b0b0f">
-    <meta name="theme-color" content="#0b0b0f">
-</head>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base.css" />
+
+  <!-- Icons / PWA (pointing to /favicon.ico/ folder) -->
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon.ico/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon.ico/favicon-16x16.png">
+  <link rel="manifest" href="favicon.ico/site.webmanifest">
+  <!-- optional legacy .ico -->
+  <link rel="icon" href="favicon.ico/favicon.ico">
+
+<!-- Browser theme colors -->
+<!-- Supported by Chrome, Edge, Safari on iOS, Android Chrome. 
+     Ignored by Firefox/Opera. Safe fallback. -->
+<meta name="theme-color" content="#0b0b0f">
+<meta name="msapplication-TileColor" content="#0b0b0f">
+
+
 <body>
+  <!-- Canvas layer (embers) -->
+  <canvas id="bg" aria-hidden="true"></canvas>
 
-    <canvas id="bg" aria-hidden="true"></canvas>
+  <nav aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="pages/about.html">About</a>
+    <a href="pages/services.html">Services</a>
+    <a href="pages/case-studies.html">Case Studies</a>
+    <a href="pages/contact.html">Contact</a>
+  </nav>
 
-    <nav id="site-nav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="pages/about.html">About</a>
-        <a href="pages/services.html">Services</a>
-        <a href="pages/case-studies.html">Case Studies</a>
-        <a href="pages/contact.html">Contact</a>
-    </nav>
+  <main class="wrap">
+    <section class="hero hero--full" id="hero">
+      <h1 class="sr-only">Focus Foundry — Media Solutions</h1>
 
-    <main>
-        <section class="hero hero--tight play-stamp" id="hero">
-          <section class="hero hero--tight hero--full" id="hero">
-            <section class="hero-bg" aria-hidden="true">
-                <div class="hero-bg-layer hero-bg-layer--back"></div>
-                <div class="hero-bg-layer hero-bg-layer--mid"></div>
-                <div class="hero-bg-layer hero-bg-layer--front"></div>
-          </section>
-            <h1 class="sr-only">Focus Foundry</h1>
-            
+      <div class="fire-title">
+        <img class="fire-logo" src="assets/fonts/h1-ff.png" alt="Focus Foundry — Media Solutions">
+      </div>
+
+      <p class="lead">Cinematic landing pages and immersive web funnels that convert.</p>
+      <a class="btn" href="#services">View Services</a>
+    </section>
+
+    <!-- … your Services / Contact sections … -->
+
+    <footer>© 2025 Briteminds · Focus Foundry</footer>
+  </main>
+
+  <script src="js/base.js"></script>
+</body>
+</html>
+
             <div class="hero-content">
                 <div class="fire-title">
                   
