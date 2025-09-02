@@ -163,7 +163,7 @@
 }
   
 })();
- Sticky nav: adds a tighter style when scrolled */
+/* Sticky nav: adds a tighter style when scrolled */
 (() => {
   const nav = document.getElementById('site-nav') || document.querySelector('nav');
   if (!nav) return;
