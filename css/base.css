@@ -609,3 +609,25 @@ body.mood-volcano .brand-stamp .logo{
   50%  { opacity:1;   }
   100% { opacity:.85; }
 }
+/* === Ember glow for nav links === */
+nav a {
+  position: relative;
+  color: var(--brand-gold);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color .2s ease;
+  
+  /* Subtle ember glow */
+  text-shadow:
+    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
+    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.4));
+  animation: ff-breathe 4s ease-in-out infinite;
+}
+
+/* Stronger glow on hover */
+nav a:hover {
+  color: #ffd88a;
+  text-shadow:
+    0 0 10px rgba(var(--lava-glow), calc(var(--lava-alpha) * 1.2)),
+    0 0 22px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7));
+}
