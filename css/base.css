@@ -1,8 +1,8 @@
 /* ========== Fonts ========== */
 @font-face {
   font-family: 'sparatedregular';
-  src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
-       url('../assets/fonts/separated/sparated-webfont.woff') format('woff');
+  src: url('../assets/separated/sparated-webfont.woff2') format('woff2'),
+       url('../assets/separated/sparated-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -34,10 +34,26 @@
   --z-nav: 25;
 
   /* HERO-SPECIFIC KNOBS - Tuned for vertical stacking */
-  --hero-padding-top: clamp(80px, 15vh, 180px); /* Adjust top padding of the hero */
-  --gap-title-stamp: clamp(24px, 4vh, 48px);    /* Space between title image and spinning logo */
-  --gap-stamp-lead: clamp(16px, 3vh, 32px);     /* Space between spinning logo and lead paragraph */
-  --gap-lead-btn: clamp(12px, 2vh, 24px);       /* Space between lead paragraph and button */
+  --hero-padding-top: clamp(80px, 15vh, 180px);
+  --gap-title-stamp: clamp(24px, 4vh, 48px);
+  --gap-stamp-lead: clamp(16px, 3vh, 32px);
+  --gap-lead-btn: clamp(12px, 2vh, 24px);
+
+  /* Ember glow tokens (unified and correct) */
+  --lava-glow-rgb: 255, 170, 60;
+  --lava-alpha: 0.28;
+
+  /* HERO LIFTS */
+  --title-lift: -14px;
+  --logo-lift: -300px;
+  --lead-lift: -370px;
+  --btn-lift: -370px;
+  --lead-btn-gap: 10px;
+
+  /* CSS Houdini properties for flickering glow */
+  @property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
+  @property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
+  @property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
 }
 
 /* ========== Base ========== */
@@ -88,15 +104,24 @@ nav {
   transition: background 0.2s ease, padding 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Nav link glow */
 nav a {
+  position: relative;
   color: var(--brand-gold);
   text-decoration: none;
   font-weight: 600;
+  transition: color .2s ease;
+  text-shadow:
+    0 0 6px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.7)),
+    0 0 14px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.45));
 }
 
 nav a:hover {
   color: #ffd88a;
   text-decoration: underline;
+  text-shadow:
+    0 0 10px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 1.2)),
+    0 0 22px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.7));
 }
 
 nav.nav--scrolled {
@@ -108,18 +133,17 @@ nav.nav--scrolled {
 /* ========== Hero ========== */
 .hero {
   position: relative;
-  /* Use flexbox to position content vertically at the top */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Corrected to start from the top */
-  padding-top: var(--hero-padding-top); /* Push content down from the nav */
+  justify-content: flex-start;
+  padding-top: var(--hero-padding-top);
   padding-bottom: var(--spacing-5);
   text-align: center;
   border-radius: var(--spacing-4);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
+  overflow: visible;
   min-height: 100vh;
 }
 
@@ -153,22 +177,42 @@ nav.nav--scrolled {
   align-items: center;
   max-width: var(--content-width);
   margin: 0 auto;
-  gap: 0; /* Control gaps explicitly with margins on children */
+  gap: 0;
 }
 
 /* Fire brand header (single image with baked-in kicker) */
-fire-title {
-  margin: 0 auto px;
+.fire-title {
+  margin: 0 auto var(--gap-title-stamp);
   text-align: center;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  position: relative;
+  /* Soft colored drop-shadows using --lava-glow-rgb / --lava-alpha */
+  filter:
+    drop-shadow(0 0 22px rgba(var(--lava-glow-rgb), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * .55)));
+  animation: ff-breathe 3.8s ease-in-out infinite;
+}
+
+.fire-title::after {
+  content: "";
+  position: absolute;
+  inset: -2% -3%;
+  pointer-events: none;
+  background: radial-gradient(60% 55% at 50% 50%,
+    rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * .50)) 0%,
+    rgba(var(--lava-glow-rgb), 0) 65%);
+  filter: blur(14px);
+  opacity: .55;
+  animation: ff-breathe 4.2s ease-in-out infinite;
+  z-index: -1;
 }
 
 .fire-logo {
-  width: min(98%, 1200px); /* was 880px, increase max width */
+  width: min(98%, 1200px);
   height: auto;
   display: block;
   margin: 0 auto;
-    filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
 /* Hiding kicker text, as it's part of the image */
@@ -199,14 +243,13 @@ fire-title {
 /* Hero copy + CTA */
 p.lead {
   color: var(--lava-glow);
-  font-size: clamp(24px, 2.8vw, 32px); /* Increased font size */
+  font-size: clamp(24px, 2.8vw, 32px);
   margin: 0 auto var(--gap-lead-btn);
   text-shadow: 0 0 10px var(--lava-glow);
   max-width: 58ch;
-    filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-/* Updated button styles to match lava theme */
+/* Button styles */
 .btn {
   display: inline-block;
   padding: 14px var(--spacing-4);
@@ -218,7 +261,7 @@ p.lead {
   box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
   transition: transform .12s ease, box-shadow .12s ease;
   margin: 0;
-   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
 .btn:hover {
@@ -326,22 +369,16 @@ footer {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   background: rgba(10, 10, 14, 0.35);
-
-  /* Safari + older engines */
   -webkit-backdrop-filter: blur(4px) saturate(110%);
-  /* Standards */
   backdrop-filter: blur(4px) saturate(110%);
-
   transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
 
-/* Fallback when backdrop-filter isn’t supported */
 @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
   .svc {
     background: rgba(10, 10, 14, 0.65);
   }
 }
-
 
 .svc:hover {
   transform: translateY(-2px);
@@ -461,240 +498,91 @@ footer {
   75% { transform: rotateX(215deg) rotateY(295deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
+
+/* "Dragonflies" animation (for a separate animation if needed, but not part of the canvas) */
 @keyframes emberRise {
   0% { transform: translateY(0) scale(1); opacity: 1; }
   100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
 }
 
-/* === “Heat mode” flicker/pulse (optional; toggle via .mood-volcano on <body>) */
-@property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
-@property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
-@property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
-
+/* This is the flicker for the fire-logo and brand-stamp */
 @keyframes lavaFlicker {
-  0%   { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-  8%   { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
-  22%  { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
-  38%  { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
-  57%  { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
-  76%  { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
-  100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
+  0% { --g1: 9px; --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
+  8% { --g1: 13px; --g2: 28px; --gA: .50; transform: scale(1.006); opacity: 1; }
+  22% { --g1: 10px; --g2: 22px; --gA: .36; transform: scale(1.002); opacity: .99; }
+  38% { --g1: 15px; --g2: 34px; --gA: .60; transform: scale(1.010); opacity: 1; }
+  57% { --g1: 11px; --g2: 24px; --gA: .40; transform: scale(1.003); opacity: .99; }
+  76% { --g1: 16px; --g2: 36px; --gA: .64; transform: scale(1.012); opacity: 1; }
+  100% { --g1: 9px; --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
 }
 
-/* turn on by adding class="mood-volcano" to <body> */
-body.mood-volcano #hero .fire-logo{
-  animation: lavaFlicker 3s infinite;
+/* Turn on by adding class="mood-volcano" to <body> */
+body.mood-volcano #hero .fire-logo,
+body.mood-volcano .brand-stamp .logo {
+  animation: lavaFlicker 3.6s linear infinite, logoTumble 28s linear infinite;
   filter:
-    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+    drop-shadow(0 0 var(--g1) rgba(245, 90, 16, var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245, 90, 16, calc(var(--gA) * .8)));
 }
 
-body.mood-volcano .brand-stamp .logo{
-  animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
+/* Hero title glow */
+.fire-title {
   filter:
-    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+    drop-shadow(0 0 15px var(--lava-glow))
+    drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-/* ===== HERO LIFTS (the simple version that worked) ===================== */
-/* Make these numbers more negative to move each item UP */
-:root{
-  --title-lift: -14px;   /* fire title image */
-  --logo-lift:  -300px;  /* round FF logo */
-  --lead-lift:  -370px;  /* subheading */
-  --btn-lift:   -370px;  /* CTA button */
-  --lead-btn-gap: 10px;  /* spacing between subheading and button */
+/* Lead paragraph glow */
+p.lead {
+  filter:
+    drop-shadow(0 0 15px var(--lava-glow))
+    drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-#hero{ overflow: visible; } /* so negative offsets don't get clipped */
-
-#hero .fire-title,
-#hero .brand-stamp,
-#hero .lead,
-#hero .btn{
-  position: relative;     /* enables top: … offsets */
-  z-index: 3;
+/* Button glow */
+.btn {
+  filter:
+    drop-shadow(0 0 15px var(--lava-glow))
+    drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
-/* Lift each piece independently */
-#hero .fire-title{ top: var(--title-lift); }
-#hero .brand-stamp{ top: var(--logo-lift); }
-#hero .lead{
-  top: var(--lead-lift);
-  margin-bottom: var(--lead-btn-gap);
-  text-align: center;
-}
-#hero .btn{
-  top: var(--btn-lift);
-  margin-top: 0;
-}
-
-/* Optional: soften lifts on small screens */
+/* Mobile responsive styles */
 @media (max-width: 840px){
   :root{
     --title-lift: -14px;
-    --logo-lift:  -110px;
-    --lead-lift:  -100px;
-    --btn-lift:   -100px;
+    --logo-lift: -110px;
+    --lead-lift: -100px;
+    --btn-lift: -100px;
   }
 }
-/* Center the image with CSS Grid */
+
+/* Final layout adjustments */
 .fire-title {
   display: grid;
   justify-items: center;
 }
 
-/* Ensure the img can be centered cleanly */
 .fire-logo {
   display: block;
-  margin: 0;          /* reset any auto margins */
+  margin: 0;
   max-width: 100%;
   height: auto;
 }
-/* Full-bleed hero: breaks out of the .wrap max-width */
-.hero.hero--full {
-  /* pull the section to full viewport width while staying centered */
-  margin-left:  calc(50% - 50vw);
+
+.hero--full {
+  margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  padding-left:  max(24px, 5vw);
+  padding-left: max(24px, 5vw);
   padding-right: max(24px, 5vw);
 }
 
-/* Now the flame title can be much larger */
-.hero.hero--full .fire-logo {
-  width: min(96vw, 1800px);  /* big on desktop, responsive on small screens */
+.hero--full .fire-logo {
+  width: min(96vw, 1800px);
   height: auto;
   display: block;
   margin: 0 auto;
 }
 
-/* Balance the tagline with the bigger title */
-.hero.hero--full p.lead {
+.hero--full p.lead {
   font-size: clamp(20px, 3vw, 30px);
-}
-/* --- Ember glow tokens --- */
-:root{
-  /* start warm orange; JS will randomize these */
-  --lava-glow: 255, 170, 60;    /* r,g,b */
-  --lava-alpha: 0.22;           /* base opacity 0–1 */
-}
-
-/* Subtle breathing on the hero title (uses the variables above) */
-.fire-title{
-  position: relative;
-  /* soft colored drop-shadows using --lava-glow / --lava-alpha */
-  filter:
-    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
-    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55)));
-  animation: ff-breathe 3.8s ease-in-out infinite;
-}
-
-/* Optional: a very soft inner glow behind the flame letters */
-.fire-title::after{
-  content:"";
-  position:absolute; inset:-2% -3%;
-  pointer-events:none;
-  background: radial-gradient(60% 55% at 50% 50%,
-              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
-              rgba(var(--lava-glow), 0) 65%);
-  filter: blur(14px);
-  opacity:.55;
-  animation: ff-breathe 4.2s ease-in-out infinite;
-  z-index:-1;        /* stays behind the title image */
-}
-
-/* Gentle breathing (intensity only; color comes from JS) */
-@keyframes ff-breathe{
-  0%   { opacity:.85; }
-  50%  { opacity:1;   }
-  100% { opacity:.85; }
-}
-/* === Ember glow for nav links === */
-nav a {
-  position: relative;
-  color: var(--brand-gold);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color .2s ease;
-  
-  /* Subtle ember glow */
-  text-shadow:
-    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
-    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.4));
-  animation: ff-breathe 4s ease-in-out infinite;
-}
-
-/* Stronger glow on hover */
-nav a:hover {
-  color: #ffd88a;
-  text-shadow:
-    0 0 10px rgba(var(--lava-glow), calc(var(--lava-alpha) * 1.2)),
-    0 0 22px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7));
-}
-/* === SAFETY NET: restore palette + constant glow === */
-:root{
-  --bg:#0b0b0f;
-  --ink:#e7e7ee;
-  --muted:#9aa0a6;
-  --accent:#66e0ff;
-  --brand-gold:#f0c870;
-  /* ember glow vars (constant intensity) */
-  --lava-glow: 255, 170, 60;  /* r,g,b; JS can still swap color */
-  --lava-alpha: 0.28;         /* fixed intensity so it never disappears */
-}
-
-/* Body text color (ensure we didn't lose it) */
-body { color: var(--ink) !important; }
-
-/* Lead paragraph back to muted (not white) */
-p.lead {
-  color: var(--muted) !important;
-  font-size: clamp(20px, 3vw, 28px); /* keep your larger size */
-   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-}
-
-/* Button back to accent fill */
-.btn{
-  background: var(--accent) !important;
-  color: #0b0b0f !important;
-  border: 0 !important;
-   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5))
-!important;
-}
-.btn:hover{
-  transform: translateY(-2px) !important;
-}
-
-/* Hero flame title glow (tight; constant, no animation) */
-.fire-title{
-  position: relative;
-  filter:
-    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
-    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55))) !important;
-  animation: none !important;
-   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-
-}
-
-/* Optional inner glow behind the title (kept tight) */
-.fire-title::after{
-  content:"";
-  position:absolute; inset:-2% -3%;
-  pointer-events:none;
-  background: radial-gradient(60% 55% at 50% 50%,
-              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
-              rgba(var(--lava-glow), 0) 65%);
-  filter: blur(14px);
-  opacity:.55;
-  z-index:-1;
-  animation: none !important;
-}
-
-/* Nav link glow constant (no pulse) */
-nav a{
-  text-shadow:
-    0 0 6px  rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
-    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.45)) !important;
-  animation: none !important;
 }
