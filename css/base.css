@@ -462,12 +462,12 @@ footer {
 }
 
 /* ===== HERO LIFTS (Media Queries) ===================== */
-@media (max-width: 840px){
+@media (max-width: 1800px){
   :root{
     --title-lift: -14px;
-    --logo-lift: -110px;
-    --lead-lift: -100px;
-    --btn-lift: -100px;
+    --logo-lift: -90px;
+    --lead-lift: -80px;
+    --btn-lift: -80px;
   }
 }
 
