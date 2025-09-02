@@ -498,10 +498,10 @@ body.mood-volcano .brand-stamp .logo{
 /* ===== HERO LIFTS (the simple version that worked) ===================== */
 /* Make these numbers more negative to move each item UP */
 :root{
-  --title-lift: -30px;   /* fire title image */
-  --logo-lift:  -300px;  /* round FF logo */
-  --lead-lift:  -300px;  /* subheading */
-  --btn-lift:   -300px;  /* CTA button */
+  --title-lift: -20px;   /* fire title image */
+  --logo-lift:  -250px;  /* round FF logo */
+  --lead-lift:  -250px;  /* subheading */
+  --btn-lift:   -250px;  /* CTA button */
   --lead-btn-gap: 10px;  /* spacing between subheading and button */
 }
 
