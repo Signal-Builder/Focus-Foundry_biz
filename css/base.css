@@ -561,7 +561,7 @@ body.mood-volcano .brand-stamp .logo{
 
 /* Now the flame title can be much larger */
 .hero.hero--full .fire-logo {
-  width: min(96vw, 1600px);  /* big on desktop, responsive on small screens */
+  width: min(96vw, 1800px);  /* big on desktop, responsive on small screens */
   height: auto;
   display: block;
   margin: 0 auto;
