@@ -631,3 +631,66 @@ nav a:hover {
     0 0 10px rgba(var(--lava-glow), calc(var(--lava-alpha) * 1.2)),
     0 0 22px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7));
 }
+/* === SAFETY NET: restore palette + constant glow === */
+:root{
+  --bg:#0b0b0f;
+  --ink:#e7e7ee;
+  --muted:#9aa0a6;
+  --accent:#66e0ff;
+  --brand-gold:#f0c870;
+  /* ember glow vars (constant intensity) */
+  --lava-glow: 255, 170, 60;  /* r,g,b; JS can still swap color */
+  --lava-alpha: 0.28;         /* fixed intensity so it never disappears */
+}
+
+/* Body text color (ensure we didn't lose it) */
+body { color: var(--ink) !important; }
+
+/* Lead paragraph back to muted (not white) */
+p.lead {
+  color: var(--muted) !important;
+  font-size: clamp(20px, 3vw, 28px); /* keep your larger size */
+}
+
+/* Button back to accent fill */
+.btn{
+  background: var(--accent) !important;
+  color: #0b0b0f !important;
+  border: 0 !important;
+  box-shadow: 0 8px 24px rgba(102,224,255,.35) !important;
+}
+.btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(102,224,255,.45) !important;
+}
+
+/* Hero flame title glow (tight; constant, no animation) */
+.fire-title{
+  position: relative;
+  filter:
+    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55))) !important;
+  animation: none !important;
+}
+
+/* Optional inner glow behind the title (kept tight) */
+.fire-title::after{
+  content:"";
+  position:absolute; inset:-2% -3%;
+  pointer-events:none;
+  background: radial-gradient(60% 55% at 50% 50%,
+              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
+              rgba(var(--lava-glow), 0) 65%);
+  filter: blur(14px);
+  opacity:.55;
+  z-index:-1;
+  animation: none !important;
+}
+
+/* Nav link glow constant (no pulse) */
+nav a{
+  text-shadow:
+    0 0 6px  rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
+    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.45)) !important;
+  animation: none !important;
+}
