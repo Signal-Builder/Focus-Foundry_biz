@@ -164,7 +164,7 @@ nav.nav--scrolled {
 }
 
 .fire-logo {
-  width: min(500%, 3000px);
+  width: min(100%, 1100px);
   height: auto;
   display: block;
   margin: 0 auto;
@@ -529,12 +529,12 @@ body.mood-volcano .brand-stamp .logo{
 }
 
 /* Optional: soften lifts on small screens */
-@media (max-width: 640px){
+@media (max-width: 840px){
   :root{
-    --title-lift: -14px;
+    --title-lift: -10px;
     --logo-lift:  -110px;
-    --lead-lift:  -100px;
-    --btn-lift:   -100px;
+    --lead-lift:  -120px;
+    --btn-lift:   -120px;
   }
 }
 /* Center the image with CSS Grid */
