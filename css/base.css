@@ -158,7 +158,7 @@ nav.nav--scrolled {
 
 /* Fire brand header (single image with baked-in kicker) */
 fire-title {
-  margin: 0 auto 4px;
+  margin: 0 auto 12px;
   text-align: center;
   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
