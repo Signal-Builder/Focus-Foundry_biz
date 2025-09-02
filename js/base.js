@@ -1,158 +1,169 @@
-/* Focus Foundry – clean embers (no burst), stable hearth, gentle motion */
+/* Focus Foundry – Embers from all sides (no logo attraction), slightly larger */
 (() => {
-  const canvas = document.getElementById('bg');
-  if (!canvas) {
-    console.warn('No #bg canvas found');
-    return;
+  const c = document.getElementById('bg');
+  if (!c) { console.warn('No #bg canvas found'); return; }
+  const ctx = c.getContext('2d', { alpha: true });
+
+  // DPR + sizing
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  let W = 0, H = 0, t = 0;
+
+  function resize(){
+    W = c.width  = Math.max(1, Math.floor(innerWidth  * dpr));
+    H = c.height = Math.max(1, Math.floor(innerHeight * dpr));
+    c.style.width  = innerWidth  + 'px';
+    c.style.height = innerHeight + 'px';
   }
-  const ctx = canvas.getContext('2d', { alpha: true });
-
-  // --- Constants and State ---
-  const DPR = Math.min(2, window.devicePixelRatio || 1);
-  const ATTRACTION_PULL_FACTOR = 0.008;
-  const ATTRACTION_PULL_CAP = 24;
-  const DRAGON_FLY_FACTOR = 0.006;
-  const PARTICLE_SPEED_MIN = 0.22;
-  const PARTICLE_SPEED_MAX = 0.55;
-  const PARTICLE_SIZE_MIN = 0.8;
-  const PARTICLE_SIZE_MAX = 1.4;
-  const HEARTH_RADIUS_MIN = 6;
-  const HEARTH_RADIUS_MAX = 18;
-
-  let width = 0,
-    height = 0,
-    time = 0;
-
-  // --- Utility Functions ---
-  const resize = () => {
-    width = canvas.width = Math.max(1, Math.floor(innerWidth * DPR));
-    height = canvas.height = Math.max(1, Math.floor(innerHeight * DPR));
-    canvas.style.width = innerWidth + 'px';
-    canvas.style.height = innerHeight + 'px';
-  };
-
-  const getHearthPosition = () => {
-    // The hearth now follows the brand-stamp logo
-    const brandStamp = document.querySelector('.brand-stamp');
-    if (brandStamp) {
-      const rect = brandStamp.getBoundingClientRect();
-      const x = (rect.left + rect.right) / 2;
-      const y = (rect.top + rect.bottom) / 2 + scrollY;
-      return { x: x * DPR, y: y * DPR };
-    }
-    // Fallback to center of canvas if logo not found
-    return { x: width / 2, y: height / 2 };
-  };
-
-  // --- Particle Logic ---
-  const getParticleCount = () => {
-    if (innerWidth < 640) return 90;
-    if (innerWidth < 1024) return 130;
-    return 170;
-  };
-
-  const particles = [];
-  const createParticle = (x, y) => ({
-    x,
-    y,
-    r: (Math.random() * (PARTICLE_SIZE_MAX - PARTICLE_SIZE_MIN) + PARTICLE_SIZE_MIN) * DPR,
-    s: Math.random() * (PARTICLE_SPEED_MAX - PARTICLE_SPEED_MIN) + PARTICLE_SPEED_MIN,
-    a: Math.random() * Math.PI * 2,
-  });
-
-  const seedParticles = () => {
-    particles.length = 0; // Clear existing particles
-    const particleCount = getParticleCount();
-
-    for (let i = 0; i < particleCount; i++) {
-      // All particles will now be seeded randomly across the screen
-      particles.push(createParticle(Math.random() * width, Math.random() * height));
-    }
-  };
-
-  // --- Animation Loop ---
-  const draw = () => {
-    time += DRAGON_FLY_FACTOR;
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect(0, 0, width, height);
-    const hearth = getHearthPosition();
-
-    for (const p of particles) {
-      // Gentle drift and motion
-      p.x += Math.cos(p.a) * p.s;
-      p.y += Math.sin(p.a + time) * p.s;
-      p.a += (Math.random() - 0.5) * 0.05;
-
-      // Attraction to hearth
-      const dx = hearth.x - p.x;
-      const dy = hearth.y - p.y;
-      const distSq = dx * dx + dy * dy + 1e-3;
-      const pull = Math.min(ATTRACTION_PULL_FACTOR, ATTRACTION_PULL_CAP / distSq);
-      p.x += dx * pull;
-      p.y += dy * pull;
-
-      // Wrap around screen
-      if (p.x < 0) p.x += width;
-      if (p.x > width) p.x -= width;
-      if (p.y < 0) p.y += height;
-      if (p.y > height) p.y -= height;
-
-      // Draw particle
-      const flicker = 1 + (Math.random() - 0.5) * 0.25;
-      const coreRadius = p.r * 2.0 * flicker;
-      const haloRadius = p.r * 8.0 * flicker;
-
-      // Bright core
-      ctx.globalCompositeOperation = 'source-over';
-      let gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, coreRadius);
-      gradient.addColorStop(0, 'rgba(255,240,170,0.75)');
-      gradient.addColorStop(1, 'rgba(255,160,60,0.00)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, coreRadius, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Warm halo (additive blend)
-      ctx.globalCompositeOperation = 'lighter';
-      gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, haloRadius);
-      gradient.addColorStop(0, 'rgba(255,200,80,0.16)');
-      gradient.addColorStop(0.7, 'rgba(255,140,40,0.08)');
-      gradient.addColorStop(1, 'rgba(255,140,40,0.00)');
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, haloRadius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    requestAnimationFrame(draw);
-  };
-
-  // --- Setup ---
-  addEventListener('resize', () => {
-    resize();
-    seedParticles();
-  }, { passive: true });
+  addEventListener('resize', resize, { passive:true });
   resize();
-  seedParticles();
-  draw();
 
-  // Initial style application
-  Object.assign(canvas.style, {
+  // Layer: behind content, above body bg
+  Object.assign(c.style, {
     position: 'fixed',
     inset: '0',
     zIndex: '10',
     pointerEvents: 'none',
     display: 'block',
-    background: 'transparent',
+    background: 'transparent'
   });
+
+  // Particle model
+  const baseCount = innerWidth < 640 ? 90 : innerWidth < 1024 ? 130 : 170;
+  const P = [];
+  const EDGE_MARGIN = 4 * dpr;     // spawn just outside the view
+  const CENTER = () => ({ x: W * 0.5, y: H * 0.5 });
+
+  function spawnFromEdge() {
+    // pick an edge: 0=top,1=right,2=bottom,3=left
+    const edge = Math.floor(Math.random() * 4);
+    let x, y;
+
+    if (edge === 0) {               // top
+      x = Math.random() * W;
+      y = -EDGE_MARGIN;
+    } else if (edge === 1) {        // right
+      x = W + EDGE_MARGIN;
+      y = Math.random() * H;
+    } else if (edge === 2) {        // bottom
+      x = Math.random() * W;
+      y = H + EDGE_MARGIN;
+    } else {                        // left
+      x = -EDGE_MARGIN;
+      y = Math.random() * H;
+    }
+
+    // direction primarily toward the center, with some spread
+    const c = CENTER();
+    const dx = c.x - x, dy = c.y - y;
+    const len = Math.hypot(dx, dy) || 1;
+    const dirx = dx / len, diry = dy / len;
+
+    // base speed (inward) and slight random angle (spread)
+    const speed = (0.35 + Math.random() * 0.55) * dpr; // 0.35..0.9
+    const spread = (Math.random() - 0.5) * 0.6;        // +/- ~0.3 rad
+    const cs = Math.cos(spread), sn = Math.sin(spread);
+
+    const vx = (dirx * cs - diry * sn) * speed;
+    const vy = (dirx * sn + diry * cs) * speed;
+
+    // slightly bigger sparks than before
+    const r = (Math.random() * 2.0 + 1.2) * dpr;       // ↑ size ~15–25%
+
+    P.push({
+      x, y,
+      vx, vy,
+      r,
+      a: Math.random() * Math.PI * 2,                  // angle for noise
+      wob: Math.random() * 2 * Math.PI                 // phase offset
+    });
+  }
+
+  // Seed particles (half from edges right now, half from all edges quickly)
+  for (let i = 0; i < baseCount; i++) spawnFromEdge();
+
+  function update(p, dt) {
+    // gentle curl noise around the velocity vector
+    const curlStrength = 0.08 * dpr;                   // subtle
+    const nx = -p.vy;                                  // perpendicular to velocity
+    const ny =  p.vx;
+    const nlen = Math.hypot(nx, ny) || 1;
+    const nux = nx / nlen, nuy = ny / nlen;
+
+    p.a += (Math.random() - 0.5) * 0.05;               // random jitter to vary sin phase
+    const wobble = Math.sin(t * 1.3 + p.wob + p.a) * curlStrength;
+
+    // advance
+    p.x += p.vx + nux * wobble;
+    p.y += p.vy + nuy * wobble;
+
+    // if particle reaches near the center or exits far outside, respawn from an edge
+    const c = CENTER();
+    const distToCenter = Math.hypot(p.x - c.x, p.y - c.y);
+    const nearCenter = distToCenter < Math.min(W, H) * 0.12;  // reached the hearth zone
+    const offscreen = (p.x < -EDGE_MARGIN*2 || p.x > W + EDGE_MARGIN*2 ||
+                       p.y < -EDGE_MARGIN*2 || p.y > H + EDGE_MARGIN*2);
+
+    if (nearCenter || offscreen) {
+      // recycle this particle
+      const idx = P.indexOf(p);
+      if (idx !== -1) {
+        P.splice(idx, 1);
+        spawnFromEdge();
+      }
+    }
+  }
+
+  function drawParticle(p) {
+    // flicker & radii
+    const flick = 1 + (Math.random() - 0.5) * 0.25;
+    const Rcore = p.r * 2.5 * flick;   // was ~2.2
+    const Rhalo = p.r * 10.5 * flick;  // was ~9.0
+
+    // bright core (normal blend)
+    ctx.globalCompositeOperation = 'source-over';
+    let g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rcore);
+    g.addColorStop(0.0, 'rgba(255, 240, 170, 0.80)');
+    g.addColorStop(1.0, 'rgba(255, 160,  60, 0.00)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rcore, 0, Math.PI * 2); ctx.fill();
+
+    // warm halo (additive)
+    ctx.globalCompositeOperation = 'lighter';
+    g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Rhalo);
+    g.addColorStop(0.0, 'rgba(255, 200, 80, 0.18)');
+    g.addColorStop(0.70,'rgba(255, 140, 40, 0.09)');
+    g.addColorStop(1.0, 'rgba(255, 140, 40, 0.00)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p.x, p.y, Rhalo, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function frame(){
+    t += 0.006;
+
+    // keep the canvas transparent each frame
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, W, H);
+
+    // update & draw
+    // (loop over a copy so we can splice/recycle safely)
+    const copy = P.slice();
+    for (const p of copy) {
+      update(p, t);
+      drawParticle(p);
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
 })();
 
 /* Sticky nav: adds a tighter style when scrolled */
 (() => {
   const nav = document.getElementById('site-nav') || document.querySelector('nav');
   if (!nav) return;
-  const setStickyState = () => nav.classList.toggle('nav--scrolled', scrollY > 10);
-  setStickyState();
-  addEventListener('scroll', setStickyState, { passive: true });
+  const set = () => nav.classList.toggle('nav--scrolled', scrollY > 10);
+  set();
+  addEventListener('scroll', set, { passive:true });
 })();
 
 /* Stamp trigger: reliable—fires on load and when hero is visible */
@@ -160,172 +171,16 @@
   const hero = document.getElementById('hero');
   if (!hero) return;
 
-  const activateStamp = () => hero.classList.add('play-stamp');
+  const activate = () => hero.classList.add('play-stamp');
 
-  // Guaranteed to fire after page load
-  window.addEventListener('load', () => setTimeout(activateStamp, 300));
+  // Guaranteed after load
+  window.addEventListener('load', () => setTimeout(activate, 300));
 
-  // Also fires when element becomes visible
+  // Also when visible (covers SPA/back/anchors)
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            activateStamp();
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(hero);
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { activate(); io.disconnect(); } });
+    }, { threshold: 0.2 });
+    io.observe(hero);
   }
-})();
-/* ===== Full-screen ember layer (independent of logo) ===== */
-(() => {
-  const cvs = document.getElementById('bg');
-  if (!cvs) return;
-  const ctx = cvs.getContext('2d');
-
-  // ---- Tweakables ----
-  const SETTINGS = {
-  countBase: 240,
-  densityFactor: 0.00018,
-  sizeMin: 1.2,
-  sizeMax: 3.0,
-  speedY: [-0.35, -0.9],
-  speedX: [-0.22, 0.22],
-  lifeMin: 3.8,
-  lifeMax: 7.8,
-  glowBlur: 18,
-  tailFade: 0.12, // longer trails
-  // flicker tuning
-  flickerFreqMin: 1.2, // Hz
-  flickerFreqMax: 2.2,
-  flareChance: 0.015,  // 1.5% per second
-  flareBoost: 1.6
-};
-function spawnParticle() {
-  return {
-    x: Math.random() * W,
-    y: Math.random() * H,
-    r: rand(SETTINGS.sizeMin, SETTINGS.sizeMax),
-    vx: rand(SETTINGS.speedX[0], SETTINGS.speedX[1]),
-    vy: rand(SETTINGS.speedY[0], SETTINGS.speedY[1]),
-    life: 0,
-    lifeMax: rand(SETTINGS.lifeMin, SETTINGS.lifeMax),
-    seed: Math.random() * 1000,
-    freq: rand(SETTINGS.flickerFreqMin, SETTINGS.flickerFreqMax),
-    flare: 0
-  };
-}
-
-
-  let DPR = 1, W = 0, H = 0, particles = [], last = 0;
-
-  function rand(a, b) { return a + Math.random() * (b - a); }
-  function choice(a,b){ return Math.random() < .5 ? a : b; }
-
-  function resize() {
-    DPR = window.devicePixelRatio || 1;
-    W = Math.max(1, window.innerWidth);
-    H = Math.max(1, window.innerHeight);
-
-    cvs.width = Math.floor(W * DPR);
-    cvs.height = Math.floor(H * DPR);
-    cvs.style.width = W + 'px';
-    cvs.style.height = H + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-
-    // target count grows with area
-    const target = Math.round(
-      SETTINGS.countBase + W * H * SETTINGS.densityFactor
-    );
-
-    // adjust pool size
-    if (particles.length > target) particles.length = target;
-    while (particles.length < target) particles.push(spawnParticle());
-  }
-
-  function spawnParticle() {
-    return {
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: rand(SETTINGS.sizeMin, SETTINGS.sizeMax),
-      vx: rand(SETTINGS.speedX[0], SETTINGS.speedX[1]),
-      vy: rand(SETTINGS.speedY[0], SETTINGS.speedY[1]),
-      life: 0,
-      lifeMax: rand(SETTINGS.lifeMin, SETTINGS.lifeMax)
-    };
-  }
-
-  function step(dt) {
-    // subtle motion blur for trails
-    // subtle motion blur for trails
-ctx.globalCompositeOperation = 'source-over';
-ctx.fillStyle = `rgba(0,0,0,${SETTINGS.tailFade})`;
-ctx.fillRect(0, 0, W, H);
-
-ctx.globalCompositeOperation = 'lighter';
-
-for (let p of particles) {
-  p.life += dt;
-  if (p.life > p.lifeMax || p.y < -12 || p.x < -12 || p.x > W + 12) {
-    Object.assign(p, spawnParticle());      // respawn
-    p.y = H + Math.random() * 40;           // bias from bottom when reusing
-  }
-
-  // physics
-  p.x += p.vx;
-  p.y += p.vy;
-
-  // per-particle flicker (combine sine + nested sine for pseudo-random)
-  const t = p.life * p.freq + p.seed;
-  const base = 0.65 + 0.35 * Math.sin(t * 6.283 + Math.sin(t * 2.7) * 0.7);
-  // occasional brief flare
-  if (Math.random() < SETTINGS.flareChance * dt) p.flare = 0.5; // seconds
-  if (p.flare > 0) { p.flare -= dt; }
-  const flare = p.flare > 0 ? SETTINGS.flareBoost : 1.0;
-
-  // radius + glow flicker
-  const rNow = p.r * (0.9 + 0.35 * base) * flare;
-  const blurNow = SETTINGS.glowBlur * (0.7 + 0.6 * base) * flare;
-
-  // warm color ramp (center = hot)
-  const hotAlpha = 0.92 * (0.8 + 0.2 * base);
-  const midAlpha = 0.55 * (0.8 + 0.2 * base);
-
-  const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rNow * 2.2);
-  grad.addColorStop(0.00, `rgba(255, 230, 160, ${hotAlpha})`); // white-hot core
-  grad.addColorStop(0.35, `rgba(255, 170, 70,  ${midAlpha})`); // bright orange
-  grad.addColorStop(1.00, `rgba(120, 20, 0,  0)`);             // fade out
-
-  ctx.save();
-  ctx.shadowBlur = blurNow;
-  ctx.shadowColor = `rgba(255,120,30,${0.55 * (0.8 + 0.2 * base)})`;
-  ctx.fillStyle = grad;
-  ctx.beginPath();
-  ctx.arc(p.x, p.y, rNow * 1.8, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-}
-
-
-  function loop(ts) {
-    if (!last) last = ts;
-    const dt = Math.min(0.05, (ts - last) / 1000); // clamp delta
-    last = ts;
-    step(dt);
-    requestAnimationFrame(loop);
-  }
-
-  // init
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
-
-  // start with a soft clear so first frame isn’t black-flash
-  ctx.fillStyle = 'rgba(0,0,0,0)';
-  ctx.fillRect(0, 0, W, H);
-requestAnimationFrame(loop);
-  };
 })();
