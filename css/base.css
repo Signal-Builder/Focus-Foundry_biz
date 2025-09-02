@@ -572,3 +572,40 @@ body.mood-volcano .brand-stamp .logo{
 .hero.hero--full p.lead {
   font-size: clamp(20px, 3vw, 30px);
 }
+/* --- Ember glow tokens --- */
+:root{
+  /* start warm orange; JS will randomize these */
+  --lava-glow: 255, 170, 60;    /* r,g,b */
+  --lava-alpha: 0.22;           /* base opacity 0–1 */
+}
+
+/* Subtle breathing on the hero title (uses the variables above) */
+.fire-title{
+  position: relative;
+  /* soft colored drop-shadows using --lava-glow / --lava-alpha */
+  filter:
+    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55)));
+  animation: ff-breathe 3.8s ease-in-out infinite;
+}
+
+/* Optional: a very soft inner glow behind the flame letters */
+.fire-title::after{
+  content:"";
+  position:absolute; inset:-2% -3%;
+  pointer-events:none;
+  background: radial-gradient(60% 55% at 50% 50%,
+              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
+              rgba(var(--lava-glow), 0) 65%);
+  filter: blur(14px);
+  opacity:.55;
+  animation: ff-breathe 4.2s ease-in-out infinite;
+  z-index:-1;        /* stays behind the title image */
+}
+
+/* Gentle breathing (intensity only; color comes from JS) */
+@keyframes ff-breathe{
+  0%   { opacity:.85; }
+  50%  { opacity:1;   }
+  100% { opacity:.85; }
+}

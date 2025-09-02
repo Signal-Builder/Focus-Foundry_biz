@@ -184,3 +184,36 @@
     io.observe(hero);
   }
 })();
+/* Ember glow color shuffler: slow, random warm hues */
+(() => {
+  const root = document.documentElement;
+
+  // warm palette: orange / yellow / red-orange
+  const palette = [
+    [255, 170,  60],  // orange
+    [255, 200,  80],  // yellow
+    [255, 140,  50],  // red-orange
+    [255, 185,  70],  // amber
+    [255, 160,  60]   // tangerine
+  ];
+
+  function tick(){
+    // pick a random warm color and a gentle opacity range
+    const [r,g,b] = palette[Math.floor(Math.random() * palette.length)];
+    const alpha   = 0.18 + Math.random() * 0.14; // 0.18–0.32
+
+    root.style.setProperty('--lava-glow',  `${r}, ${g}, ${b}`);
+    root.style.setProperty('--lava-alpha', alpha.toFixed(3));
+
+    // next change in 2.2–4.8s to feel organic
+    const next = 2200 + Math.random() * 2600;
+    setTimeout(tick, next);
+  }
+
+  // start shortly after load
+  if (document.readyState === 'complete') {
+    setTimeout(tick, 500);
+  } else {
+    window.addEventListener('load', () => setTimeout(tick, 500), { once:true });
+  }
+})();
