@@ -650,6 +650,8 @@ body { color: var(--ink) !important; }
 p.lead {
   color: var(--muted) !important;
   font-size: clamp(20px, 3vw, 28px); /* keep your larger size */
+   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+}
 }
 
 /* Button back to accent fill */
@@ -657,11 +659,11 @@ p.lead {
   background: var(--accent) !important;
   color: #0b0b0f !important;
   border: 0 !important;
-  box-shadow: 0 8px 24px rgba(102,224,255,.35) !important;
+   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5))
+!important;
 }
 .btn:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(102,224,255,.45) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* Hero flame title glow (tight; constant, no animation) */
@@ -671,6 +673,8 @@ p.lead {
     drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
     drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55))) !important;
   animation: none !important;
+   filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+
 }
 
 /* Optional inner glow behind the title (kept tight) */
