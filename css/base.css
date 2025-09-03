@@ -45,10 +45,10 @@
   --gap-lead-btn: clamp(12px, 2vh, 24px);
   
   /* HERO LIFTS - These are essential for the layout */
-  --title-lift: -14px;
+  --title-lift: -25px;
   --logo-lift: -300px;
-  --lead-lift: -370px;
-  --btn-lift: -370px;
+  --lead-lift: -300px;
+  --btn-lift: -300px;
   --lead-btn-gap: 10px;
 
   /* CSS Houdini properties for animated glow */
