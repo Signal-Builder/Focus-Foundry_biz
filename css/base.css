@@ -9,706 +9,558 @@
   font-display: swap;
 }
 
-
 /* ========== Tokens ========== */
-
 :root {
- /* Colors */
- --bg: #0b0b0f;
- --ink: #e7e7ee;
- --muted: #9aa0a6;
- --accent: #66e0ff;
- --brand-gold: #f0c870;
- --lava-glow: #f55a10;
+  /* Colors */
+  --bg: #0b0b0f;
+  --ink: #e7e7ee;
+  --muted: #9aa0a6;
+  --accent: #66e0ff;
+  --brand-gold: #f0c870;
+  --lava-glow: #f55a10; /* initial; later you override to numeric */
 
-/* Spacing Scale (based on an 8px grid) */
- --spacing-1: 8px;
- --spacing-2: 12px;
- --spacing-3: 16px;
- --spacing-4: 24px;
- --spacing-5: 48px;
+  /* Spacing Scale (based on an 8px grid) */
+  --spacing-1: 8px;
+  --spacing-2: 12px;
+  --spacing-3: 16px;
+  --spacing-4: 24px;
+  --spacing-5: 48px;
 
- /* Layout */
+  /* Layout */
+  --content-width: 1100px;
 
- --content-width: 1100px;
+  /* Z-Index Layers */
+  --z-canvas: 10;
+  --z-content: 20;
+  --z-nav: 25;
 
- /* Z-Index Layers */
- --z-canvas: 10;
- --z-content: 20;
- --z-nav: 25;
-
- /* HERO-SPECIFIC KNOBS - Tuned for vertical stacking */
- --hero-padding-top: clamp(80px, 15vh, 180px); /* Adjust top padding of the hero */
- --gap-title-stamp: clamp(24px, 4vh, 48px); /* Space between title image and spinning logo */
- --gap-stamp-lead: clamp(16px, 3vh, 32px); /* Space between spinning logo and lead paragraph */
- --gap-lead-btn: clamp(12px, 2vh, 24px); /* Space between lead paragraph and button */
+  /* HERO-SPECIFIC KNOBS - Tuned for vertical stacking */
+  --hero-padding-top: clamp(80px, 15vh, 180px); /* Adjust top padding of the hero */
+  --gap-title-stamp: clamp(24px, 4vh, 48px);    /* Space between title image and spinning logo */
+  --gap-stamp-lead: clamp(16px, 3vh, 32px);     /* Space between spinning logo and lead paragraph */
+  --gap-lead-btn: clamp(12px, 2vh, 24px);       /* Space between lead paragraph and button */
 }
 
 /* ========== Base ========== */
-*,
-*::before,
-*::after {
- box-sizing: border-box;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
-html,
+html, body { height: 100%; }
+
 body {
- height: 100%;
-}
-body {
- margin: 0;
- color: var(--ink);
- font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, sans-serif;
- background-image: url("../assets/background/lava-bg.jpg");
- background-size: cover;
- background-position: center;
- background-repeat: no-repeat;
- background-color: var(--bg);
- min-height: 100vh;
+  margin: 0;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, sans-serif;
+  background-image: url("../assets/background/lava-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--bg);
+  min-height: 100vh;
 }
 
 .wrap {
- max-width: var(--content-width);
- margin: 0 auto;
- padding: var(--spacing-5) var(--spacing-4);
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--spacing-5) var(--spacing-4);
 }
 
 /* ========== Sticky translucent nav ========== */
-
 nav {
- position: sticky;
- top: 0;
- z-index: var(--z-nav);
- display: flex;
- justify-content: center;
- gap: var(--spacing-4);
- padding: 14px 0;
- background: rgba(10, 10, 14, 0.45);
- -webkit-backdrop-filter: saturate(120%) blur(8px);
- backdrop-filter: saturate(120%) blur(8px);
- border-bottom: 1px solid rgba(255, 255, 255, 0.06);
- font-size: 17px;
- letter-spacing: 0.02em;
- transition: background 0.2s ease, padding 0.2s ease, box-shadow 0.2s ease;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-4);
+  padding: 14px 0;
+  background: rgba(10, 10, 14, 0.45);
+  -webkit-backdrop-filter: saturate(120%) blur(8px);
+  backdrop-filter: saturate(120%) blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  transition: background 0.2s ease, padding 0.2s ease, box-shadow 0.2s ease;
 }
-
 nav a {
- color: var(--brand-gold);
- text-decoration: none;
- font-weight: 600;
+  color: var(--brand-gold);
+  text-decoration: none;
+  font-weight: 600;
 }
-
 nav a:hover {
- color: #ffd88a;
- text-decoration: underline;
+  color: #ffd88a;
+  text-decoration: underline;
 }
-
 nav.nav--scrolled {
- padding: 10px 0;
- background: rgba(10, 10, 14, 0.6);
- box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  padding: 10px 0;
+  background: rgba(10, 10, 14, 0.6);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 /* ========== Hero ========== */
 .hero {
- position: relative;
- /* Use flexbox to position content vertically at the top */
- display: flex;
- flex-direction: column;
- align-items: center;
- justify-content: flex-start; /* Corrected to start from the top */
- padding-top: var(--hero-padding-top); /* Push content down from the nav */
- padding-bottom: var(--spacing-5);
- text-align: center;
- border-radius: var(--spacing-4);
- background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
- box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
- overflow: hidden;
- min-height: 100vh;
+  position: relative;
+  /* Use flexbox to position content vertically at the top */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Corrected to start from the top */
+  padding-top: var(--hero-padding-top); /* Push content down from the nav */
+  padding-bottom: var(--spacing-5);
+  text-align: center;
+  border-radius: var(--spacing-4);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  min-height: 100vh;
 }
 
 /* Legibility mask */
 .hero::before {
- content: "";
- position: absolute;
- inset: -8px;
- z-index: -1;
- border-radius: inherit;
- background: radial-gradient(1200px 700px at 50% 0%, rgba(0, 0, 0, 0.35), transparent 60%);
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(1200px 700px at 50% 0%, rgba(0, 0, 0, 0.35), transparent 60%);
 }
 
 /* Visually-hidden text for accessibility */
 .sr-only {
- position: absolute;
- width: 1px;
- height: 1px;
- padding: 0;
- margin: -1px;
- overflow: hidden;
- clip: rect(0, 0, 0, 0);
- white-space: nowrap;
- border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Container for all hero's core content, now acts as the main stack */
 .hero-content {
- display: flex;
- flex-direction: column;
- align-items: center;
- max-width: var(--content-width);
- margin: 0 auto;
- gap: 0; /* Control gaps explicitly with margins on children */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  gap: 0; /* Control gaps explicitly with margins on children */
 }
 
 /* Fire brand header (single image with baked-in kicker) */
-
-fire-title {
- margin: 0 auto px;
- text-align: center;
- filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+.fire-title {
+  margin: 0 auto;
+  text-align: center;
+  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
-
 .fire-logo {
- width: min(98%, 1200px); /* was 880px, increase max width */
- height: auto;
- display: block;
- margin: 0 auto;
- filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  width: min(98%, 1200px); /* was 880px, increase max width */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
 /* Hiding kicker text, as it's part of the image */
-
-.kicker {
- display: none !important;
-}
+.kicker { display: none !important; }
 
 /* Brand stamp animation container */
 .brand-stamp {
- position: relative;
- width: min(70vw, 360px);
- height: auto;
- margin: 0 auto var(--gap-stamp-lead);
- transform-style: preserve-3d;
- perspective: 1000px;
- animation: none !important;
+  position: relative;
+  width: min(70vw, 360px);
+  height: auto;
+  margin: 0 auto var(--gap-stamp-lead);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  animation: none !important;
 }
-
 .brand-stamp .logo {
- width: 100%;
- height: auto;
- display: block;
- filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
- transform-origin: 50% 50%;
- animation: logoTumble 28s linear infinite;
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite;
 }
 
 /* Hero copy + CTA */
 p.lead {
- color: var(--lava-glow);
- font-size: clamp(24px, 2.8vw, 32px); /* Increased font size */
- margin: 0 auto var(--gap-lead-btn);
- text-shadow: 0 0 10px var(--lava-glow);
- max-width: 58ch;
- filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  color: rgb(var(--lava-glow));
+  font-size: clamp(24px, 2.8vw, 32px);
+  margin: 0 auto var(--gap-lead-btn);
+  text-shadow: 0 0 10px rgb(var(--lava-glow));
+  max-width: 58ch;
+  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
 
 /* Updated button styles to match lava theme */
-
 .btn {
- display: inline-block;
- padding: 14px var(--spacing-4);
- border-radius: 12px;
- text-decoration: none;
- font-weight: 700;
- color: var(--bg);
- background: var(--lava-glow);
- box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
- transition: transform .12s ease, box-shadow .12s ease;
- margin: 0;
-filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  display: inline-block;
+  padding: 14px var(--spacing-4);
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--bg);
+  background: rgb(var(--lava-glow));
+  box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
+  transition: transform .12s ease, box-shadow .12s ease;
+  margin: 0;
+  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
-
 .btn:hover {
- transform: translateY(-2px);
- box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45);
 }
-
-.btn:active {
- transform: translateY(0);
-}
+.btn:active { transform: translateY(0); }
 
 .btn-ghost {
- background: transparent;
- color: var(--lava-glow);
- border: 1px solid rgba(245, 90, 16, 0.18);
- box-shadow: none;
+  background: transparent;
+  color: rgb(var(--lava-glow));
+  border: 1px solid rgba(245, 90, 16, 0.18);
+  box-shadow: none;
 }
-
-.btn-ghost:hover {
- border-color: rgba(245, 90, 16, 0.35);
-}
+.btn-ghost:hover { border-color: rgba(245, 90, 16, 0.35); }
 
 /* Tagline section */
-
-.tagline-section {
- text-align: center;
- padding: 24px 0;
-}
-
+.tagline-section { text-align: center; padding: 24px 0; }
 .tagline-title {
- font-size: clamp(28px, 4vw, 48px);
- font-weight: 700;
- color: var(--brand-gold);
- text-transform: uppercase;
- letter-spacing: 0.15em;
- margin: 0;
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--brand-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
 }
-
 .tagline-subhead {
- font-size: clamp(16px, 2.2vw, 20px);
- color: var(--lava-glow);
- text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
- margin-top: 8px;
- margin-bottom: 24px;
+  font-size: clamp(16px, 2.2vw, 20px);
+  color: rgb(var(--lava-glow));
+  text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
+  margin-top: 8px;
+  margin-bottom: 24px;
 }
-/* ========== Footer ========== */
 
-footer {
- margin: 64px 0 0;
- text-align: center;
- color: var(--muted);
-}
+/* ========== Footer ========== */
+footer { margin: 64px 0 0; text-align: center; color: var(--muted); }
 
 /* ========== Canvas: embers layer ========== */
 #bg {
- position: fixed;
- inset: 0;
- width: 100vw;
- height: 100vh;
- display: block;
- z-index: var(--z-canvas);
- pointer-events: none;
- background: transparent;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  background: transparent;
 }
 /* Content above canvas */
-main,
-.wrap,
-.hero,
-.card,
-nav,
-
-footer {
- position: relative;
- z-index: var(--z-content);
-}
+main, .wrap, .hero, .card, nav, footer { position: relative; z-index: var(--z-content); }
 
 /* ========== Services ========== */
-
-.services {
- margin: var(--spacing-5) 0 var(--spacing-2);
-}
-
-.services > h2 {
- font-size: clamp(24px, 3.8vw, 36px);
- margin: 0 0 18px;
-}
-
+.services { margin: var(--spacing-5) 0 var(--spacing-2); }
+.services > h2 { font-size: clamp(24px, 3.8vw, 36px); margin: 0 0 18px; }
 .services-grid {
- display: grid;
- gap: var(--spacing-3);
- grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid;
+  gap: var(--spacing-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-
-@media (max-width: 900px) {
- .services-grid {
- grid-template-columns: repeat(2, minmax(0, 1fr));
- }
-}
-
-@media (max-width: 640px) {
- .services-grid {
- grid-template-columns: 1fr;
- }
-}
-
+@media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .services-grid { grid-template-columns: 1fr; } }
 .svc {
- padding: 20px;
- border: 1px solid rgba(255, 255, 255, 0.1);
- border-radius: 16px;
- background: rgba(10, 10, 14, 0.35);
-
- /* Safari + older engines */
- -webkit-backdrop-filter: blur(4px) saturate(110%);
-
- /* Standards */
- backdrop-filter: blur(4px) saturate(110%);
- transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(10, 10, 14, 0.35);
+  -webkit-backdrop-filter: blur(4px) saturate(110%);
+  backdrop-filter: blur(4px) saturate(110%);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
-
 /* Fallback when backdrop-filter isn’t supported */
 @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-
-    .svc {
- background: rgba(10, 10, 14, 0.65);
- }
+  .svc { background: rgba(10, 10, 14, 0.65); }
 }
-
 .svc:hover {
- transform: translateY(-2px);
- border-color: rgba(255, 255, 255, 0.18);
- box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
 }
-
 .svc-icon {
- width: 44px;
- height: 44px;
- display: grid;
- place-items: center;
- border-radius: 10px;
- background: rgba(255, 170, 60, 0.12);
- color: #f5c375;
- margin-bottom: 10px;
+  width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px;
+  background: rgba(255, 170, 60, 0.12); color: #f5c375; margin-bottom: 10px;
 }
-
-.svc h3 {
- margin: 0 0 6px;
- font-size: clamp(18px, 2.6vw, 22px);
-}
-
-.svc p {
- margin: 0 0 10px;
- color: var(--muted);
-}
-
-.svc-link {
- color: var(--accent);
- text-decoration: none;
- font-weight: 600;
-}
-
-.svc-link:hover {
- text-decoration: underline;
-}
+.svc h3 { margin: 0 0 6px; font-size: clamp(18px, 2.6vw, 22px); }
+.svc p { margin: 0 0 10px; color: var(--muted); }
+.svc-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+.svc-link:hover { text-decoration: underline; }
 
 /* ========== Contact band ========== */
-
 .contact-band {
- margin: 56px 0 0;
- border-radius: 20px;
- background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
- box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  margin: 56px 0 0;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
+.contact-inner { max-width: 980px; margin: 0 auto; padding: 28px 22px; text-align: center; }
+.contact-inner h2 { margin: 0 0 6px; font-size: clamp(24px, 3.8vw, 36px); }
+.contact-lead { margin: 0 0 16px; color: var(--muted); }
 
-.contact-inner {
- max-width: 980px;
- margin: 0 auto;
- padding: 28px 22px;
- text-align: center;
-}
-
-.contact-inner h2 {
- margin: 0 0 6px;
- font-size: clamp(24px, 3.8vw, 36px);
-}
-
-.contact-lead {
- margin: 0 0 16px;
- color: var(--muted);
-}
-
+/* Responsive tweaks */
 @media (max-width: 640px) {
- .wrap {
- padding: 36px 16px;
- }
- .hero {
- padding: 56px 18px 40px;
- }
- .fire-logo {
- width: 94%;
- }
- nav {
- gap: var(--spacing-3);
- font-size: 16px;
- }
+  .wrap { padding: 36px 16px; }
+  .hero { padding: 56px 18px 40px; }
+  .fire-logo { width: 94%; }
+  nav { gap: var(--spacing-3); font-size: 16px; }
 }
 
 /* Optional tighter hero variant */
-
-.hero.hero--tight {
-padding-top: 26px;
-}
+.hero.hero--tight { padding-top: 26px; }
 
 /* Keyframes */
-
 @keyframes ff-stampIn {
- 0% { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
- 60% { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
- 100% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
+  0% { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
+  60% { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
 }
-
 @keyframes ff-fadeOut { to { opacity: 0; } }
-
 @keyframes ff-imprintGlow {
- 0% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
- 50% { box-shadow: 0 0 16px var(--brand-gold); }
- 100% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
+  0% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
+  50% { box-shadow: 0 0 16px var(--brand-gold); }
+  100% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
 }
-
 @keyframes ff-brandFlash {
- 0% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
- 50% { box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8); }
- 100% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
+  0% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
+  50% { box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8); }
+  100% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
 }
-
 @keyframes ff-fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
 @keyframes logoSwing {
- 0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
- 25% { transform: rotateX(20deg) rotateY(30deg); }
- 75% { transform: rotateX(-20deg) rotateY(-30deg); }
+  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
+  25% { transform: rotateX(20deg) rotateY(30deg); }
+  75% { transform: rotateX(-20deg) rotateY(-30deg); }
 }
 @keyframes logoSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
 @keyframes logoPulse {
- 0%, 100% { transform: scale(1); opacity: 0.8; }
- 50% { transform: scale(1.1); opacity: 1; }
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
 }
-
 @keyframes logoTumble {
- 0% { transform: rotateX(0deg) rotateY(0deg); }
- 25% { transform: rotateX(35deg) rotateY(65deg); }
- 50% { transform: rotateX(110deg) rotateY(180deg); }
- 75% { transform: rotateX(215deg) rotateY(295deg); }
- 100% { transform: rotateX(360deg) rotateY(360deg); }
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  25% { transform: rotateX(35deg) rotateY(65deg); }
+  50% { transform: rotateX(110deg) rotateY(180deg); }
+  75% { transform: rotateX(215deg) rotateY(295deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 @keyframes emberRise {
- 0% { transform: translateY(0) scale(1); opacity: 1; }
- 100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
 }
+
 /* === “Heat mode” flicker/pulse (optional; toggle via .mood-volcano on <body>) */
 @property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
 @property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
 @property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
 @keyframes lavaFlicker {
- 0%  { --g1: 9px; --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
- 8%  { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
- 22% { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
- 38% { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
- 57% { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
- 76% { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
- 100% { --g1: 9px; --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
+  0%   { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
+  8%   { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
+  22%  { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
+  38%  { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
+  57%  { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
+  76%  { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
+  100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
 }
-
 /* turn on by adding class="mood-volcano" to <body> */
 body.mood-volcano #hero .fire-logo{
- animation: lavaFlicker 3s infinite;
- filter:
- drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
- drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+  animation: lavaFlicker 3s infinite;
+  filter:
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
 }
 body.mood-volcano .brand-stamp .logo{
- animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
- filter:
- drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
- drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
+  animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
+  filter:
+    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
+    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
 }
 
 /* ===== HERO LIFTS (the simple version that worked) ===================== */
 /* Make these numbers more negative to move each item UP */
 :root{
- --title-lift: -14px; /* fire title image */
- --logo-lift: -300px; /* round FF logo */
- --lead-lift: -370px; /* subheading */
- --btn-lift:  -370px; /* CTA button */
- --lead-btn-gap: 10px; /* spacing between subheading and button */
+  --title-lift: -14px;   /* fire title image */
+  --logo-lift:  -300px;  /* round FF logo */
+  --lead-lift:  -370px;  /* subheading */
+  --btn-lift:   -370px;  /* CTA button */
+  --lead-btn-gap: 10px;  /* spacing between subheading and button */
 }
 #hero{ overflow: visible; } /* so negative offsets don't get clipped */
 #hero .fire-title,
 #hero .brand-stamp,
 #hero .lead,
 #hero .btn{
- position: relative;  /* enables top: … offsets */
- z-index: 3;
+  position: relative;     /* enables top: … offsets */
+  z-index: 3;
 }
-
 /* Lift each piece independently */
 #hero .fire-title{ top: var(--title-lift); }
 #hero .brand-stamp{ top: var(--logo-lift); }
 #hero .lead{
- top: var(--lead-lift);
- margin-bottom: var(--lead-btn-gap);
- text-align: center;
+  top: var(--lead-lift);
+  margin-bottom: var(--lead-btn-gap);
+  text-align: center;
 }
 #hero .btn{
- top: var(--btn-lift);
- margin-top: 0;
+  top: var(--btn-lift);
+  margin-top: 0;
 }
-
 /* Optional: soften lifts on small screens */
 @media (max-width: 840px){
- :root{
- --title-lift: -14px;
- --logo-lift: -110px;
- --lead-lift: -100px;
- --btn-lift:  -100px;
- }
+  :root{
+    --title-lift: -14px;
+    --logo-lift:  -110px;
+    --lead-lift:  -100px;
+    --btn-lift:   -100px;
+  }
 }
+
 /* Center the image with CSS Grid */
 .fire-title {
- display: grid;
- justify-items: center;
+  display: grid;
+  justify-items: center;
 }
 /* Ensure the img can be centered cleanly */
 .fire-logo {
- display: block;
- margin: 0; /* reset any auto margins */
- max-width: 100%;
- height: auto;
+  display: block;
+  margin: 0;
+  max-width: 100%;
+  height: auto;
 }
 /* Full-bleed hero: breaks out of the .wrap max-width */
 .hero.hero--full {
- /* pull the section to full viewport width while staying centered */
- margin-left: alc(50% - 50vw);
- margin-right: calc(50% - 50vw);
- padding-left: max(24px, 5vw);
- padding-right: max(24px, 5vw);
+  margin-left:  calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding-left:  max(24px, 5vw);
+  padding-right: max(24px, 5vw);
 }
 /* Now the flame title can be much larger */
 .hero.hero--full .fire-logo {
- width: min(96vw, 1800px); /* big on desktop, responsive on small screens */
- height: auto;
- display: block;
- margin: 0 auto;
+  width: min(96vw, 1800px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
-
 /* Balance the tagline with the bigger title */
 .hero.hero--full p.lead {
- font-size: clamp(20px, 3vw, 30px);
+  font-size: clamp(20px, 3vw, 30px);
 }
+
 /* --- Ember glow tokens --- */
 :root{
- /* start warm orange; JS will randomize these */
- --lava-glow: 255, 170, 60; /* r,g,b */
- --lava-alpha: 0.22; /* base opacity 0–1 */
+  /* start warm orange; JS will randomize these */
+  --lava-glow: 255, 170, 60;    /* r,g,b */
+  --lava-alpha: 0.22;           /* base opacity 0–1 */
 }
-
 /* Subtle breathing on the hero title (uses the variables above) */
 .fire-title{
- position: relative;
- /* soft colored drop-shadows using --lava-glow / --lava-alpha */
- filter:
- drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
- drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55)));
- animation: ff-breathe 3.8s ease-in-out infinite;
+  position: relative;
+  /* soft colored drop-shadows using --lava-glow / --lava-alpha */
+  filter:
+    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55)));
+  animation: ff-breathe 3.8s ease-in-out infinite;
 }
-
 /* Optional: a very soft inner glow behind the flame letters */
 .fire-title::after{
- content:"";
- position:absolute; inset:-2% -3%;
- pointer-events:none;
- background: radial-gradient(60% 55% at 50% 50%,
- rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
- rgba(var(--lava-glow), 0) 65%);
- filter: blur(14px);
- opacity:.55;
- animation: ff-breathe 4.2s ease-in-out infinite;
- z-index:-1; /* stays behind the title image */
+  content:"";
+  position:absolute; inset:-2% -3%;
+  pointer-events:none;
+  background: radial-gradient(60% 55% at 50% 50%,
+              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
+              rgba(var(--lava-glow), 0) 65%);
+  filter: blur(14px);
+  opacity:.55;
+  animation: ff-breathe 4.2s ease-in-out infinite;
+  z-index:-1;
 }
-
 /* Gentle breathing (intensity only; color comes from JS) */
 @keyframes ff-breathe{
-
- 0%  { opacity:.85; }
- 50% { opacity:1;  }
- 100% { opacity:.85; }
+  0%   { opacity:.85; }
+  50%  { opacity:1;   }
+  100% { opacity:.85; }
 }
+
 /* === Ember glow for nav links === */
 nav a {
- position: relative;
- color: var(--brand-gold);
- text-decoration: none;
- font-weight: 600;
- transition: color .2s ease;
-
- /* Subtle ember glow */
- text-shadow:
- 0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
- 0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.4));
- animation: ff-breathe 4s ease-in-out infinite;
+  position: relative;
+  color: var(--brand-gold);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color .2s ease;
+  /* Subtle ember glow */
+  text-shadow:
+    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
+    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.4));
+  animation: ff-breathe 4s ease-in-out infinite;
 }
-
 /* Stronger glow on hover */
 nav a:hover {
- color: #ffd88a;
- text-shadow:
- 0 0 10px rgba(var(--lava-glow), calc(var(--lava-alpha) * 1.2)),
- 0 0 22px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7));
+  color: #ffd88a;
+  text-shadow:
+    0 0 10px rgba(var(--lava-glow), calc(var(--lava-alpha) * 1.2)),
+    0 0 22px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7));
 }
 
 /* === SAFETY NET: restore palette + constant glow === */
 :root{
- --bg:#0b0b0f;
- --ink:#e7e7ee;
- --muted:#9aa0a6;
- --accent:#66e0ff;
- --brand-gold:#f0c870;
-/* ember glow vars (constant intensity) */
---lava-glow: 255, 170, 60; /* r,g,b; JS can still swap color */
- --lava-alpha: 0.28; 
-  /* fixed intensity so it never disappears */
+  --bg:#0b0b0f;
+  --ink:#e7e7ee;
+  --muted:#9aa0a6;
+  --accent:#66e0ff;
+  --brand-gold:#f0c870;
+  /* ember glow vars (constant intensity) */
+  --lava-glow: 255, 170, 60;  /* r,g,b; JS can still swap color */
+  --lava-alpha: 0.28;         /* fixed intensity so it never disappears */
 }
-
 /* Body text color (ensure we didn't lose it) */
 body { color: var(--ink) !important; }
-
 /* Lead paragraph back to muted (not white) */
 p.lead {
- color: var(--muted) !important;
- font-size: clamp(20px, 3vw, 28px); /* keep your larger size */
-filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
+  color: var(--muted) !important;
+  font-size: clamp(20px, 3vw, 28px); /* keep your larger size */
+  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
 }
-
-
 /* Button back to accent fill */
 .btn{
- background: var(--accent) !important;
- color: #0b0b0f !important;
- border: 0 !important;
-filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5))
-!important;
+  background: var(--accent) !important;
+  color: #0b0b0f !important;
+  border: 0 !important;
+  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5)) !important;
 }
-.btn:hover{
- transform: translateY(-2px) !important;
-}
+.btn:hover{ transform: translateY(-2px) !important; }
 
 /* Hero flame title glow (tight; constant, no animation) */
 .fire-title{
- position: relative;
- filter:
- drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
- drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55))) !important;
- animation: none !important;
-filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-
+  position: relative;
+  filter:
+    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55))) !important;
+  animation: none !important;
 }
 /* Optional inner glow behind the title (kept tight) */
 .fire-title::after{
- content:"";
- position:absolute; inset:-2% -3%;
- pointer-events:none;
- background: radial-gradient(60% 55% at 50% 50%,
- rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
- rgba(var(--lava-glow), 0) 65%);
- filter: blur(14px);
- opacity:.55;
- z-index:-1; animation: none !important;
+  content:"";
+  position:absolute; inset:-2% -3%;
+  pointer-events:none;
+  background: radial-gradient(60% 55% at 50% 50%,
+              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
+              rgba(var(--lava-glow), 0) 65%);
+  filter: blur(14px);
+  opacity:.55;
+  z-index:-1;
+  animation: none !important;
 }
-
 /* Nav link glow constant (no pulse) */
 nav a{
-     text-shadow:
- 0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
- 0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.45)) !important;
- animation: none !important;
+  text-shadow:
+    0 0 6px  rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
+    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.45)) !important;
+  animation: none !important;
 }
