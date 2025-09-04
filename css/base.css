@@ -414,10 +414,10 @@ body.mood-volcano .brand-stamp .logo{
 /* Optional: soften lifts on small screens */
 @media (max-width: 840px){
   :root{
-    --title-lift: -40px;
-    --logo-lift:  -110px;
-    --lead-lift:  -250px;
-    --btn-lift:   -250px;
+    --title-lift: -100px;
+    --logo-lift:  -310px;
+    --lead-lift:  -300px;
+    --btn-lift:   -300px;
   }
 }
 
@@ -588,3 +588,30 @@ nav a{
 /* Ensure hero remains above canvas, canvas stays behind */
 #bg{ z-index: 10 !important; }
 .hero, nav, main, footer { z-index: 20 !important; position: relative; }
+/* --- Round FF logo: centered + rotary spin --- */
+.brand-stamp {
+  display: block !important;
+  width: min(64vw, 340px);
+  margin: 14px auto 22px; /* space under the fire title */
+  perspective: 1000px;    /* gives depth for 3D spin */
+}
+
+.brand-stamp .logo {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter:
+    drop-shadow(0 0 12px rgba(255,190,90,0.35))
+    drop-shadow(0 0 28px rgba(255,160,60,0.25));
+  transform-origin: 50% 50%;
+  animation: logoTumble 28s linear infinite; /* <-- spin restored */
+}
+
+/* Logo tumble keyframes (already in your CSS, but repeat here for safety) */
+@keyframes logoTumble {
+  0%   { transform: rotateX(0deg) rotateY(0deg); }
+  25%  { transform: rotateX(35deg) rotateY(65deg); }
+  50%  { transform: rotateX(110deg) rotateY(180deg); }
+  75%  { transform: rotateX(215deg) rotateY(295deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
