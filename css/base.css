@@ -615,3 +615,49 @@ nav a{
   75%  { transform: rotateX(215deg) rotateY(295deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
+/* ==============================
+   HERO LIFT CONTROLS (OVERRIDES)
+   Tweak these four numbers only.
+   More negative = pulled further up
+   ============================== */
+:root{
+  --lift-title: -140px;   /* fire title image */
+  --lift-logo:  -260px;   /* round FF logo */
+  --lift-lead:  -320px;   /* subheading */
+  --lift-btn:   -320px;   /* CTA button */
+}
+
+/* Make sure the hero lets items move outside its box */
+#hero{ overflow: visible !important; }
+
+/* Apply the lifts with transforms so layout stays stable */
+#hero .fire-title{
+  transform: translateY(var(--lift-title)) !important;
+  will-change: transform;
+}
+#hero .brand-stamp{
+  transform: translateY(var(--lift-logo)) !important;
+  will-change: transform;
+}
+#hero p.lead{
+  transform: translateY(var(--lift-lead)) !important;
+  will-change: transform;
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;  /* small gap above button */
+}
+#hero .btn{
+  transform: translateY(var(--lift-btn)) !important;
+  will-change: transform;
+  margin-top: 0 !important;
+}
+
+/* Keep everything centered visually */
+#hero .fire-title,
+#hero .brand-stamp,
+#hero p.lead,
+#hero .btn{
+  position: relative !important;
+  left: 0; right: 0;
+  margin-left: auto; margin-right: auto;
+  text-align: center;
+}
