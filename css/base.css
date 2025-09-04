@@ -564,3 +564,27 @@ nav a{
     0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.45)) !important;
   animation: none !important;
 }
+/* ===== QUICK FIX OVERRIDES (paste at END of CSS) ===== */
+
+/* 1) Cap the flame title size so it fits the viewport */
+.hero.hero--full .fire-logo {
+  width: min(92vw, 1200px) !important;  /* was 96vw, 1800px */
+  height: auto !important;
+}
+
+/* 2) Hide the old round “FF” brand-stamp completely (if any leftover) */
+.brand-stamp { 
+  display: none !important; 
+}
+
+/* 3) Neutralize the manual lift offsets so hero content stacks naturally */
+:root{
+  --title-lift: 0px !important;
+  --logo-lift:  0px !important;
+  --lead-lift:  0px !important;
+  --btn-lift:   0px !important;
+}
+
+/* Ensure hero remains above canvas, canvas stays behind */
+#bg{ z-index: 10 !important; }
+.hero, nav, main, footer { z-index: 20 !important; position: relative; }
