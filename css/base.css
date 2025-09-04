@@ -704,3 +704,69 @@ nav a{
   border-color: rgba(245, 90, 16, 0.6) !important;
   color: rgba(255, 140, 60, 1) !important;
 }
+/* =========================================
+   GOLD THEME — match nav link coloring/glow
+   (hero lead + all primary/ghost buttons)
+   ========================================= */
+
+/* Reusable gold glow */
+:root {
+  --gold-rgb: 240, 200, 112;          /* #f0c870 */
+  --gold-glow-a-strong: 0.75;
+  --gold-glow-a-soft:   0.45;
+}
+
+/* Lead line under the hero title */
+#hero p.lead{
+  color: var(--brand-gold) !important;
+  text-shadow:
+    0 0 6px  rgba(var(--gold-rgb), var(--gold-glow-a-strong)),
+    0 0 14px rgba(var(--gold-rgb), var(--gold-glow-a-soft)) !important;
+  filter:
+    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
+    drop-shadow(0 0 22px rgba(var(--gold-rgb), .35)) !important;
+}
+
+/* Primary buttons (hero & contact band) */
+#hero .btn,
+.contact-actions .btn:not(.btn-ghost){
+  background: var(--brand-gold) !important;
+  color: #0b0b0f !important;               /* dark text for contrast */
+  border: 0 !important;
+  text-shadow: none !important;
+  box-shadow: 0 8px 24px rgba(var(--gold-rgb), .28) !important;
+  filter:
+    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
+    drop-shadow(0 0 18px rgba(var(--gold-rgb), .35)) !important;
+}
+#hero .btn:hover,
+.contact-actions .btn:not(.btn-ghost):hover{
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 28px rgba(var(--gold-rgb), .40) !important;
+}
+
+/* Ghost buttons (outline style) */
+#hero .btn-ghost,
+.contact-actions .btn-ghost{
+  background: transparent !important;
+  color: var(--brand-gold) !important;
+  border: 1px solid rgba(var(--gold-rgb), .55) !important;
+  box-shadow: none !important;
+  text-shadow:
+    0 0 6px  rgba(var(--gold-rgb), .6),
+    0 0 12px rgba(var(--gold-rgb), .35) !important;
+}
+#hero .btn-ghost:hover,
+.contact-actions .btn-ghost:hover{
+  color: #ffe6a8 !important; /* slightly brighter gold */
+  border-color: rgba(var(--gold-rgb), .8) !important;
+}
+
+/* Optional: give section headings a subtle gold glow like the nav */
+.tagline-title,
+.services > h2,
+#contact-title{
+  text-shadow:
+    0 0 6px  rgba(var(--gold-rgb), .35),
+    0 0 12px rgba(var(--gold-rgb), .20);
+}
