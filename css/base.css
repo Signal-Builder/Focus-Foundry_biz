@@ -770,3 +770,41 @@ nav a{
     0 0 6px  rgba(var(--gold-rgb), .35),
     0 0 12px rgba(var(--gold-rgb), .20);
 }
+/* Buttons: use the same glow palette as nav links */
+.btn {
+  display: inline-block;
+  padding: 14px var(--spacing-4);
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--brand-gold);
+  background: transparent; /* transparent instead of solid fill */
+  border: 1px solid rgba(240, 200, 112, 0.4); /* gold border */
+  text-shadow: 
+    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
+    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.4));
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(240, 200, 112, 0.8);
+  box-shadow: 0 0 18px rgba(var(--lava-glow), 0.7);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Ghost variation stays almost the same */
+.btn-ghost {
+  background: transparent;
+  color: var(--brand-gold);
+  border: 1px solid rgba(240, 200, 112, 0.25);
+  text-shadow: none;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(240, 200, 112, 0.7);
+  box-shadow: 0 0 14px rgba(var(--lava-glow), 0.5);
+}
