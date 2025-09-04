@@ -414,10 +414,10 @@ body.mood-volcano .brand-stamp .logo{
 /* Optional: soften lifts on small screens */
 @media (max-width: 840px){
   :root{
-    --title-lift: -14px;
+    --title-lift: -20px;
     --logo-lift:  -110px;
-    --lead-lift:  -100px;
-    --btn-lift:   -100px;
+    --lead-lift:  -200px;
+    --btn-lift:   -200px;
   }
 }
 
