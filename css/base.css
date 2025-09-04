@@ -622,9 +622,9 @@ nav a{
    ============================== */
 :root{
   --lift-title: -130px;   /* fire title image */
-  --lift-logo:  -350px;   /* round FF logo */
-  --lift-lead:  -400px;   /* subheading */
-  --lift-btn:   -400px;   /* CTA button */
+  --lift-logo:  -500px;   /* round FF logo */
+  --lift-lead:  -450px;   /* subheading */
+  --lift-btn:   -450px;   /* CTA button */
 }
 
 /* Make sure the hero lets items move outside its box */
