@@ -621,10 +621,10 @@ nav a{
    More negative = pulled further up
    ============================== */
 :root{
-  --lift-title: -140px;   /* fire title image */
-  --lift-logo:  -260px;   /* round FF logo */
-  --lift-lead:  -320px;   /* subheading */
-  --lift-btn:   -320px;   /* CTA button */
+  --lift-title: -130px;   /* fire title image */
+  --lift-logo:  -300px;   /* round FF logo */
+  --lift-lead:  -350px;   /* subheading */
+  --lift-btn:   -350px;   /* CTA button */
 }
 
 /* Make sure the hero lets items move outside its box */
