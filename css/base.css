@@ -1,41 +1,31 @@
-/* ========== Fonts (keep only what you use) ========== */
-@font-face{
-  font-family: 'sparatedregular';
-  src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
-       url('../assets/fonts/separated/sparated-webfont.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ========== Tokens ========== */
 :root{
   /* Core palette */
-  --bg:#0b0b0f;
+  --bg:#0b0b1a;           /* midnight page bg */
   --ink:#e7e7ee;
   --muted:#9aa0a6;
 
-  /* Gold system (matches nav + hero) */
+  /* Gold system (matches nav + UI) */
   --brand-gold:#f0c870;
   --gold-rgb:240,200,112;
 
-  /* Ember color hooks (used by JS) */
+  /* Ember color hooks (JS reads these) — used ONLY on hero title */
   --lava-glow:255,170,60;   /* r,g,b */
   --lava-alpha:.28;
 
   /* Layout & z-order */
   --content-width:1100px;
-  --z-canvas:10;
-  --z-content:20;
-  --z-nav:25;
+  --z-canvas:10;   /* sparks canvas */
+  --z-bg:8;        /* hero photo (::before) */
+  --z-content:20;  /* real content */
+  --z-nav:25;      /* sticky nav */
 
   /* Spacing */
-  --space-2:12px;
   --space-3:16px;
   --space-4:24px;
   --space-5:48px;
 
-  /* Hero lifts (negative pulls up) */
+  /* Hero lift controls (negative pulls up) */
   --lift-title:-130px;
   --lift-logo:-450px;
   --lift-lead:-500px;
@@ -46,18 +36,23 @@
 *,*::before,*::after{ box-sizing:border-box }
 html,body{ height:100% }
 body{
-  margin:0; color:var(--ink);
+  margin:0;
+  color:var(--ink);
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;
-
-  /* Lava background ON the hero only — page below is dark */
-  background: var(--bg);
+  background:var(--bg);
 }
 .wrap{ max-width:var(--content-width); margin:0 auto; padding:var(--space-5) var(--space-4) }
 
-/* ========== Ember canvas (behind content) ========== */
+/* Accessible h1 used only for SEO/screen readers */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* ========== Sparks canvas (behind content) ========== */
 #bg{
   position:fixed; inset:0; width:100vw; height:100vh;
-  display:block; pointer-events:none; z-index:var(--z-canvas); background:transparent;
+  z-index:var(--z-canvas); pointer-events:none; background:transparent; display:block;
 }
 
 /* ========== Sticky nav ========== */
@@ -72,108 +67,98 @@ nav{
   font-size:17px; letter-spacing:.02em;
 }
 nav a{
-  color:var(--brand-gold); text-decoration:none; font-weight:600;
-  text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), .60),
-    0 0 12px rgba(var(--gold-rgb), .35);
+  color:var(--brand-gold);
+  text-decoration:none; font-weight:600;
+  text-shadow:0 0 6px rgba(var(--gold-rgb),.6), 0 0 12px rgba(var(--gold-rgb),.35);
 }
 nav a:hover{ color:#ffd88a; text-decoration:underline }
+nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.60); box-shadow:0 6px 18px rgba(0,0,0,.35) }
 
-/* ========== Hero (full-bleed) ========== */
+/* ========== Hero (full-bleed, lava photo only here) ========== */
 .hero{
-  position:relative; overflow:visible; /* allow lifts */
-  text-align:center; min-height:100vh;
+  position:relative; overflow:visible; min-height:100vh; text-align:center;
 
-  /* Full-bleed container */
+  /* full-bleed breakout */
   margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
-  padding-left:max(24px, 5vw); padding-right:max(24px, 5vw);
-  padding-top:clamp(80px, 15vh, 180px);
-  padding-bottom:var(--space-5);
+  padding:clamp(80px,15vh,180px) max(24px,5vw) var(--space-5);
 
-  /* Hero-only backdrop image */
+  /* no background on the element itself */
+  background:none;
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0; z-index:var(--z-bg); border-radius:24px; pointer-events:none;
   background:
     radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%),
-    url("../assets/background/lava-bg.jpg") center / cover no-repeat;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-  border-radius:24px;
+    url("../assets/background/lava-bg.jpg") center/cover no-repeat;
 }
+.hero, main, footer, nav{ position:relative; z-index:var(--z-content) }
 
-/* Fire title image */
+/* Flame title (LAVA glow ONLY here) */
 .fire-title{
   display:grid; justify-items:center;
   transform:translateY(var(--lift-title));
   filter:
-    drop-shadow(0 0 22px rgba(var(--gold-rgb), .35))
-    drop-shadow(0 0 42px rgba(var(--gold-rgb), .20));
+    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha)*.55)));
+  animation:ff-breathe 3.8s ease-in-out infinite;
 }
-.fire-logo{
-  width:min(92vw, 1200px); height:auto; display:block; margin:0;
+.fire-title::after{
+  content:"";
+  position:absolute; inset:-2% -3%; z-index:-1; pointer-events:none;
+  background:radial-gradient(60% 55% at 50% 50%,
+    rgba(var(--lava-glow), calc(var(--lava-alpha)*.50)) 0%,
+    rgba(var(--lava-glow), 0) 65%);
+  filter:blur(14px); opacity:.55; animation:ff-breathe 4.2s ease-in-out infinite;
 }
+.fire-logo{ width:min(92vw,1200px); height:auto; display:block; margin:0 }
 
-/* Spinning round logo (if present) */
+/* Round spinning logo (GOLD glow) */
 .brand-stamp{
-  width:min(64vw, 340px); margin:14px auto 22px;
+  width:min(64vw,340px);
+  margin:14px auto 22px;
   transform:translateY(var(--lift-logo));
   perspective:1000px;
 }
 .brand-stamp .logo{
   width:100%; height:auto; display:block;
-  filter:
-    drop-shadow(0 0 12px rgba(var(--gold-rgb), .35))
-    drop-shadow(0 0 28px rgba(var(--gold-rgb), .25));
+  filter:drop-shadow(0 0 10px rgba(var(--gold-rgb),.55)) drop-shadow(0 0 20px rgba(var(--gold-rgb),.35));
   transform-origin:50% 50%;
   animation:logoTumble 28s linear infinite;
 }
 
-/* Lead + CTA */
-p.lead{
+/* Lead + CTA (GOLD) */
+#hero p.lead{
   max-width:58ch; margin:0 auto 10px;
   transform:translateY(var(--lift-lead));
   color:var(--brand-gold);
-  font-size:clamp(22px, 3vw, 30px);
-  text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), .65),
-    0 0 14px rgba(var(--gold-rgb), .40);
-  filter:
-    drop-shadow(0 0 10px rgba(var(--gold-rgb), .50))
-    drop-shadow(0 0 18px rgba(var(--gold-rgb), .30));
+  font-size:clamp(22px,3vw,30px);
+  text-shadow:0 0 6px rgba(var(--gold-rgb),.65), 0 0 14px rgba(var(--gold-rgb),.40);
 }
-.btn{
+#hero .btn{
   display:inline-block; padding:14px var(--space-4);
   border-radius:12px; text-decoration:none; font-weight:700;
-  background:transparent; color:var(--brand-gold);
-  border:1px solid rgba(var(--gold-rgb), .40);
-  text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), .60),
-    0 0 12px rgba(var(--gold-rgb), .35);
-  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
   transform:translateY(var(--lift-btn));
-}
-.btn:hover{
-  transform:translateY(calc(var(--lift-btn) - 2px));
-  border-color:rgba(var(--gold-rgb), .70);
-  color:#ffd88a;
-}
-.btn-ghost{
   background:transparent; color:var(--brand-gold);
-  border:1px solid rgba(var(--gold-rgb), .35);
+  border:1px solid rgba(var(--gold-rgb),.35);
+  text-shadow:0 0 6px rgba(var(--gold-rgb),.55), 0 0 14px rgba(var(--gold-rgb),.35);
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
 }
-
-/* Keep all hero content above the canvas */
-main, nav, footer, .hero{ position:relative; z-index:var(--z-content) }
+#hero .btn:hover{
+  transform:translateY(calc(var(--lift-btn) - 2px));
+  border-color:rgba(var(--gold-rgb),.65); color:#ffd88a;
+}
 
 /* ========== Tagline / Services / Contact ========== */
 .tagline-section{ text-align:center; padding:24px 0 }
 .tagline-title{
   font-size:clamp(28px,4vw,48px); font-weight:700; text-transform:uppercase; letter-spacing:.15em; margin:0;
   color:var(--brand-gold);
-  text-shadow:0 0 6px rgba(var(--gold-rgb), .35), 0 0 12px rgba(var(--gold-rgb), .20);
+  text-shadow:0 0 6px rgba(var(--gold-rgb),.35), 0 0 12px rgba(var(--gold-rgb),.20);
 }
-.tagline-subhead{
-  font-size:clamp(16px, 2.2vw, 20px); margin:8px 0 24px; color:var(--muted);
-}
+.tagline-subhead{ font-size:clamp(16px,2.2vw,20px); margin:8px 0 24px; color:var(--muted) }
 
-.services{ margin:var(--space-5) 0 var(--space-2) }
+.services{ margin:var(--space-5) 0 var(--space-3) }
 .services > .wrap > h2{ font-size:clamp(24px,3.8vw,36px); margin:0 0 18px }
 .services-grid{ display:grid; gap:var(--space-3); grid-template-columns:repeat(3, minmax(0,1fr)) }
 @media (max-width:900px){ .services-grid{ grid-template-columns:repeat(2, minmax(0,1fr)) } }
@@ -205,6 +190,7 @@ main, nav, footer, .hero{ position:relative; z-index:var(--z-content) }
 .contact-lead{ margin:0 0 16px; color:var(--muted) }
 .contact-actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
 
+/* Footer */
 footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
 
 /* ========== Keyframes ========== */
@@ -215,8 +201,9 @@ footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
   75%{  transform:rotateX(215deg) rotateY(295deg) }
   100%{ transform:rotateX(360deg) rotateY(360deg) }
 }
+@keyframes ff-breathe{ 0%{opacity:.85} 50%{opacity:1} 100%{opacity:.85} }
 
-/* ========== Responsive ========== */
+/* ========== Responsive lift relax ========== */
 @media (max-width:840px){
   :root{
     --lift-title:-80px;
@@ -225,174 +212,4 @@ footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
     --lift-btn:-240px;
   }
   nav{ gap:var(--space-3); font-size:16px }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .brand-stamp .logo{ animation:none }
-  .fire-title, .brand-stamp, p.lead, .btn{ transform:none }
-}
-/* === Spark visibility fix: canvas above hero bg, below content === */
-
-/* 1) Move hero background image off the element and onto ::before */
-.hero{
-  background: none !important;          /* stop painting over the canvas */
-  position: relative;                    /* ensure ::before positions correctly */
-  overflow: visible;                     /* so lifted items aren’t clipped */
-}
-
-/* Hero bg image + legibility mask sits LOW in the stack */
-.hero::before{
-  content:"";
-  position:absolute; inset:0;
-  z-index: 8;                            /* below canvas */
-  border-radius:24px;
-  background:
-    radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%),
-    url("../assets/background/lava-bg.jpg") center / cover no-repeat;
-  pointer-events:none;
-}
-
-/* 2) Put the ember canvas above the hero bg but below content */
-#bg{
-  z-index: 12 !important;                /* above .hero::before (8) */
-}
-
-/* 3) Keep all real content above the canvas */
-.hero, nav, main, footer{
-  position: relative;
-  z-index: 20;                           /* above canvas */
-}
-
-/* (Optional) ensure hero parts are in the content layer too */
-.fire-title, .brand-stamp, #hero p.lead, #hero .btn{
-  position: relative;
-  z-index: 21;                           /* just to be safe */
-}
-/* === 1) Layout/stack: hero photo only in HERO, rest midnight blue === */
-body{
-  /* midnight-blue page background (no photo below the hero) */
-  background-image: none !important;
-  background-color: #0b0b1a !important;
-}
-
-/* hero uses the lava photo on its ::before layer (keeps sparks above it) */
-.hero{
-  background: none !important;
-  position: relative;
-  overflow: visible; /* allow lifted elements */
-}
-.hero::before{
-  content:"";
-  position:absolute; inset:0;
-  z-index: 8; /* below canvas */
-  border-radius: 24px;
-  background:
-    radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%),
-    url("../assets/background/lava-bg.jpg") center/cover no-repeat;
-  pointer-events:none;
-}
-
-/* canvas above hero photo; content above canvas */
-#bg{ z-index:12 !important; }
-.hero, nav, main, footer{ position:relative; z-index:20 !important; }
-
-/* ===========================================
-   2) Glow palette: lava (title-only) + gold
-   =========================================== */
-:root{
-  /* JS glow shuffler expects this numeric triplet */
-  --lava-glow: 255, 170, 60;  /* r,g,b */
-  --lava-alpha: .28;
-
-  /* exact nav gold */
-  --gold-rgb: 240, 200, 112;  /* #f0c870 */
-  --gold-a-strong: .75;
-  --gold-a-soft:   .45;
-}
-
-/* --- Lava glow ONLY on hero title image --- */
-.fire-title{
-  filter:
-    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
-    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha)*.55))) !important;
-  animation: ff-breathe 3.8s ease-in-out infinite !important;
-}
-.fire-title::after{
-  content:"";
-  position:absolute; inset:-2% -3%;
-  z-index:-1; pointer-events:none;
-  background: radial-gradient(60% 55% at 50% 50%,
-              rgba(var(--lava-glow), calc(var(--lava-alpha)*.50)) 0%,
-              rgba(var(--lava-glow), 0) 65%);
-  filter: blur(14px);
-  opacity:.55;
-  animation: ff-breathe 4.2s ease-in-out infinite;
-}
-
-/* --- Gold glow for logo + “gold” copy/buttons (match nav) --- */
-.brand-stamp .logo{
-  filter:
-    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
-    drop-shadow(0 0 20px rgba(var(--gold-rgb), .35)) !important;
-}
-
-/* lead line in gold (same tone as nav) */
-#hero p.lead{
-  color: rgb(var(--gold-rgb)) !important;
-  text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), var(--gold-a-strong)),
-    0 0 14px rgba(var(--gold-rgb), var(--gold-a-soft)) !important;
-  filter:
-    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
-    drop-shadow(0 0 22px rgba(var(--gold-rgb), .35)) !important;
-}
-
-/* transparent gold buttons (hero + contact) */
-#hero .btn,
-.contact-actions .btn:not(.btn-ghost){
-  background: transparent !important;
-  color: rgb(var(--gold-rgb)) !important;
-  border: 1px solid rgba(var(--gold-rgb), .35) !important;
-  box-shadow: none !important;
-  text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), .55),
-    0 0 14px rgba(var(--gold-rgb), .35) !important;
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-}
-#hero .btn:hover,
-.contact-actions .btn:not(.btn-ghost):hover{
-  transform: translateY(-2px);
-  border-color: rgba(var(--gold-rgb), .65) !important;
-  color: #ffd88a !important; /* slightly brighter gold */
-  box-shadow: 0 0 18px rgba(var(--gold-rgb), .40) !important;
-}
-
-/* ghost variant stays outline gold */
-#hero .btn-ghost,
-.contact-actions .btn-ghost{
-  background: transparent !important;
-  color: rgb(var(--gold-rgb)) !important;
-  border: 1px solid rgba(var(--gold-rgb), .35) !important;
-  box-shadow: none !important;
-}
-
-/* ===========================================
-   3) Lift controls (unchanged behavior)
-   =========================================== */
-:root{
-  --lift-title: -130px;
-  --lift-logo:  -450px;
-  --lift-lead:  -500px;
-  --lift-btn:   -500px;
-}
-#hero{ overflow: visible !important; }
-#hero .fire-title{ transform: translateY(var(--lift-title)) !important; }
-#hero .brand-stamp{ transform: translateY(var(--lift-logo)) !important; }
-#hero p.lead{ transform: translateY(var(--lift-lead)) !important; margin:0 0 10px !important; }
-#hero .btn{  transform: translateY(var(--lift-btn)) !important;  margin-top:0 !important; }
-
-/* breathing keyframes */
-@keyframes ff-breathe{
-  0% {opacity:.85;} 50% {opacity:1;} 100% {opacity:.85;}
 }
