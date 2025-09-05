@@ -1,852 +1,234 @@
-
-/* ========== Fonts ========== */
-@font-face {
+/* ========== Fonts (keep only what you use) ========== */
+@font-face{
   font-family: 'sparatedregular';
   src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
        url('../assets/fonts/separated/sparated-webfont.woff') format('woff');
-  font-weight: normal;
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 /* ========== Tokens ========== */
-:root {
-  /* Colors */
-  --bg: #0b0b0f;
-  --ink: #e7e7ee;
-  --muted: #9aa0a6;
-  --accent: #66e0ff;
-  --brand-gold: #f0c870;
-  --lava-glow: #f55a10; /* initial; later you override to numeric */
-
-  /* Spacing Scale (based on an 8px grid) */
-  --spacing-1: 8px;
-  --spacing-2: 12px;
-  --spacing-3: 16px;
-  --spacing-4: 24px;
-  --spacing-5: 48px;
-
-  /* Layout */
-  --content-width: 1100px;
-
-  /* Z-Index Layers */
-  --z-canvas: 10;
-  --z-content: 20;
-  --z-nav: 25;
-
-  /* HERO-SPECIFIC KNOBS - Tuned for vertical stacking */
-  --hero-padding-top: clamp(80px, 15vh, 180px); /* Adjust top padding of the hero */
-  --gap-title-stamp: clamp(24px, 4vh, 48px);    /* Space between title image and spinning logo */
-  --gap-stamp-lead: clamp(16px, 3vh, 32px);     /* Space between spinning logo and lead paragraph */
-  --gap-lead-btn: clamp(12px, 2vh, 24px);       /* Space between lead paragraph and button */
-}
-
-/* ========== Base ========== */
-*, *::before, *::after { box-sizing: border-box; }
-
-html, body { height: 100%; }
-
-body {
-  margin: 0;
-  color: var(--ink);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, sans-serif;
-  background-image: url("../assets/background/lava-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: var(--bg);
-  min-height: 100vh;
-}
-
-.wrap {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: var(--spacing-5) var(--spacing-4);
-}
-
-/* ========== Sticky translucent nav ========== */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: var(--z-nav);
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-4);
-  padding: 14px 0;
-  background: rgba(10, 10, 14, 0.45);
-  -webkit-backdrop-filter: saturate(120%) blur(8px);
-  backdrop-filter: saturate(120%) blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 17px;
-  letter-spacing: 0.02em;
-  transition: background 0.2s ease, padding 0.2s ease, box-shadow 0.2s ease;
-}
-nav a {
-  color: var(--brand-gold);
-  text-decoration: none;
-  font-weight: 600;
-}
-nav a:hover {
-  color: #ffd88a;
-  text-decoration: underline;
-}
-nav.nav--scrolled {
-  padding: 10px 0;
-  background: rgba(10, 10, 14, 0.6);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-}
-
-/* ========== Hero ========== */
-.hero {
-  position: relative;
-  /* Use flexbox to position content vertically at the top */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Corrected to start from the top */
-  padding-top: var(--hero-padding-top); /* Push content down from the nav */
-  padding-bottom: var(--spacing-5);
-  text-align: center;
-  border-radius: var(--spacing-4);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: hidden;
-  min-height: 100vh;
-}
-
-/* Legibility mask */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(1200px 700px at 50% 0%, rgba(0, 0, 0, 0.35), transparent 60%);
-}
-
-/* Visually-hidden text for accessibility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Container for all hero's core content, now acts as the main stack */
-.hero-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  gap: 0; /* Control gaps explicitly with margins on children */
-}
-
-/* Fire brand header (single image with baked-in kicker) */
-.fire-title {
-  margin: 0 auto;
-  text-align: center;
-  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-.fire-logo {
-  width: min(98%, 1200px); /* was 880px, increase max width */
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-/* Hiding kicker text, as it's part of the image */
-.kicker { display: none !important; }
-
-/* Brand stamp animation container */
-.brand-stamp {
-  position: relative;
-  width: min(70vw, 360px);
-  height: auto;
-  margin: 0 auto var(--gap-stamp-lead);
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  animation: none !important;
-}
-.brand-stamp .logo {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-  transform-origin: 50% 50%;
-  animation: logoTumble 28s linear infinite;
-}
-
-/* Hero copy + CTA */
-p.lead {
-  color: rgb(var(--lava-glow));
-  font-size: clamp(24px, 2.8vw, 32px);
-  margin: 0 auto var(--gap-lead-btn);
-  text-shadow: 0 0 10px rgb(var(--lava-glow));
-  max-width: 58ch;
-  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-/* Updated button styles to match lava theme */
-.btn {
-  display: inline-block;
-  padding: 14px var(--spacing-4);
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 700;
-  color: var(--bg);
-  background: rgb(var(--lava-glow));
-  box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
-  transition: transform .12s ease, box-shadow .12s ease;
-  margin: 0;
-  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45);
-}
-.btn:active { transform: translateY(0); }
-
-.btn-ghost {
-  background: transparent;
-  color: rgb(var(--lava-glow));
-  border: 1px solid rgba(245, 90, 16, 0.18);
-  box-shadow: none;
-}
-.btn-ghost:hover { border-color: rgba(245, 90, 16, 0.35); }
-
-/* Tagline section */
-.tagline-section { text-align: center; padding: 24px 0; }
-.tagline-title {
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 700;
-  color: var(--brand-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin: 0;
-}
-.tagline-subhead {
-  font-size: clamp(16px, 2.2vw, 20px);
-  color: rgb(var(--lava-glow));
-  text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
-  margin-top: 8px;
-  margin-bottom: 24px;
-}
-
-/* ========== Footer ========== */
-footer { margin: 64px 0 0; text-align: center; color: var(--muted); }
-
-/* ========== Canvas: embers layer ========== */
-#bg {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  display: block;
-  z-index: var(--z-canvas);
-  pointer-events: none;
-  background: transparent;
-}
-/* Content above canvas */
-main, .wrap, .hero, .card, nav, footer { position: relative; z-index: var(--z-content); }
-
-/* ========== Services ========== */
-.services { margin: var(--spacing-5) 0 var(--spacing-2); }
-.services > h2 { font-size: clamp(24px, 3.8vw, 36px); margin: 0 0 18px; }
-.services-grid {
-  display: grid;
-  gap: var(--spacing-3);
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-@media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 640px) { .services-grid { grid-template-columns: 1fr; } }
-.svc {
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  background: rgba(10, 10, 14, 0.35);
-  -webkit-backdrop-filter: blur(4px) saturate(110%);
-  backdrop-filter: blur(4px) saturate(110%);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
-}
-/* Fallback when backdrop-filter isn’t supported */
-@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-  .svc { background: rgba(10, 10, 14, 0.65); }
-}
-.svc:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-}
-.svc-icon {
-  width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px;
-  background: rgba(255, 170, 60, 0.12); color: #f5c375; margin-bottom: 10px;
-}
-.svc h3 { margin: 0 0 6px; font-size: clamp(18px, 2.6vw, 22px); }
-.svc p { margin: 0 0 10px; color: var(--muted); }
-.svc-link { color: var(--accent); text-decoration: none; font-weight: 600; }
-.svc-link:hover { text-decoration: underline; }
-
-/* ========== Contact band ========== */
-.contact-band {
-  margin: 56px 0 0;
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-}
-.contact-inner { max-width: 980px; margin: 0 auto; padding: 28px 22px; text-align: center; }
-.contact-inner h2 { margin: 0 0 6px; font-size: clamp(24px, 3.8vw, 36px); }
-.contact-lead { margin: 0 0 16px; color: var(--muted); }
-
-/* Responsive tweaks */
-@media (max-width: 640px) {
-  .wrap { padding: 36px 16px; }
-  .hero { padding: 56px 18px 40px; }
-  .fire-logo { width: 94%; }
-  nav { gap: var(--spacing-3); font-size: 16px; }
-}
-
-/* Optional tighter hero variant */
-.hero.hero--tight { padding-top: 26px; }
-
-/* Keyframes */
-@keyframes ff-stampIn {
-  0% { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
-  60% { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
-}
-@keyframes ff-fadeOut { to { opacity: 0; } }
-@keyframes ff-imprintGlow {
-  0% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
-  50% { box-shadow: 0 0 16px var(--brand-gold); }
-  100% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
-}
-@keyframes ff-brandFlash {
-  0% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
-  50% { box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8); }
-  100% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
-}
-@keyframes ff-fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes logoSwing {
-  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
-  25% { transform: rotateX(20deg) rotateY(30deg); }
-  75% { transform: rotateX(-20deg) rotateY(-30deg); }
-}
-@keyframes logoSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes logoPulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; }
-}
-@keyframes logoTumble {
-  0% { transform: rotateX(0deg) rotateY(0deg); }
-  25% { transform: rotateX(35deg) rotateY(65deg); }
-  50% { transform: rotateX(110deg) rotateY(180deg); }
-  75% { transform: rotateX(215deg) rotateY(295deg); }
-  100% { transform: rotateX(360deg) rotateY(360deg); }
-}
-@keyframes emberRise {
-  0% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
-}
-
-/* === “Heat mode” flicker/pulse (optional; toggle via .mood-volcano on <body>) */
-@property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
-@property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
-@property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
-@keyframes lavaFlicker {
-  0%   { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-  8%   { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
-  22%  { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
-  38%  { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
-  57%  { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
-  76%  { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
-  100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-}
-/* turn on by adding class="mood-volcano" to <body> */
-body.mood-volcano #hero .fire-logo{
-  animation: lavaFlicker 3s infinite;
-  filter:
-    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
-}
-body.mood-volcano .brand-stamp .logo{
-  animation: logoTumble 28s linear infinite, lavaFlicker 3.6s infinite;
-  filter:
-    drop-shadow(0 0 var(--g1) rgba(245,90,16,var(--gA)))
-    drop-shadow(0 0 var(--g2) rgba(245,90,16, calc(var(--gA)*.8)));
-}
-
-/* ===== HERO LIFTS (the simple version that worked) ===================== */
-/* Make these numbers more negative to move each item UP */
 :root{
-  --title-lift: -14px;   /* fire title image */
-  --logo-lift:  -300px;  /* round FF logo */
-  --lead-lift:  -370px;  /* subheading */
-  --btn-lift:   -370px;  /* CTA button */
-  --lead-btn-gap: 10px;  /* spacing between subheading and button */
-}
-#hero{ overflow: visible; } /* so negative offsets don't get clipped */
-#hero .fire-title,
-#hero .brand-stamp,
-#hero .lead,
-#hero .btn{
-  position: relative;     /* enables top: … offsets */
-  z-index: 3;
-}
-/* Lift each piece independently */
-#hero .fire-title{ top: var(--title-lift); }
-#hero .brand-stamp{ top: var(--logo-lift); }
-#hero .lead{
-  top: var(--lead-lift);
-  margin-bottom: var(--lead-btn-gap);
-  text-align: center;
-}
-#hero .btn{
-  top: var(--btn-lift);
-  margin-top: 0;
-}
-/* Optional: soften lifts on small screens */
-@media (max-width: 840px){
-  :root{
-    --title-lift: -300px;
-    --logo-lift:  -510px;
-    --lead-lift:  -500px;
-    --btn-lift:   -500px;
-  }
-}
-
-/* Center the image with CSS Grid */
-.fire-title {
-  display: grid;
-  justify-items: center;
-}
-/* Ensure the img can be centered cleanly */
-.fire-logo {
-  display: block;
-  margin: 0;
-  max-width: 100%;
-  height: auto;
-}
-/* Full-bleed hero: breaks out of the .wrap max-width */
-.hero.hero--full {
-  margin-left:  calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  padding-left:  max(24px, 5vw);
-  padding-right: max(24px, 5vw);
-}
-/* Now the flame title can be much larger */
-.hero.hero--full .fire-logo {
-  width: min(96vw, 1800px);
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-/* Balance the tagline with the bigger title */
-.hero.hero--full p.lead {
-  font-size: clamp(20px, 3vw, 30px);
-}
-
-/* --- Ember glow tokens --- */
-:root{
-  /* start warm orange; JS will randomize these */
-  --lava-glow: 255, 170, 60;    /* r,g,b */
-  --lava-alpha: 0.22;           /* base opacity 0–1 */
-}
-/* Subtle breathing on the hero title (uses the variables above) */
-.fire-title{
-  position: relative;
-  /* soft colored drop-shadows using --lava-glow / --lava-alpha */
-  filter:
-    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
-    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55)));
-  animation: ff-breathe 3.8s ease-in-out infinite;
-}
-/* Optional: a very soft inner glow behind the flame letters */
-.fire-title::after{
-  content:"";
-  position:absolute; inset:-2% -3%;
-  pointer-events:none;
-  background: radial-gradient(60% 55% at 50% 50%,
-              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
-              rgba(var(--lava-glow), 0) 65%);
-  filter: blur(14px);
-  opacity:.55;
-  animation: ff-breathe 4.2s ease-in-out infinite;
-  z-index:-1;
-}
-/* Gentle breathing (intensity only; color comes from JS) */
-@keyframes ff-breathe{
-  0%   { opacity:.85; }
-  50%  { opacity:1;   }
-  100% { opacity:.85; }
-}
-
-/* === Ember glow for nav links === */
-nav a {
-  position: relative;
-  color: var(--brand-gold);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color .2s ease;
-  /* Subtle ember glow */
-  text-shadow:
-    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
-    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.4));
-  animation: ff-breathe 4s ease-in-out infinite;
-}
-/* Stronger glow on hover */
-nav a:hover {
-  color: #ffd88a;
-  text-shadow:
-    0 0 10px rgba(var(--lava-glow), calc(var(--lava-alpha) * 1.2)),
-    0 0 22px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7));
-}
-
-/* === SAFETY NET: restore palette + constant glow === */
-:root{
+  /* Core palette */
   --bg:#0b0b0f;
   --ink:#e7e7ee;
   --muted:#9aa0a6;
-  --accent:#66e0ff;
+
+  /* Gold system (matches nav + hero) */
   --brand-gold:#f0c870;
-  /* ember glow vars (constant intensity) */
-  --lava-glow: 255, 170, 60;  /* r,g,b; JS can still swap color */
-  --lava-alpha: 0.28;         /* fixed intensity so it never disappears */
-}
-/* Body text color (ensure we didn't lose it) */
-body { color: var(--ink) !important; }
-/* Lead paragraph back to muted (not white) */
-p.lead {
-  color: var(--muted) !important;
-  font-size: clamp(20px, 3vw, 28px); /* keep your larger size */
-  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-/* Button back to accent fill */
-.btn{
-  background: var(--accent) !important;
-  color: #0b0b0f !important;
-  border: 0 !important;
-  filter: drop-shadow(0 0 15px rgb(var(--lava-glow))) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5)) !important;
-}
-.btn:hover{ transform: translateY(-2px) !important; }
+  --gold-rgb:240,200,112;
 
-/* Hero flame title glow (tight; constant, no animation) */
-.fire-title{
-  position: relative;
-  filter:
-    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
-    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha) * .55))) !important;
-  animation: none !important;
+  /* Ember color hooks (used by JS) */
+  --lava-glow:255,170,60;   /* r,g,b */
+  --lava-alpha:.28;
+
+  /* Layout & z-order */
+  --content-width:1100px;
+  --z-canvas:10;
+  --z-content:20;
+  --z-nav:25;
+
+  /* Spacing */
+  --space-2:12px;
+  --space-3:16px;
+  --space-4:24px;
+  --space-5:48px;
+
+  /* Hero lifts (negative pulls up) */
+  --lift-title:-130px;
+  --lift-logo:-450px;
+  --lift-lead:-500px;
+  --lift-btn:-500px;
 }
-/* Optional inner glow behind the title (kept tight) */
-.fire-title::after{
-  content:"";
-  position:absolute; inset:-2% -3%;
-  pointer-events:none;
-  background: radial-gradient(60% 55% at 50% 50%,
-              rgba(var(--lava-glow), calc(var(--lava-alpha) * .50)) 0%,
-              rgba(var(--lava-glow), 0) 65%);
-  filter: blur(14px);
-  opacity:.55;
-  z-index:-1;
-  animation: none !important;
+
+/* ========== Base ========== */
+*,*::before,*::after{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0; color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;
+
+  /* Lava background ON the hero only — page below is dark */
+  background: var(--bg);
 }
-/* Nav link glow constant (no pulse) */
+.wrap{ max-width:var(--content-width); margin:0 auto; padding:var(--space-5) var(--space-4) }
+
+/* ========== Ember canvas (behind content) ========== */
+#bg{
+  position:fixed; inset:0; width:100vw; height:100vh;
+  display:block; pointer-events:none; z-index:var(--z-canvas); background:transparent;
+}
+
+/* ========== Sticky nav ========== */
+nav{
+  position:sticky; top:0; z-index:var(--z-nav);
+  display:flex; justify-content:center; gap:var(--space-4);
+  padding:14px 0;
+  background:rgba(10,10,14,.45);
+  -webkit-backdrop-filter:saturate(120%) blur(8px);
+  backdrop-filter:saturate(120%) blur(8px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:17px; letter-spacing:.02em;
+}
 nav a{
+  color:var(--brand-gold); text-decoration:none; font-weight:600;
   text-shadow:
-    0 0 6px  rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
-    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.45)) !important;
-  animation: none !important;
+    0 0 6px  rgba(var(--gold-rgb), .60),
+    0 0 12px rgba(var(--gold-rgb), .35);
 }
-/* ===== QUICK FIX OVERRIDES (paste at END of CSS) ===== */
+nav a:hover{ color:#ffd88a; text-decoration:underline }
 
-/* 1) Cap the flame title size so it fits the viewport */
-.hero.hero--full .fire-logo {
-  width: min(92vw, 1200px) !important;  /* was 96vw, 1800px */
-  height: auto !important;
-}
+/* ========== Hero (full-bleed) ========== */
+.hero{
+  position:relative; overflow:visible; /* allow lifts */
+  text-align:center; min-height:100vh;
 
-/* 2) Hide the old round “FF” brand-stamp completely (if any leftover) */
-.brand-stamp { 
-  display: none !important; 
-}
+  /* Full-bleed container */
+  margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
+  padding-left:max(24px, 5vw); padding-right:max(24px, 5vw);
+  padding-top:clamp(80px, 15vh, 180px);
+  padding-bottom:var(--space-5);
 
-/* 3) Neutralize the manual lift offsets so hero content stacks naturally */
-:root{
-  --title-lift: 0px !important;
-  --logo-lift:  0px !important;
-  --lead-lift:  0px !important;
-  --btn-lift:   0px !important;
-}
-
-/* Ensure hero remains above canvas, canvas stays behind */
-#bg{ z-index: 10 !important; }
-.hero, nav, main, footer { z-index: 20 !important; position: relative; }
-/* --- Round FF logo: centered + rotary spin --- */
-.brand-stamp {
-  display: block !important;
-  width: min(64vw, 340px);
-  margin: 14px auto 22px; /* space under the fire title */
-  perspective: 1000px;    /* gives depth for 3D spin */
+  /* Hero-only backdrop image */
+  background:
+    radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%),
+    url("../assets/background/lava-bg.jpg") center / cover no-repeat;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  border-radius:24px;
 }
 
-.brand-stamp .logo {
-  width: 100%;
-  height: auto;
-  display: block;
+/* Fire title image */
+.fire-title{
+  display:grid; justify-items:center;
+  transform:translateY(var(--lift-title));
   filter:
-    drop-shadow(0 0 12px rgba(255,190,90,0.35))
-    drop-shadow(0 0 28px rgba(255,160,60,0.25));
-  transform-origin: 50% 50%;
-  animation: logoTumble 28s linear infinite; /* <-- spin restored */
+    drop-shadow(0 0 22px rgba(var(--gold-rgb), .35))
+    drop-shadow(0 0 42px rgba(var(--gold-rgb), .20));
+}
+.fire-logo{
+  width:min(92vw, 1200px); height:auto; display:block; margin:0;
 }
 
-/* Logo tumble keyframes (already in your CSS, but repeat here for safety) */
-@keyframes logoTumble {
-  0%   { transform: rotateX(0deg) rotateY(0deg); }
-  25%  { transform: rotateX(35deg) rotateY(65deg); }
-  50%  { transform: rotateX(110deg) rotateY(180deg); }
-  75%  { transform: rotateX(215deg) rotateY(295deg); }
-  100% { transform: rotateX(360deg) rotateY(360deg); }
+/* Spinning round logo (if present) */
+.brand-stamp{
+  width:min(64vw, 340px); margin:14px auto 22px;
+  transform:translateY(var(--lift-logo));
+  perspective:1000px;
 }
-/* ==============================
-   HERO LIFT CONTROLS (OVERRIDES)
-   Tweak these four numbers only.
-   More negative = pulled further up
-   ============================== */
-:root{
-  --lift-title: -130px;   /* fire title image */
-  --lift-logo:  -450px;   /* round FF logo */
-  --lift-lead:  -500px;   /* subheading */
-  --lift-btn:   -500px;   /* CTA button */
-}
-
-/* Make sure the hero lets items move outside its box */
-#hero{ overflow: visible !important; }
-
-/* Apply the lifts with transforms so layout stays stable */
-#hero .fire-title{
-  transform: translateY(var(--lift-title)) !important;
-  will-change: transform;
-}
-#hero .brand-stamp{
-  transform: translateY(var(--lift-logo)) !important;
-  will-change: transform;
-}
-#hero p.lead{
-  transform: translateY(var(--lift-lead)) !important;
-  will-change: transform;
-  margin-top: 0 !important;
-  margin-bottom: 10px !important;  /* small gap above button */
-}
-#hero .btn{
-  transform: translateY(var(--lift-btn)) !important;
-  will-change: transform;
-  margin-top: 0 !important;
-}
-
-/* Keep everything centered visually */
-#hero .fire-title,
-#hero .brand-stamp,
-#hero p.lead,
-#hero .btn{
-  position: relative !important;
-  left: 0; right: 0;
-  margin-left: auto; margin-right: auto;
-  text-align: center;
-}
-/* ==============================
-   HERO CTA + LEAD COLOR FIX
-   ============================== */
-
-/* Lead paragraph — glowing lava orange/red */
-#hero p.lead {
-  color: rgba(245, 90, 16, 0.95) !important; /* lava orange/red */
-  text-shadow:
-    0 0 10px rgba(245, 90, 16, 0.8),
-    0 0 20px rgba(245, 90, 16, 0.6) !important;
+.brand-stamp .logo{
+  width:100%; height:auto; display:block;
   filter:
-    drop-shadow(0 0 15px rgba(245, 90, 16, 0.8))
-    drop-shadow(0 0 25px rgba(245, 90, 16, 0.5)) !important;
+    drop-shadow(0 0 12px rgba(var(--gold-rgb), .35))
+    drop-shadow(0 0 28px rgba(var(--gold-rgb), .25));
+  transform-origin:50% 50%;
+  animation:logoTumble 28s linear infinite;
 }
 
-/* Primary CTA button — filled with lava glow */
-#hero .btn {
-  background: rgba(245, 90, 16, 0.95) !important;
-  color: #0b0b0f !important; /* dark text for contrast */
-  border: none !important;
-  text-shadow: none !important;
+/* Lead + CTA */
+p.lead{
+  max-width:58ch; margin:0 auto 10px;
+  transform:translateY(var(--lift-lead));
+  color:var(--brand-gold);
+  font-size:clamp(22px, 3vw, 30px);
+  text-shadow:
+    0 0 6px  rgba(var(--gold-rgb), .65),
+    0 0 14px rgba(var(--gold-rgb), .40);
   filter:
-    drop-shadow(0 0 12px rgba(245, 90, 16, 0.85))
-    drop-shadow(0 0 20px rgba(245, 90, 16, 0.55)) !important;
+    drop-shadow(0 0 10px rgba(var(--gold-rgb), .50))
+    drop-shadow(0 0 18px rgba(var(--gold-rgb), .30));
 }
-
-#hero .btn:hover {
-  background: rgba(255, 120, 40, 1) !important; /* brighter orange on hover */
-  transform: translateY(-2px) !important;
-  box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45) !important;
-}
-
-/* Ghost button (secondary) */
-#hero .btn-ghost {
-  background: transparent !important;
-  color: rgba(245, 90, 16, 0.95) !important;
-  border: 1px solid rgba(245, 90, 16, 0.35) !important;
-  box-shadow: none !important;
-}
-#hero .btn-ghost:hover {
-  border-color: rgba(245, 90, 16, 0.6) !important;
-  color: rgba(255, 140, 60, 1) !important;
-}
-/* =========================================
-   GOLD THEME — match nav link coloring/glow
-   (hero lead + all primary/ghost buttons)
-   ========================================= */
-
-/* Reusable gold glow */
-:root {
-  --gold-rgb: 240, 200, 112;          /* #f0c870 */
-  --gold-glow-a-strong: 0.75;
-  --gold-glow-a-soft:   0.45;
-}
-
-/* Lead line under the hero title */
-#hero p.lead{
-  color: var(--brand-gold) !important;
+.btn{
+  display:inline-block; padding:14px var(--space-4);
+  border-radius:12px; text-decoration:none; font-weight:700;
+  background:transparent; color:var(--brand-gold);
+  border:1px solid rgba(var(--gold-rgb), .40);
   text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), var(--gold-glow-a-strong)),
-    0 0 14px rgba(var(--gold-rgb), var(--gold-glow-a-soft)) !important;
-  filter:
-    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
-    drop-shadow(0 0 22px rgba(var(--gold-rgb), .35)) !important;
+    0 0 6px  rgba(var(--gold-rgb), .60),
+    0 0 12px rgba(var(--gold-rgb), .35);
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+  transform:translateY(var(--lift-btn));
+}
+.btn:hover{
+  transform:translateY(calc(var(--lift-btn) - 2px));
+  border-color:rgba(var(--gold-rgb), .70);
+  color:#ffd88a;
+}
+.btn-ghost{
+  background:transparent; color:var(--brand-gold);
+  border:1px solid rgba(var(--gold-rgb), .35);
 }
 
-/* Primary buttons (hero & contact band) */
-#hero .btn,
-.contact-actions .btn:not(.btn-ghost){
-  background: var(--brand-gold) !important;
-  color: #0b0b0f !important;               /* dark text for contrast */
-  border: 0 !important;
-  text-shadow: none !important;
-  box-shadow: 0 8px 24px rgba(var(--gold-rgb), .28) !important;
-  filter:
-    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
-    drop-shadow(0 0 18px rgba(var(--gold-rgb), .35)) !important;
+/* Keep all hero content above the canvas */
+main, nav, footer, .hero{ position:relative; z-index:var(--z-content) }
+
+/* ========== Tagline / Services / Contact ========== */
+.tagline-section{ text-align:center; padding:24px 0 }
+.tagline-title{
+  font-size:clamp(28px,4vw,48px); font-weight:700; text-transform:uppercase; letter-spacing:.15em; margin:0;
+  color:var(--brand-gold);
+  text-shadow:0 0 6px rgba(var(--gold-rgb), .35), 0 0 12px rgba(var(--gold-rgb), .20);
 }
-#hero .btn:hover,
-.contact-actions .btn:not(.btn-ghost):hover{
-  transform: translateY(-2px) !important;
-  box-shadow: 0 12px 28px rgba(var(--gold-rgb), .40) !important;
+.tagline-subhead{
+  font-size:clamp(16px, 2.2vw, 20px); margin:8px 0 24px; color:var(--muted);
 }
 
-/* Ghost buttons (outline style) */
-#hero .btn-ghost,
-.contact-actions .btn-ghost{
-  background: transparent !important;
-  color: var(--brand-gold) !important;
-  border: 1px solid rgba(var(--gold-rgb), .55) !important;
-  box-shadow: none !important;
-  text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), .6),
-    0 0 12px rgba(var(--gold-rgb), .35) !important;
+.services{ margin:var(--space-5) 0 var(--space-2) }
+.services > .wrap > h2{ font-size:clamp(24px,3.8vw,36px); margin:0 0 18px }
+.services-grid{ display:grid; gap:var(--space-3); grid-template-columns:repeat(3, minmax(0,1fr)) }
+@media (max-width:900px){ .services-grid{ grid-template-columns:repeat(2, minmax(0,1fr)) } }
+@media (max-width:640px){ .services-grid{ grid-template-columns:1fr } }
+.svc{
+  padding:20px; border:1px solid rgba(255,255,255,.10); border-radius:16px;
+  background:rgba(10,10,14,.35);
+  -webkit-backdrop-filter:blur(4px) saturate(110%);
+  backdrop-filter:blur(4px) saturate(110%);
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
 }
-#hero .btn-ghost:hover,
-.contact-actions .btn-ghost:hover{
-  color: #ffe6a8 !important; /* slightly brighter gold */
-  border-color: rgba(var(--gold-rgb), .8) !important;
+.svc:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.18); box-shadow:0 10px 24px rgba(0,0,0,.35) }
+.svc-icon{
+  width:44px; height:44px; display:grid; place-items:center; border-radius:10px;
+  background:rgba(255,170,60,.12); color:#f5c375; margin-bottom:10px;
+}
+.svc h3{ margin:0 0 6px; font-size:clamp(18px,2.6vw,22px) }
+.svc p{ margin:0 0 10px; color:var(--muted) }
+.svc-link{ color:#66e0ff; text-decoration:none; font-weight:600 }
+.svc-link:hover{ text-decoration:underline }
+
+.contact-band{
+  margin:56px 0 0; border-radius:20px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+.contact-inner{ max-width:980px; margin:0 auto; padding:28px 22px; text-align:center }
+#contact-title{ margin:0 0 6px; font-size:clamp(24px,3.8vw,36px) }
+.contact-lead{ margin:0 0 16px; color:var(--muted) }
+.contact-actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
+
+footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
+
+/* ========== Keyframes ========== */
+@keyframes logoTumble{
+  0%{   transform:rotateX(0)   rotateY(0)   }
+  25%{  transform:rotateX(35deg) rotateY(65deg) }
+  50%{  transform:rotateX(110deg) rotateY(180deg) }
+  75%{  transform:rotateX(215deg) rotateY(295deg) }
+  100%{ transform:rotateX(360deg) rotateY(360deg) }
 }
 
-/* Optional: give section headings a subtle gold glow like the nav */
-.tagline-title,
-.services > h2,
-#contact-title{
-  text-shadow:
-    0 0 6px  rgba(var(--gold-rgb), .35),
-    0 0 12px rgba(var(--gold-rgb), .20);
-}
-/* Buttons: use the same glow palette as nav links */
-.btn {
-  display: inline-block;
-  padding: 14px var(--spacing-4);
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 700;
-  color: var(--brand-gold);
-  background: transparent; /* transparent instead of solid fill */
-  border: 1px solid rgba(240, 200, 112, 0.4); /* gold border */
-  text-shadow: 
-    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.7)),
-    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha) * 0.4));
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+/* ========== Responsive ========== */
+@media (max-width:840px){
+  :root{
+    --lift-title:-80px;
+    --lift-logo:-220px;
+    --lift-lead:-240px;
+    --lift-btn:-240px;
+  }
+  nav{ gap:var(--space-3); font-size:16px }
 }
 
-.btn:hover {
-  transform: translateY(-2px);
-  border-color: rgba(240, 200, 112, 0.7);
-  box-shadow: 0 0 18px rgba(var(--lava-glow), 0.7);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-/* Ghost variation stays almost the same */
-.btn-ghost {
-  background: transparent;
-  color: var(--brand-gold);
-  border: 1px solid rgba(240, 200, 112, 0.25);
-  text-shadow: none;
-}
-
-.btn-ghost:hover {
-  border-color: rgba(240, 200, 112, 0.7);
-  box-shadow: 0 0 14px rgba(var(--lava-glow), 0.5);
-}
-/* === Force hero text + buttons to match nav gold === */
-
-/* Hero lead text */
-p.lead {
-  color: var(--brand-gold) !important;   /* exact same gold as nav */
-  font-size: clamp(22px, 3vw, 30px);
-  text-shadow:
-  
-    0 0 14px rgba(240, 200, 112, 0.4);
-}
-
-/* Transparent gold-glow buttons */
-.btn {
-  background: transparent !important;
-  color: var(--brand-gold) !important;
-  border: 1px solid rgba(240, 200, 112, 0.35);
-  font-weight: 600;
-  text-shadow:
-      0 0 14px rgba(240, 200, 112, 0.5);
-  transition: all 0.2s ease;
-}
-
-.btn:hover {
-  border-color: rgba(240, 200, 112, 0.65);
-  color: #ffd88a !important; /* slightly brighter gold on hover */
-  text-shadow:
-    0 0 10px rgba(240, 200, 112, 1),
-    0 0 22px rgba(240, 200, 112, 0.8);
-  transform: translateY(-2px);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-/* Ghost button variant */
-.btn-ghost {
-  background: transparent !important;
-  color: var(--brand-gold) !important;
-  border: 1px solid rgba(240, 200, 112, 0.25);
-  box-shadow: none !important;
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .brand-stamp .logo{ animation:none }
+  .fire-title, .brand-stamp, p.lead, .btn{ transform:none }
 }
