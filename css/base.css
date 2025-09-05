@@ -232,6 +232,43 @@ footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
   .brand-stamp .logo{ animation:none }
   .fire-title, .brand-stamp, p.lead, .btn{ transform:none }
 }
+/* === Spark visibility fix: canvas above hero bg, below content === */
+
+/* 1) Move hero background image off the element and onto ::before */
+.hero{
+  background: none !important;          /* stop painting over the canvas */
+  position: relative;                    /* ensure ::before positions correctly */
+  overflow: visible;                     /* so lifted items aren’t clipped */
+}
+
+/* Hero bg image + legibility mask sits LOW in the stack */
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  z-index: 8;                            /* below canvas */
+  border-radius:24px;
+  background:
+    radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%),
+    url("../assets/background/lava-bg.jpg") center / cover no-repeat;
+  pointer-events:none;
+}
+
+/* 2) Put the ember canvas above the hero bg but below content */
+#bg{
+  z-index: 12 !important;                /* above .hero::before (8) */
+}
+
+/* 3) Keep all real content above the canvas */
+.hero, nav, main, footer{
+  position: relative;
+  z-index: 20;                           /* above canvas */
+}
+
+/* (Optional) ensure hero parts are in the content layer too */
+.fire-title, .brand-stamp, #hero p.lead, #hero .btn{
+  position: relative;
+  z-index: 21;                           /* just to be safe */
+}
 /* === 1) Layout/stack: hero photo only in HERO, rest midnight blue === */
 body{
   /* midnight-blue page background (no photo below the hero) */
