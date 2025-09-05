@@ -269,3 +269,130 @@ footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
   position: relative;
   z-index: 21;                           /* just to be safe */
 }
+/* === 1) Layout/stack: hero photo only in HERO, rest midnight blue === */
+body{
+  /* midnight-blue page background (no photo below the hero) */
+  background-image: none !important;
+  background-color: #0b0b1a !important;
+}
+
+/* hero uses the lava photo on its ::before layer (keeps sparks above it) */
+.hero{
+  background: none !important;
+  position: relative;
+  overflow: visible; /* allow lifted elements */
+}
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  z-index: 8; /* below canvas */
+  border-radius: 24px;
+  background:
+    radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%),
+    url("../assets/background/lava-bg.jpg") center/cover no-repeat;
+  pointer-events:none;
+}
+
+/* canvas above hero photo; content above canvas */
+#bg{ z-index:12 !important; }
+.hero, nav, main, footer{ position:relative; z-index:20 !important; }
+
+/* ===========================================
+   2) Glow palette: lava (title-only) + gold
+   =========================================== */
+:root{
+  /* JS glow shuffler expects this numeric triplet */
+  --lava-glow: 255, 170, 60;  /* r,g,b */
+  --lava-alpha: .28;
+
+  /* exact nav gold */
+  --gold-rgb: 240, 200, 112;  /* #f0c870 */
+  --gold-a-strong: .75;
+  --gold-a-soft:   .45;
+}
+
+/* --- Lava glow ONLY on hero title image --- */
+.fire-title{
+  filter:
+    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha)*.55))) !important;
+  animation: ff-breathe 3.8s ease-in-out infinite !important;
+}
+.fire-title::after{
+  content:"";
+  position:absolute; inset:-2% -3%;
+  z-index:-1; pointer-events:none;
+  background: radial-gradient(60% 55% at 50% 50%,
+              rgba(var(--lava-glow), calc(var(--lava-alpha)*.50)) 0%,
+              rgba(var(--lava-glow), 0) 65%);
+  filter: blur(14px);
+  opacity:.55;
+  animation: ff-breathe 4.2s ease-in-out infinite;
+}
+
+/* --- Gold glow for logo + “gold” copy/buttons (match nav) --- */
+.brand-stamp .logo{
+  filter:
+    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
+    drop-shadow(0 0 20px rgba(var(--gold-rgb), .35)) !important;
+}
+
+/* lead line in gold (same tone as nav) */
+#hero p.lead{
+  color: rgb(var(--gold-rgb)) !important;
+  text-shadow:
+    0 0 6px  rgba(var(--gold-rgb), var(--gold-a-strong)),
+    0 0 14px rgba(var(--gold-rgb), var(--gold-a-soft)) !important;
+  filter:
+    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
+    drop-shadow(0 0 22px rgba(var(--gold-rgb), .35)) !important;
+}
+
+/* transparent gold buttons (hero + contact) */
+#hero .btn,
+.contact-actions .btn:not(.btn-ghost){
+  background: transparent !important;
+  color: rgb(var(--gold-rgb)) !important;
+  border: 1px solid rgba(var(--gold-rgb), .35) !important;
+  box-shadow: none !important;
+  text-shadow:
+    0 0 6px  rgba(var(--gold-rgb), .55),
+    0 0 14px rgba(var(--gold-rgb), .35) !important;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+#hero .btn:hover,
+.contact-actions .btn:not(.btn-ghost):hover{
+  transform: translateY(-2px);
+  border-color: rgba(var(--gold-rgb), .65) !important;
+  color: #ffd88a !important; /* slightly brighter gold */
+  box-shadow: 0 0 18px rgba(var(--gold-rgb), .40) !important;
+}
+
+/* ghost variant stays outline gold */
+#hero .btn-ghost,
+.contact-actions .btn-ghost{
+  background: transparent !important;
+  color: rgb(var(--gold-rgb)) !important;
+  border: 1px solid rgba(var(--gold-rgb), .35) !important;
+  box-shadow: none !important;
+}
+
+/* ===========================================
+   3) Lift controls (unchanged behavior)
+   =========================================== */
+:root{
+  --lift-title: -130px;
+  --lift-logo:  -450px;
+  --lift-lead:  -500px;
+  --lift-btn:   -500px;
+}
+#hero{ overflow: visible !important; }
+#hero .fire-title{ transform: translateY(var(--lift-title)) !important; }
+#hero .brand-stamp{ transform: translateY(var(--lift-logo)) !important; }
+#hero p.lead{ transform: translateY(var(--lift-lead)) !important; margin:0 0 10px !important; }
+#hero .btn{  transform: translateY(var(--lift-btn)) !important;  margin-top:0 !important; }
+
+/* breathing keyframes */
+@keyframes ff-breathe{
+  0% {opacity:.85;} 50% {opacity:1;} 100% {opacity:.85;}
+}
