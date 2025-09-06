@@ -77,23 +77,26 @@ body{
 /* ========== Sticky nav ========== */
 nav{
   position:sticky; top:0; z-index:var(--z-nav);
-  display:flex; justify-content:center; gap:var(--space-4);
-  padding:14px 0;
-  background:rgba(10,10,14,.12);
+  /* ... other nav styles ... */
+
+  /* Set the background to be highly transparent */
+  background:rgba(10,10,14,.45);
   -webkit-backdrop-filter:saturate(120%) blur(8px);
   backdrop-filter:saturate(120%) blur(8px);
-  border-bottom:1px solid rgba(255,255,255,.02);
-  font-size:17px; letter-spacing:.02em;
+
+  /* ... other nav styles ... */
 }
-nav a{
-  color:var(--brand-gold);
-  text-decoration:none; font-weight:600;
-  text-shadow:0 0 6px rgba(var(--gold-rgb),.6), 0 0 12px rgba(var(--gold-rgb),.35);
+nav.nav--scrolled{
+  /* ... other nav scrolled styles ... */
+  /* Keep this background slightly more opaque than the default nav background */
+  background:rgba(10,10,14,.60);
+  /* ... other nav scrolled styles ... */
 }
+
 nav a:hover{ color:#ffd88a; text-decoration:underline }
 nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.10); box-shadow:0 6px 18px rgba(0,0,0,.35) }
 
-/* ========== Hero (full-bleed, lava photo only here) ========== */
+
 /* ========== Hero (full-bleed, lava photo only here) ========== */
 .hero{
   /* The hero itself needs to be positioned for its pseudo-element to work */
@@ -218,7 +221,9 @@ nav {
 
 .svc{
   padding:20px; border:1px solid rgba(255,255,255,.10); border-radius:16px;
-  background:rgba(10,10,14,.00);
+
+  /* Set the background to be highly transparent */
+  background:rgba(10,10,14,.35);
   -webkit-backdrop-filter:blur(4px) saturate(110%);
   backdrop-filter:blur(4px) saturate(110%);
   transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
