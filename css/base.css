@@ -112,6 +112,7 @@ nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.60); box-shadow:0 6
     drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
     drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha)*.55)));
   animation:ff-breathe 3.8s ease-in-out infinite;
+  z-index: var(--z-content);
 }
 .fire-title::after{
   content:"";
@@ -129,12 +130,14 @@ nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.60); box-shadow:0 6
   margin:14px auto 22px;
   transform:translateY(var(--lift-logo));
   perspective:1000px;
+  z-index: var(--z-content);
 }
 .brand-stamp .logo{
   width:100%; height:auto; display:block;
   filter:drop-shadow(0 0 10px rgba(var(--gold-rgb),.55)) drop-shadow(0 0 20px rgba(var(--gold-rgb),.35));
   transform-origin:50% 50%;
   animation:logoTumble 28s linear infinite;
+  z-index: var(--z-content);
 }
 
 /* Lead + CTA (GOLD) */
@@ -144,6 +147,7 @@ nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.60); box-shadow:0 6
   color:var(--brand-gold);
   font-size:clamp(22px,3vw,30px);
   text-shadow:0 0 6px rgba(var(--gold-rgb),.65), 0 0 14px rgba(var(--gold-rgb),.40);
+  z-index: var(--z-content);
 }
 #hero .btn{
   display:inline-block; padding:14px var(--space-4);
@@ -153,6 +157,7 @@ nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.60); box-shadow:0 6
   border:1px solid rgba(var(--gold-rgb),.35);
   text-shadow:0 0 6px rgba(var(--gold-rgb),.55), 0 0 14px rgba(var(--gold-rgb),.35);
   transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+  z-index: var(--z-content);
 }
 #hero .btn:hover{
   transform:translateY(calc(var(--lift-btn) - 2px));
@@ -223,3 +228,52 @@ footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
   }
   nav{ gap:var(--space-3); font-size:16px }
 }
+/* ===== HERO BACKGROUND / STACKING FIX (final authority) ===== */
+
+/* 0) Page base */
+body{
+  background-color:#0b0b1a !important; /* midnight */
+  background-image:none !important;
+}
+
+/* 1) The hero element itself should NOT paint a bg */
+.hero{
+  position: relative !important;
+  background: none !important;
+  overflow: visible !important; /* keeps lifted items visible */
+  z-index: 20 !important;       /* content layer */
+}
+
+/* 2) Put the photo on ::before, make it translucent (so sparks show through) */
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:24px;
+  pointer-events:none;
+  z-index: 5 !important;  /* BELOW the canvas */
+
+  /* “Opacity” without affecting children:
+     a soft dark overlay + the lava photo */
+  background:
+    linear-gradient(0deg, rgba(0,0,0,.40), rgba(0,0,0,.40)),                 /* dim layer */
+    radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%), /* legibility mask */
+    url("../assets/background/lava-bg.jpg") center / cover no-repeat;        /* lava image */
+}
+
+/* 3) Sparks canvas: OVER the bg, UNDER the content */
+#bg{
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important; height: 100vh !important;
+  background: transparent !important;
+  pointer-events: none !important;
+  z-index: 12 !important;   /* above ::before, below content */
+}
+
+/* 4) Make sure all real content beats the canvas */
+nav, main, footer, .hero,
+.fire-title, .brand-stamp, #hero p.lead, #hero .btn{
+  position: relative !important;
+  z-index: 20 !important;
+}
+
