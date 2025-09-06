@@ -210,9 +210,10 @@ nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.30); box-shadow:0 6
 .services-grid{ display:grid; gap:var(--space-3); grid-template-columns:repeat(3, minmax(0,1fr)) }
 @media (max-width:900px){ .services-grid{ grid-template-columns:repeat(2, minmax(0,1fr)) } }
 @media (max-width:640px){ .services-grid{ grid-template-columns:1fr } }
+
 .svc{
   padding:20px; border:1px solid rgba(255,255,255,.10); border-radius:16px;
-  background:rgba(10,10,14,.15);
+  background:rgba(10,10,14,.01);
   -webkit-backdrop-filter:blur(4px) saturate(110%);
   backdrop-filter:blur(4px) saturate(110%);
   transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
