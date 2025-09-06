@@ -87,7 +87,7 @@ nav a{
   text-shadow:0 0 6px rgba(var(--gold-rgb),.6), 0 0 12px rgba(var(--gold-rgb),.35);
 }
 nav a:hover{ color:#ffd88a; text-decoration:underline }
-nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.30); box-shadow:0 6px 18px rgba(0,0,0,.35) }
+nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.10); box-shadow:0 6px 18px rgba(0,0,0,.35) }
 
 /* ========== Hero (full-bleed, lava photo only here) ========== */
 .hero{
