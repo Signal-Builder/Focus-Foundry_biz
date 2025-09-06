@@ -75,7 +75,7 @@ nav{
   position:sticky; top:0; z-index:var(--z-nav);
   display:flex; justify-content:center; gap:var(--space-4);
   padding:14px 0;
-  background:rgba(10,10,14,.45);
+  background:rgba(10,10,14,.12);
   -webkit-backdrop-filter:saturate(120%) blur(8px);
   backdrop-filter:saturate(120%) blur(8px);
   border-bottom:1px solid rgba(255,255,255,.06);
