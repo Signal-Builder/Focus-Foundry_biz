@@ -1,547 +1,240 @@
 /* ========== Fonts ========== */
-@font-face {
+@font-face{
   font-family: 'sparatedregular';
   src: url('../assets/fonts/separated/sparated-webfont.woff2') format('woff2'),
-       url('../assets/fonts/separated/sparated-webfont.woff') format('woff');
-  font-weight: normal;
+       url('../assets/fonts/separated/sparated-webfont.woff')  format('woff');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
+/* ========== CSS Custom Properties (Houdini) ========== */
+@property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
+@property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
+@property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
+
 /* ========== Tokens ========== */
-/* All global variables are defined once here for clarity and consistency. */
-:root {
+:root{
   /* Colors */
-  --bg: #0b0b0f;
-  --ink: #e7e7ee;
-  --muted: #9aa0a6;
-  --accent: #66e0ff;
-  --brand-gold: #f0c870;
-  --lava-glow: #f55a10;
+  --bg:#0b0b0f;
+  --ink:#e7e7ee;
+  --muted:#9aa0a6;
+  --accent:#66e0ff;
 
-  /* Spacing Scale (based on an 8px grid) */
-  --spacing-1: 8px;
-  --spacing-2: 12px;
-  --spacing-3: 16px;
-  --spacing-4: 24px;
-  --spacing-5: 48px;
+  /* Gold (nav + lead + buttons) */
+  --brand-gold:#f0c870;
+  --gold-rgb:240,200,112;
 
-/* Ember glow (RGB triple!) */
-  --lava-glow: 255,170,60; /* r,g,b */
-  --lava-alpha: .28;
+  /* Ember glow (JS expects numeric triplet) */
+  --lava-glow:255,170,60;    /* r,g,b */
+  --lava-alpha:.28;
+  --lava: rgb(var(--lava-glow)); /* convenience color */
 
-/* Layout */
-  --content-width: 1100px;
-  
-  /* Z-Index Layers */
-  --z-canvas: 10;
-  --z-content: 20;
-  --z-nav: 25;
-  
-  /* HERO-SPECIFIC KNOBS - Tuned for vertical stacking */
-  --hero-padding-top: clamp(80px, 15vh, 180px);
-  --gap-title-stamp: clamp(24px, 4vh, 48px);
-  --gap-stamp-lead: clamp(16px, 3vh, 32px);
-  --gap-lead-btn: clamp(12px, 2vh, 24px);
-  
-  /* HERO LIFTS - These are essential for the layout */
-  --title-lift: -25px;
-  --logo-lift: -300px;
-  --lead-lift: -300px;
-  --btn-lift: -300px;
-  --lead-btn-gap: 10px;
+  /* Layout */
+  --content-width:1100px;
+  --z-canvas:10;
+  --z-content:20;
+  --z-nav:25;
 
-  /* CSS Houdini properties for animated glow */
-  @property --g1 { syntax: '<length>'; inherits: true; initial-value: 12px; }
-  @property --g2 { syntax: '<length>'; inherits: true; initial-value: 26px; }
-  @property --gA { syntax: '<number>'; inherits: true; initial-value: .45; }
+  /* Spacing */
+  --space-2:12px;
+  --space-3:16px;
+  --space-4:24px;
+  --space-5:48px;
+
+  /* Hero lift controls (negative pulls up) */
+  --lift-title:-25px;
+  --lift-logo:-300px;
+  --lift-lead:-300px;
+  --lift-btn:-300px;
+  --lead-btn-gap:10px;
 }
 
-@keyframes lavaFlicker {
-  0% { --g1: 9px;  --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
-  8% { --g1: 13px; --g2: 28px; --gA: .50; transform: scale(1.006); opacity: 1; }
-  22% { --g1: 10px; --g2: 22px; --gA: .36; transform: scale(1.002); opacity: .99; }
-  38% { --g1: 15px; --g2: 34px; --gA: .60; transform: scale(1.010); opacity: 1; }
-  57% { --g1: 11px; --g2: 24px; --gA: .40; transform: scale(1.003); opacity: .99; }
-  76% { --g1: 16px; --g2: 36px; --gA: .64; transform: scale(1.012); opacity: 1; }
-  100% { --g1: 9px;  --g2: 20px; --gA: .32; transform: scale(1.000); opacity: .98; }
-}
-
-/* Corrected body.mood-volcano styles */
-body.mood-volcano #hero .fire-logo,
-body.mood-volcano .brand-stamp .logo {
-  animation: lavaFlicker 3.6s linear infinite, logoTumble 28s linear infinite;
-  filter:
-    drop-shadow(0 0 var(--g1) rgba(245, 90, 16, var(--gA)))
-    drop-shadow(0 0 var(--g2) rgba(245, 90, 16, calc(var(--gA) * .8)));
-}
 /* ========== Base ========== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+*,*::before,*::after{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0; color:var(--ink);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;
+  /* Page-wide photo so the ember canvas can sit on top of it */
+  background-image:url("../assets/background/lava-bg.jpg");
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+  background-color:var(--bg);
+  min-height:100vh;
+}
+.wrap{ max-width:var(--content-width); margin:0 auto; padding:var(--space-5) var(--space-4) }
+
+/* ========== Ember canvas (behind content, above body bg) ========== */
+#bg{
+  position:fixed; inset:0; width:100vw; height:100vh;
+  display:block; pointer-events:none; background:transparent;
+  z-index:var(--z-canvas); /* 10 */
 }
 
-html,
-body {
-  height: 100%;
-}
+/* Put real content above the canvas */
+main, nav, .hero, footer{ position:relative; z-index:var(--z-content) } /* 20 */
 
-body {
-  margin: 0;
-  color: var(--ink);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, sans-serif;
-  background-image: url("../assets/background/lava-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: var(--bg);
-  min-height: 100vh;
-}
-
-.wrap {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: var(--spacing-5) var(--spacing-4);
-}
-
-/* ========= Sticky nav ========= */
+/* ========== Sticky nav ========== */
 nav{
-  position: sticky; top: 0; z-index: 25;
-  display:flex; justify-content:center; gap:24px;
-  padding:14px 0; background:rgba(10,10,14,.45);
+  position:sticky; top:0; z-index:var(--z-nav);
+  display:flex; justify-content:center; gap:var(--space-4);
+  padding:14px 0;
+  background:rgba(10,10,14,.45);
   -webkit-backdrop-filter:saturate(120%) blur(8px);
   backdrop-filter:saturate(120%) blur(8px);
   border-bottom:1px solid rgba(255,255,255,.06);
   font-size:17px; letter-spacing:.02em;
+  transition:background .2s ease, padding .2s ease, box-shadow .2s ease;
 }
 nav a{
   color:var(--brand-gold); text-decoration:none; font-weight:600;
   text-shadow:
-    0 0 6px rgba(var(--lava-glow), calc(var(--lava-alpha)*0.7)),
-    0 0 14px rgba(var(--lava-glow), calc(var(--lava-alpha)*0.45));
+    0 0 6px  rgba(var(--gold-rgb), .60),
+    0 0 12px rgba(var(--gold-rgb), .35);
 }
 nav a:hover{ color:#ffd88a; text-decoration:underline }
+nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.60); box-shadow:0 6px 18px rgba(0,0,0,.35) }
 
-/* Nav link glow with correct variables */
-nav a {
-  position: relative;
-  color: var(--brand-gold);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color .2s ease;
+/* ========== Hero (transparent so sparks show through) ========== */
+.hero{
+  position:relative; overflow:visible; min-height:100vh; text-align:center;
+  /* keep full width feel without covering canvas */
+  margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
+  padding-left:max(24px, 5vw); padding-right:max(24px, 5vw);
+  padding-top:clamp(80px, 15vh, 180px); padding-bottom:var(--space-5);
+  /* subtle frame only (no background fill) */
+  border-radius:24px; box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+/* Fire title */
+.fire-title{
+  display:grid; justify-items:center;
+  transform:translateY(var(--lift-title));
+  /* lava glow only on the title */
+  filter:
+    drop-shadow(0 0 22px rgba(var(--lava-glow), var(--lava-alpha)))
+    drop-shadow(0 0 42px rgba(var(--lava-glow), calc(var(--lava-alpha)*.55)));
+}
+.fire-logo{
+  width:min(98vw, 1200px);
+  height:auto; display:block; margin:0;
+}
+
+/* Spinning round logo (if present) */
+.brand-stamp{
+  width:min(64vw, 340px); margin:14px auto 22px;
+  transform:translateY(var(--lift-logo));
+  perspective:1000px;
+}
+.brand-stamp .logo{
+  width:100%; height:auto; display:block;
+  /* gold-ish glow to match nav */
+  filter:
+    drop-shadow(0 0 10px rgba(var(--gold-rgb), .55))
+    drop-shadow(0 0 20px rgba(var(--gold-rgb), .35));
+  transform-origin:50% 50%;
+  animation:logoTumble 28s linear infinite;
+}
+
+/* Lead + CTA (gold to match nav) */
+p.lead{
+  max-width:58ch; margin:0 auto var(--lead-btn-gap);
+  transform:translateY(var(--lift-lead));
+  color:rgb(var(--gold-rgb));
+  font-size:clamp(22px, 3vw, 30px);
   text-shadow:
-    0 0 6px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.7)),
-    0 0 14px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.45));
+    0 0 6px  rgba(var(--gold-rgb), .65),
+    0 0 14px rgba(var(--gold-rgb), .40);
+  filter:
+    drop-shadow(0 0 10px rgba(var(--gold-rgb), .50))
+    drop-shadow(0 0 18px rgba(var(--gold-rgb), .30));
 }
-
-nav a:hover {
-  color: #ffd88a;
-  text-decoration: underline;
+.btn{
+  display:inline-block; padding:14px var(--space-4);
+  border-radius:12px; text-decoration:none; font-weight:700;
+  background:transparent; color:rgb(var(--gold-rgb));
+  border:1px solid rgba(var(--gold-rgb), .40);
   text-shadow:
-    0 0 10px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 1.2)),
-    0 0 22px rgba(var(--lava-glow-rgb), calc(var(--lava-alpha) * 0.7));
+    0 0 6px  rgba(var(--gold-rgb), .60),
+    0 0 12px rgba(var(--gold-rgb), .35);
+  transform:translateY(var(--lift-btn));
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+}
+.btn:hover{
+  transform:translateY(calc(var(--lift-btn) - 2px));
+  border-color:rgba(var(--gold-rgb), .70);
+  color:#ffd88a;
+}
+.btn-ghost{
+  background:transparent; color:rgb(var(--gold-rgb));
+  border:1px solid rgba(var(--gold-rgb), .35);
 }
 
-nav.nav--scrolled {
-  padding: 10px 0;
-  background: rgba(10, 10, 14, 0.6);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+/* ========== Tagline / Services / Contact ========== */
+.tagline-section{ text-align:center; padding:24px 0 }
+.tagline-title{
+  font-size:clamp(28px,4vw,48px); font-weight:700; text-transform:uppercase; letter-spacing:.15em; margin:0;
+  color:var(--brand-gold);
+  text-shadow:0 0 6px rgba(var(--gold-rgb), .35), 0 0 12px rgba(var(--gold-rgb), .20);
+}
+.tagline-subhead{ font-size:clamp(16px, 2.2vw, 20px); margin:8px 0 24px; color:var(--muted) }
+
+.services{ margin:var(--space-5) 0 var(--space-2) }
+.services > .wrap > h2{ font-size:clamp(24px,3.8vw,36px); margin:0 0 18px }
+.services-grid{ display:grid; gap:var(--space-3); grid-template-columns:repeat(3, minmax(0,1fr)) }
+@media (max-width:900px){ .services-grid{ grid-template-columns:repeat(2, minmax(0,1fr)) } }
+@media (max-width:640px){ .services-grid{ grid-template-columns:1fr } }
+.svc{
+  padding:20px; border:1px solid rgba(255,255,255,.10); border-radius:16px;
+  background:rgba(10,10,14,.35);
+  -webkit-backdrop-filter:blur(4px) saturate(110%);
+  backdrop-filter:blur(4px) saturate(110%);
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.svc:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.18); box-shadow:0 10px 24px rgba(0,0,0,.35) }
+.svc-icon{
+  width:44px; height:44px; display:grid; place-items:center; border-radius:10px;
+  background:rgba(255,170,60,.12); color:#f5c375; margin-bottom:10px;
+}
+.svc h3{ margin:0 0 6px; font-size:clamp(18px,2.6vw,22px) }
+.svc p{ margin:0 0 10px; color:var(--muted) }
+.svc-link{ color:var(--accent); text-decoration:none; font-weight:600 }
+.svc-link:hover{ text-decoration:underline }
+
+.contact-band{
+  margin:56px 0 0; border-radius:20px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+.contact-inner{ max-width:980px; margin:0 auto; padding:28px 22px; text-align:center }
+#contact-title{ margin:0 0 6px; font-size:clamp(24px,3.8vw,36px) }
+.contact-lead{ margin:0 0 16px; color:var(--muted) }
+.contact-actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
+
+footer{ margin:64px 0 0; text-align:center; color:var(--muted) }
+
+/* ========== Keyframes ========== */
+@keyframes logoTumble{
+  0%{   transform:rotateX(0)   rotateY(0)   }
+  25%{  transform:rotateX(35deg) rotateY(65deg) }
+  50%{  transform:rotateX(110deg) rotateY(180deg) }
+  75%{  transform:rotateX(215deg) rotateY(295deg) }
+  100%{ transform:rotateX(360deg) rotateY(360deg) }
 }
 
-/* ========== Hero ========== */
-.hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: var(--hero-padding-top);
-  padding-bottom: var(--spacing-5);
-  text-align: center;
-  border-radius: var(--spacing-4);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  overflow: visible;
-  min-height: 100vh;
-}
-
-/* Legibility mask */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  z-index: -1;
-  border-radius: inherit;
-  background: radial-gradient(1200px 700px at 50% 0%, rgba(0, 0, 0, 0.35), transparent 60%);
-}
-
-/* Visually-hidden text for accessibility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Container for all hero's core content, now acts as the main stack */
-.hero-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: var(--content-width);
-  margin: 0 auto;
-  gap: 0;
-}
-
-/* Hero elements are correctly positioned with these rules */
-#hero .fire-title,
-#hero .brand-stamp,
-#hero .lead,
-#hero .btn {
-  position: relative;
-  z-index: 3;
-}
-
-/* Correctly lifts each piece independently */
-#hero .fire-title { top: var(--title-lift); }
-#hero .brand-stamp { top: var(--logo-lift); }
-#hero .lead {
-  top: var(--lead-lift);
-  margin-bottom: var(--lead-btn-gap);
-  text-align: center;
-  color: var(--lava-glow);
-  text-shadow: 0 0 10px var(--lava-glow);
-}
-#hero .btn {
-  top: var(--btn-lift);
-  margin-top: 0;
-}
-
-/* Fire brand header (single image with baked-in kicker) */
-.fire-title {
-  margin: 0 auto var(--gap-title-stamp);
-  text-align: center;
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-.fire-logo {
-  width: min(98%, 1200px);
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-/* Hiding kicker text, as it's part of the image */
-.kicker {
-  display: none !important;
-}
-
-/* Brand stamp animation container */
-.brand-stamp {
-  position: relative;
-  width: min(70vw, 360px);
-  height: auto;
-  margin: 0 auto var(--gap-stamp-lead);
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  animation: none !important;
-}
-
-.brand-stamp .logo {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-  transform-origin: 50% 50%;
-  animation: logoTumble 28s linear infinite;
-}
-
-/* Hero copy + CTA */
-p.lead {
-  font-size: clamp(24px, 2.8vw, 32px);
-  max-width: 58ch;
-}
-
-/* Updated button styles to match lava theme and have the glow */
-.btn {
-  display: inline-block;
-  padding: 14px var(--spacing-4);
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 700;
-  color: var(--bg);
-  background: var(--lava-glow);
-  box-shadow: 0 8px 24px rgba(245, 90, 16, 0.35);
-  transition: transform .12s ease, box-shadow .12s ease;
-  margin: 0;
-  filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5));
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(245, 90, 16, 0.45);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--lava-glow);
-  border: 1px solid rgba(245, 90, 16, 0.18);
-  box-shadow: none;
-  filter: none;
-}
-.btn-ghost:hover {
-  border-color: rgba(245, 90, 16, 0.35);
-}
-
-/* Tagline section */
-.tagline-section {
-  text-align: center;
-  padding: 24px 0;
-}
-
-.tagline-title {
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 700;
-  color: var(--brand-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin: 0;
-}
-
-.tagline-subhead {
-  font-size: clamp(16px, 2.2vw, 20px);
-  color: var(--lava-glow);
-  text-shadow: 0 0 10px rgba(245, 90, 16, 0.8);
-  margin-top: 8px;
-  margin-bottom: 24px;
-}
-
-/* ========== Footer ========== */
-footer {
-  margin: 64px 0 0;
-  text-align: center;
-  color: var(--muted);
-}
-
-/* ========== Canvas: embers layer ========== */
-#bg {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  display: block;
-  z-index: var(--z-canvas);
-  pointer-events: none;
-  background: transparent;
-}
-
-/* Content above canvas */
-main,
-.wrap,
-.hero,
-.card,
-nav,
-footer {
-  position: relative;
-  z-index: var(--z-content);
-}
-
-/* ========== Services ========== */
-.services {
-  margin: var(--spacing-5) 0 var(--spacing-2);
-}
-
-.services > h2 {
-  font-size: clamp(24px, 3.8vw, 36px);
-  margin: 0 0 18px;
-}
-
-.services-grid {
-  display: grid;
-  gap: var(--spacing-3);
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-@media (max-width: 900px) {
-  .services-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.svc {
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  background: rgba(10, 10, 14, 0.35);
-  -webkit-backdrop-filter: blur(4px) saturate(110%);
-  backdrop-filter: blur(4px) saturate(110%);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
-}
-
-@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-  .svc {
-    background: rgba(10, 10, 14, 0.65);
-  }
-}
-
-.svc:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-}
-
-.svc-icon {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: rgba(255, 170, 60, 0.12);
-  color: #f5c375;
-  margin-bottom: 10px;
-}
-
-.svc h3 {
-  margin: 0 0 6px;
-  font-size: clamp(18px, 2.6vw, 22px);
-}
-
-.svc p {
-  margin: 0 0 10px;
-  color: var(--muted);
-}
-
-.svc-link {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.svc-link:hover {
-  text-decoration: underline;
-}
-
-/* ========== Contact band ========== */
-.contact-band {
-  margin: 56px 0 0;
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-}
-
-.contact-inner {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 28px 22px;
-  text-align: center;
-}
-
-.contact-inner h2 {
-  margin: 0 0 6px;
-  font-size: clamp(24px, 3.8vw, 36px);
-}
-
-.contact-lead {
-  margin: 0 0 16px;
-  color: var(--muted);
-}
-
-@media (max-width: 640px) {
-  .wrap {
-    padding: 36px 16px;
-  }
-  .hero {
-    padding: 56px 18px 40px;
-  }
-  .fire-logo {
-    width: 94%;
-  }
-  nav {
-    gap: var(--spacing-3);
-    font-size: 16px;
-  }
-}
-
-/* Optional tighter hero variant */
-.hero.hero--tight {
-  padding-top: 26px;
-}
-
-/* ===== HERO LIFTS (Media Queries) ===================== */
-@media (max-width: 1800px){
+/* ========== Responsive ========== */
+@media (max-width:840px){
   :root{
-    --title-lift: -14px;
-    --logo-lift: -80px;
-    --lead-lift: -80px;
-    --btn-lift: -80px;
+    --lift-title:-14px;
+    --lift-logo:-110px;
+    --lift-lead:-100px;
+    --lift-btn:-100px;
   }
+  nav{ gap:var(--space-3); font-size:16px }
 }
 
-/* ========== Keyframes and Animations ========== */
-@keyframes ff-stampIn {
-  0% { transform: scale(2) rotate(-8deg); filter: blur(10px); opacity: 0; }
-  60% { transform: scale(0.96) rotate(2deg); filter: blur(1.4px); opacity: 1; }
-  100% { transform: scale(1) rotate(0deg); filter: blur(0); opacity: 1; }
-}
-@keyframes ff-fadeOut { to { opacity: 0; } }
-@keyframes ff-imprintGlow {
-  0% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
-  50% { box-shadow: 0 0 16px var(--brand-gold); }
-  100% { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
-}
-@keyframes ff-brandFlash {
-  0% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
-  50% { box-shadow: 0 0 40px 10px rgba(255, 160, 60, 0.8); }
-  100% { box-shadow: 0 0 0 rgba(255, 160, 60, 0); }
-}
-@keyframes ff-fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes logoSwing {
-  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
-  25% { transform: rotateX(20deg) rotateY(30deg); }
-  75% { transform: rotateX(-20deg) rotateY(-30deg); }
-}
-@keyframes logoSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes logoPulse {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; }
-}
-@keyframes logoTumble {
-  0% { transform: rotateX(0deg) rotateY(0deg); }
-  25% { transform: rotateX(35deg) rotateY(65deg); }
-  50% { transform: rotateX(110deg) rotateY(180deg); }
-  75% { transform: rotateX(215deg) rotateY(295deg); }
-  100% { transform: rotateX(360deg) rotateY(360deg); }
-}
-@keyframes emberRise {
-  0% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
-}
-@keyframes lavaFlicker {
-  0%   { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-  8%   { --g1: 13px; --g2: 28px; --gA:.50; transform:scale(1.006); opacity:1; }
-  22%  { --g1: 10px; --g2: 22px; --gA:.36; transform:scale(1.002); opacity:.99; }
-  38%  { --g1: 15px; --g2: 34px; --gA:.60; transform:scale(1.010); opacity:1; }
-  57%  { --g1: 11px; --g2: 24px; --gA:.40; transform:scale(1.003); opacity:.99; }
-  76%  { --g1: 16px; --g2: 36px; --gA:.64; transform:scale(1.012); opacity:1; }
-  100% { --g1: 9px;  --g2: 20px; --gA:.32; transform:scale(1.000); opacity:.98; }
-}
-@keyframes lavaGlowPulse {
-  0%, 100% { filter: drop-shadow(0 0 15px var(--lava-glow)) drop-shadow(0 0 25px rgba(245, 90, 16, 0.5)); }
-  50% { filter: drop-shadow(0 0 25px var(--lava-glow)) drop-shadow(0 0 40px rgba(245, 90, 16, 0.7)); }
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .brand-stamp .logo{ animation:none }
+  .fire-title, .brand-stamp, p.lead, .btn{ transform:none }
 }
