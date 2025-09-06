@@ -25,10 +25,10 @@
 
   /* Layout & z-order */
   --content-width:1100px;
-  --z-canvas:10;   /* sparks canvas */
-  --z-bg:8;        /* hero photo (::before) */
-  --z-content:20;  /* real content */
-  --z-nav:25;      /* sticky nav */
+  --z-canvas: -1;   /* Set sparks canvas to be a negative value so it's behind everything */
+  --z-bg: 1;        /* Set hero photo to be a low positive value */
+  --z-content: 20;  /* Keep content high */
+  --z-nav: 25;      /* Keep nav highest */
 
   /* Spacing */
   --space-3:16px;
@@ -40,6 +40,8 @@
   --lift-logo:-450px;
   --lift-lead:-500px;
   --lift-btn:-500px;
+
+  
 }
 
 /* ========== Base ========== */
@@ -62,8 +64,11 @@ body{
 /* ========== Sparks canvas (behind content) ========== */
 #bg{
   position:fixed; inset:0; width:100vw; height:100vh;
-  z-index:var(--z-canvas); pointer-events:none; background:transparent; display:block;
+  /* Use a negative z-index to guarantee it's always behind the main content. */
+  z-index:var(--z-canvas);
+  pointer-events:none; background:transparent; display:block;
 }
+
 
 /* ========== Sticky nav ========== */
 nav{
@@ -87,23 +92,50 @@ nav.nav--scrolled{ padding:10px 0; background:rgba(10,10,14,.60); box-shadow:0 6
 /* ========== Hero (full-bleed, lava photo only here) ========== */
 .hero{
   position:relative; overflow:visible; min-height:100vh; text-align:center;
-
-  /* full-bleed breakout */
   margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
   padding:clamp(80px,15vh,180px) max(24px,5vw) var(--space-5);
-
-  /* no background on the element itself */
   background:none;
 }
 .hero::before{
   content:"";
-  position:absolute; inset:0; z-index:var(--z-bg); border-radius:24px; pointer-events:none;
+  position:absolute; inset:0;
+  /*
+    Give the hero's background a z-index of 1.
+    Since .hero is position: relative, this creates a new stacking context.
+    The children of .hero must have a z-index > 1 to appear on top of this background.
+  */
+  z-index:var(--z-bg);
+  border-radius:24px; pointer-events:none;
   background:
     radial-gradient(1200px 700px at 50% 0%, rgba(0,0,0,.35), transparent 60%),
     url("../assets/background/lava-bg.jpg") center/cover no-repeat;
 }
-.hero, main, footer, nav{ position:relative; z-index:var(--z-content) }
 
+/*
+  The following hero children need a higher z-index than the hero's
+  background to be visible.
+*/
+.fire-title,
+.brand-stamp,
+#hero p.lead,
+#hero .btn {
+  /*
+    Set the z-index for all of these elements to be higher than
+    the hero's background (z-index: 1). Using `z-index: 2` is sufficient.
+    Using `var(--z-content)` is a good practice to ensure they stay on top.
+  */
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/*
+  Your existing main, footer, and nav rules are correct.
+  Their z-index values already put them on top.
+*/
+.hero, main, footer, nav {
+  position:relative;
+  z-index:var(--z-content);
+}
 /* Flame title (LAVA glow ONLY here) */
 .fire-title{
   display:grid; justify-items:center;
