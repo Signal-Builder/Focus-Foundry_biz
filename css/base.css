@@ -16,7 +16,7 @@
   /* Layout & z-order */
   --content-width:1100px;
   --z-canvas:10;   /* sparks canvas */
-  --z-bg:8;        /* hero photo (::before) */
+  --z-bg:15;        /* hero photo (::before) */
   --z-content:20;  /* real content */
   --z-nav:25;      /* sticky nav */
 
